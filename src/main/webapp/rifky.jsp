@@ -8,6 +8,6 @@
 </head>
 <body>
 	Azzi anak yang sebatang dulu~
-	alalalalala
+	alalalalala~
 </body>
 </html>
