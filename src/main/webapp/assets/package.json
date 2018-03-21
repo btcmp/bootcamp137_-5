@@ -7,11 +7,11 @@
     "bootstrap": "^3.3.7",
     "datatables.net-bs": "^1.10.16",
     "datatables.net-buttons-bs": "^1.5.1",
-    "parsleyjs": "^2.8.1",
-    "pnotify": "^4.0.0-alpha.2",
     "font-awesome": "^4.7.0",
+    "ionicons": "^3.0.0",
     "jquery.inputmask": "^3.3.4",
-    "ionicons": "^3.0.0"
+    "parsleyjs": "^2.8.1",
+    "pnotify": "^4.0.0-alpha.2"
   },
   "devDependencies": {},
   "scripts": {
