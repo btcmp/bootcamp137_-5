@@ -205,7 +205,6 @@
   <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
-
 <!-- jQuery 3 -->
 <script src="${baseUrl }assets/node_modules/jquery/dist/jquery.min.js"></script>
 <!-- Bootstrap 3.3.7 -->
@@ -217,7 +216,8 @@
 <script src="${baseUrl }assets/node_modules/parsleyjs/dist/parsley.min.js"></script>
 
 <script src="${baseUrl }assets/node_modules/jquery.inputmask/dist/jquery.inputmask.bundle.js"></script>
-<script src="${baseUrl }assets/node_modules/pnotify/dist/es/pnotify.js"></script>
+<script src="${baseUrl }assets/node_modules/pnotify/dist/iife/PNotify.js"></script>
+
 <!-- AdminLTE App -->
 <script src="${baseUrl }assets/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
@@ -226,6 +226,19 @@
 <c:forEach items="${asset}" var="aset">
 	<script src="${baseUrl }assets/js/${aset}.js"></script>
 </c:forEach>
-
+<script type="text/javascript">
+var notice = new PNotify({
+	  target: document.body,
+	  data: {
+		  	title: "coba saja",
+			text: "coba lagi",
+			type: "success",
+			styling:'bootstrap3'
+	  }
+	});
+notice.on('click', function() {
+    notice.close();
+});
+</script>
 </body>
 </html>
