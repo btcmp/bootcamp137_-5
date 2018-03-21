@@ -5,39 +5,26 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.validator.constraints.Email;
 
 @Entity
-@Table(name="EMPLOYEE")
-public class Employee {
-
+@Table(name = "ROLE")
+public class Role {
+	
 	//properties
 	@Id
 	@GeneratedValue(generator = "system-uuid")
-	@GenericGenerator(name = "system-uuid", strategy="uuid2")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
 	private String id;
 	
-	@Column(name = "first_name", nullable = false)
-	private String firstName;
+	private String name;
 	
-	@Column(name = "last_name", nullable = false)
-	private String lastName;
-	
-	@Email
-	private String email;
-	
-	@Column(name = "title")
-	private String title;
-	
-	@Column(nullable = false)
-	private boolean haveAcount;
+	private String description;
 	
 	@Column(name = "created_by")
 	private long createdBy;
@@ -65,44 +52,20 @@ public class Employee {
 		this.id = id;
 	}
 	
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 	
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public String getLastName() {
-		return lastName;
+	public String getDescription() {
+		return description;
 	}
 	
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	
-	public String getEmail() {
-		return email;
-	}
-	
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
-	public String getTitle() {
-		return title;
-	}
-	
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	public boolean isHaveAcount() {
-		return haveAcount;
-	}
-	
-	public void setHaveAcount(boolean haveAcount) {
-		this.haveAcount = haveAcount;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public long getCreatedBy() {
