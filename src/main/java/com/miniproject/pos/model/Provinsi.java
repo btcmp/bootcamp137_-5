@@ -1,12 +1,14 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,25 +17,18 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="Item_variant")
-public class ItemVariant {
+@Table(name="province")
+public class Provinsi {
 
-	//properties
+	//property
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
-	@Column(nullable=false)
-	@Size(max=255)
-	private String name;
-	
-	@Column(nullable=false)
+	@Column(name="name_provice", nullable=false)
 	@Size(max=50)
-	private String sku;
-	
-	@Column(nullable=false)
-	private double price;
+	private String name;
 	
 	@Column(name="created_by", nullable=true)
 	private long createdBy;
@@ -51,7 +46,7 @@ public class ItemVariant {
 	
 	@Column(nullable=false)
 	private boolean active;
-
+	
 	//setter n getter
 	public String getId() {
 		return id;
@@ -67,22 +62,6 @@ public class ItemVariant {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getSku() {
-		return sku;
-	}
-
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
 	}
 
 	public long getCreatedBy() {
@@ -125,18 +104,17 @@ public class ItemVariant {
 		this.active = active;
 	}
 	
-	/*//relasi
-	@ManyToOne
-	private Itemms itemms;
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="provinsi")
+	private List<Region> regions;
 
-	public Itemms getItemms() {
-		return itemms;
+	public List<Region> getRegions() {
+		return regions;
 	}
 
-	public void setItemms(Itemms itemms) {
-		this.itemms = itemms;
+	public void setRegions(List<Region> regions) {
+		this.regions = regions;
 	}
-	*/
+	
 	
 	
 }

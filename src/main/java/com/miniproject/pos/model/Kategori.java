@@ -1,11 +1,14 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -100,6 +103,20 @@ public class Kategori {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
+	/*//relasi
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="kategori")
+	private List<Items> itemss;
+
+	public List<Items> getItemss() {
+		return itemss;
+	}
+
+	public void setItemss(List<Items> itemss) {
+		this.itemss = itemss;
+	}
+	*/
+	
 	
 	
 	

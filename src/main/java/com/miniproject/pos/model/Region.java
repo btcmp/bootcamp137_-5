@@ -1,48 +1,42 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="Item_variant")
-public class ItemVariant {
+@Table(name="Regionss_XE")
+public class Region {
 
-	//properties
+	//property
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
-	@Column(nullable=false)
-	@Size(max=255)
+	@Column(nullable=false, name="name_region")
 	private String name;
 	
-	@Column(nullable=false)
-	@Size(max=50)
-	private String sku;
-	
-	@Column(nullable=false)
-	private double price;
-	
-	@Column(name="created_by", nullable=true)
+	@Column(nullable=true, name="created_by")
 	private long createdBy;
 	
 	@Temporal(TemporalType.DATE)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
 	
-	@Column(name="modified_by", nullable=true)
+	@Column(nullable=true, name="modified_by")
 	private long modifiedBy;
 	
 	@Temporal(TemporalType.DATE)
@@ -67,22 +61,6 @@ public class ItemVariant {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getSku() {
-		return sku;
-	}
-
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
 	}
 
 	public long getCreatedBy() {
@@ -125,18 +103,28 @@ public class ItemVariant {
 		this.active = active;
 	}
 	
-	/*//relasi
+	//relasi
 	@ManyToOne
-	private Itemms itemms;
+	private Provinsi provinsi;
 
-	public Itemms getItemms() {
-		return itemms;
+	public Provinsi getProvinsi() {
+		return provinsi;
 	}
 
-	public void setItemms(Itemms itemms) {
-		this.itemms = itemms;
+	public void setProvinsi(Provinsi provinsi) {
+		this.provinsi = provinsi;
 	}
-	*/
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="region")
+	private List<District> districts;
+
+	public List<District> getDistricts() {
+		return districts;
+	}
+
+	public void setDistricts(List<District> districts) {
+		this.districts = districts;
+	}
 	
 	
 }

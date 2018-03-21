@@ -1,5 +1,12 @@
 package com.miniproject.pos.model;
 
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.GenericGenerator;
+
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -7,33 +14,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="Item_variant")
-public class ItemVariant {
+@Table(name="District")
+public class District {
 
-	//properties
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
 	@Column(nullable=false)
-	@Size(max=255)
 	private String name;
-	
-	@Column(nullable=false)
-	@Size(max=50)
-	private String sku;
-	
-	@Column(nullable=false)
-	private double price;
 	
 	@Column(name="created_by", nullable=true)
 	private long createdBy;
@@ -52,7 +44,7 @@ public class ItemVariant {
 	@Column(nullable=false)
 	private boolean active;
 
-	//setter n getter
+	//settern getter
 	public String getId() {
 		return id;
 	}
@@ -67,22 +59,6 @@ public class ItemVariant {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getSku() {
-		return sku;
-	}
-
-	public void setSku(String sku) {
-		this.sku = sku;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
 	}
 
 	public long getCreatedBy() {
@@ -125,18 +101,18 @@ public class ItemVariant {
 		this.active = active;
 	}
 	
-	/*//relasi
 	@ManyToOne
-	private Itemms itemms;
+	private Region region;
 
-	public Itemms getItemms() {
-		return itemms;
+	public Region getRegion() {
+		return region;
 	}
 
-	public void setItemms(Itemms itemms) {
-		this.itemms = itemms;
+	public void setRegion(Region region) {
+		this.region = region;
 	}
-	*/
+	
+	
 	
 	
 }

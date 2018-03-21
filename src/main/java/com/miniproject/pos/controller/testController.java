@@ -1,7 +1,6 @@
 package com.miniproject.pos.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -9,8 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class testController {
 
 	@RequestMapping
-	public String index(Model model) {
-		model.addAttribute("title", "coba title");
+	public String index() {
 		return "test/index";
 	}
 }
