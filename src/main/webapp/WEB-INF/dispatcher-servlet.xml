@@ -12,7 +12,7 @@
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix">
-			<value>/WEB-INF/view/</value>
+			<value>/WEB-INF/views/</value>
 		</property>
 		<property name="suffix">
 			<value>.jsp</value>
@@ -20,7 +20,7 @@
 	</bean>
 
 	<mvc:annotation-driven />
-	<mvc:resources mapping="/resources/**" location="/resources/" />
+	<mvc:resources mapping="/assets/**" location="/assets/" />
 
 	<mvc:annotation-driven>
 		<mvc:message-converters>
