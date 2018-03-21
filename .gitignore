@@ -1,5 +1,5 @@
 /.springBeans
 /readme.md
-/target
+target/*
 /.classpath
-.settings
+.settings/*
