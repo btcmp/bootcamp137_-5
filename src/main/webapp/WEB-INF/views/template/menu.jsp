@@ -1,5 +1,5 @@
-<%@page import="com.batch137.util.Menu"%>
-<%@page import="com.batch137.util.Breadcrumb"%>
+<%@page import="com.miniproject.pos.utils.Menu"%>
+<%@page import="com.miniproject.pos.utils.Breadcrumb"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!-- Left side column. contains the logo and sidebar -->
