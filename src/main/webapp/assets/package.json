@@ -1,0 +1,22 @@
+{
+  "name": "kelompok5",
+  "version": "1.0.0",
+  "description": "pos kelompok 5",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "datatables.net-bs": "^1.10.16",
+    "datatables.net-buttons-bs": "^1.5.1",
+    "parsleyjs": "^2.8.1",
+    "pnotify": "^4.0.0-alpha.2",
+    "font-awesome": "^4.7.0",
+    "jquery.inputmask": "^3.3.4",
+    "ionicons": "^3.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
