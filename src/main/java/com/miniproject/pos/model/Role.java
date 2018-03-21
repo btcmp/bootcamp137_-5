@@ -1,11 +1,15 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -42,6 +46,9 @@ public class Role {
 	
 	@Column(nullable = false)
 	private boolean active;
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade  =CascadeType.ALL, mappedBy = "role", orphanRemoval = true)
+	private List<User> listUser;
 	
 	//setters and getters
 	public String getId() {
@@ -106,6 +113,14 @@ public class Role {
 	
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public List<User> getListUser() {
+		return listUser;
+	}
+
+	public void setListUser(List<User> listUser) {
+		this.listUser = listUser;
 	}
 	
 }

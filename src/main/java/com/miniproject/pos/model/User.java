@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -13,10 +15,11 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "user")
+@Table(name = "USER_XE")
 public class User {
 
 	//properties
+	
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy ="uuid2")
@@ -38,16 +41,22 @@ public class User {
 	@Column(name  = "modified_by")
 	private long modifiedBy;
 	
-	@Column(name  = "modified_by")
+	@Column(name  = "modified_on")
 	@Temporal(TemporalType.DATE)
 	private Date modifiedOn;
 	
 	@Column(nullable = false)
 	private boolean active;
 
+	@OneToOne
+	private Employee employee;
+	
+	@ManyToOne
+	private Role role;
 	
 	
 	//Setters and Getters
+	
 	public String getId() {
 		return id;
 	}
@@ -110,6 +119,22 @@ public class User {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	
 }

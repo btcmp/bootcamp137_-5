@@ -21,9 +21,9 @@
 		<property name="dataSource" ref="dataSource"></property>
 		<property name="annotatedClasses">
 			<list>
-				<!-- <value>com.miniproject.pos.model.Kategori</value> -->
-				<!-- <value>com.miniproject.pos.model.Employee</value>-->
-				
+				<value>com.miniproject.pos.model.Employee</value>
+				<value>com.miniproject.pos.model.Role</value>
+				<value>com.miniproject.pos.model.User</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
