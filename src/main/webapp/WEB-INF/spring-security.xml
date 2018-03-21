@@ -15,7 +15,7 @@
 	<authentication-manager>
 		<authentication-provider>
 			<user-service>
-				<user name="masydaarrizaqu" password="123456" authorities="ROLE_USER" />
+				<user name="kelompok5" password="123456" authorities="ROLE_USER" />
 				<user name="operator" password="operator" authorities="ROLE_STAFF" />
 				<user name="staff" password="staff" authorities="ROLE_STAFF" />
 			</user-service>
