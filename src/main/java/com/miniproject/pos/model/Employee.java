@@ -33,6 +33,7 @@ public class Employee {
 	@Email
 	private String email;
 	
+	@Column(name = "title")
 	private String title;
 	
 	@Column(nullable = false)
