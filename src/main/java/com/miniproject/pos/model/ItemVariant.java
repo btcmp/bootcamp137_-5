@@ -13,21 +13,22 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="pos_mst_item")
-public class Items {
+@Table(name="pos_mst_item_variant")
+public class ItemVariant {
 
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
-	@Column(nullable=true)
+	//private String itemId;
 	private String name;
-	//private long categoryId;
+	private String sku;
+	private float price;
 	//@Column(name="created_by", nullable=true)
 	//private long createdBy;
 	@Column(name="created_on", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
-    private Date createdOn;
+	private Date createdOn;
 	//@Column(name="modified_by", nullable=true)
 	//private long modifiedBy;
 	@Column(name="modified_on", nullable=true)
@@ -46,24 +47,24 @@ public class Items {
 	public void setName(String name) {
 		this.name = name;
 	}
-	/*public long getCreatedBy() {
-		return createdBy;
+	public String getSku() {
+		return sku;
 	}
-	public void setCreatedBy(long createdBy) {
-		this.createdBy = createdBy;
-	}*/
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
+	public float getPrice() {
+		return price;
+	}
+	public void setPrice(float price) {
+		this.price = price;
+	}
 	public Date getCreatedOn() {
 		return createdOn;
 	}
 	public void setCreatedOn(Date createdOn) {
 		this.createdOn = createdOn;
 	}
-	/*public long getModifiedBy() {
-		return modifiedBy;
-	}
-	public void setModifiedBy(long modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}*/
 	public Date getModifiedOn() {
 		return modifiedOn;
 	}
