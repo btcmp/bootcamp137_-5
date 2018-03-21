@@ -1,4 +1,4 @@
-package com.miniproject.pos.entity;
+package com.miniproject.pos.model;
 
 import java.sql.Date;
 
