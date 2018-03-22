@@ -1,3 +1,4 @@
+<%@page import="com.miniproject.pos.model.ItemVariant"%>
 <%@page import="com.miniproject.pos.model.Items"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
@@ -17,43 +18,25 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<h3>Daftar Barang</h3>
+					<h3>Daftar Items</h3>
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
 				<p>
 					<button class="btn btn-primary" id="tambah-data">Tambah Data</button>
 					</p>
-					<table id="barang-list" class="table table-stripped table-bordered table-hover">
+					<table id="items-list" class="table table-stripped table-bordered table-hover">
 						<thead>
 							<tr>
-								<th>No</th>
-								<th>Kode Barang</th>
-								<th>Nama Barang</th>
-								<th>Harga</th>
-								<th>Stock</th>
-								<th>Action</th>
+								<th>Name</th>
+								<th>Category</th>
+								<th>Unit Price</th>
+								<th>In Stock</th>
+								<th>Stock Alert</th>
+								<th>#</th>
 							</tr>
 						</thead>
-						<tbody id="data-barang">
-							<%
-								int no = 1;
-								List<Items> items = (List<Items>) request.getAttribute("items");
-								if (items != null)
-									for (Items i : items) {
-							%>
-							<tr>
-								<td><%=no%></td>
-								<td><%=i.getId()%></td>
-								<td><button class="lihat-data btn btn-success btn-xs" data-id="<%=i.getId()%>" data-toggle="tooltip" data-placement="top" title="Lihat Data"> <i class=" fa fa-check"></i> </button> 
-								<button class="update-data btn btn-primary btn-xs" data-id="<%=i.getId()%>" data-toggle="tooltip" data-placement="top" title="Edit Data"> <i class=" fa fa-pencil"> </i></button>
-								<button class="hapus-data btn btn-danger btn-xs" data-id="<%=i.getId()%>" data-toggle="tooltip" data-placement="top" title="hapus Data"> <i class=" fa fa-trash"> </i></button></td>
-							</tr>
-							<%
-								no++;
-									}
-							%>
-						</tbody>
+						
 					</table>
 
 				</div>

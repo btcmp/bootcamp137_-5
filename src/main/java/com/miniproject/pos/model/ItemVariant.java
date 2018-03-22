@@ -4,10 +4,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -56,6 +58,9 @@ public class ItemVariant {
 	@ManyToOne
 	@JoinColumn(name="item_id")
 	private Items itemId;
+
+	@OneToOne(mappedBy = "variantId", fetch = FetchType.LAZY, optional = false)
+	private ItemInventory inventory;
 	
 	//setter n getter
 	public String getId() {
@@ -89,6 +94,7 @@ public class ItemVariant {
 	public void setPrice(double price) {
 		this.price = price;
 	}
+	
 
 	/*public long getCreatedBy() {
 		return createdBy;

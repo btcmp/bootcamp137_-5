@@ -23,6 +23,7 @@
 			<list>
 				<value>com.miniproject.pos.model.Items</value>
 				<value>com.miniproject.pos.model.ItemVariant</value>
+				<value>com.miniproject.pos.model.ItemInventory</value>
 				<!-- <value>com.miniproject.pos.model.Employee</value>-->
 				
 			</list>

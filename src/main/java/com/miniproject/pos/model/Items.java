@@ -32,9 +32,9 @@ public class Items {
 	@Size(max=255)
 	private String name;
 	
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name="category_id")
-	private Kategori categoryId;
+	private Kategori categoryId;*/
 	
 	//@Column(name="created_by", nullable=true)
 	//private long createdBy;
@@ -111,13 +111,13 @@ public class Items {
 		this.active = active;
 	}
 
-	public Kategori getCategoryId() {
+	/*public Kategori getCategoryId() {
 		return categoryId;
 	}
 
 	public void setCategoryId(Kategori categoryId) {
 		this.categoryId = categoryId;
-	}
+	}*/
 
 	public List<ItemVariant> getVariants() {
 		return variants;
