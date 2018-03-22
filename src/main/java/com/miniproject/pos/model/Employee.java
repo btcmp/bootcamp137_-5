@@ -40,7 +40,7 @@ public class Employee {
 	private String title;
 	
 	@Column(nullable = false)
-	private boolean haveAcount;
+	private boolean haveAccount;
 	
 //	@ManyToOne
 //	@Column(name = "created_by", nullable = true)
@@ -105,12 +105,12 @@ public class Employee {
 		this.title = title;
 	}
 	
-	public boolean isHaveAcount() {
-		return haveAcount;
+	public boolean isHaveAccount() {
+		return haveAccount;
 	}
 	
-	public void setHaveAcount(boolean haveAcount) {
-		this.haveAcount = haveAcount;
+	public void setHaveAcount(boolean haveAccount) {
+		this.haveAccount = haveAccount;
 	}
 	
 //	public User getCreatedBy() {
