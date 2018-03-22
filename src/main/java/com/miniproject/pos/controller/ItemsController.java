@@ -21,9 +21,11 @@ public class ItemsController {
 	@Autowired
 	ItemVariantService itemVariantService;
 	
+	@Autowired
+	KategoriService ks;
+	
 	@RequestMapping("/index")
 	public String index(Model model) {
-		KategoriService ks = new KategoriService();
 		model.addAttribute("category", ks.selectAll());
 		model.addAttribute("title", "Data Items");
 		return "items/index";
