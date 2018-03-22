@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "ROLE")
+@Table(name = "pos_mst_role")
 public class Role {
 	
 	//properties
@@ -32,20 +32,20 @@ public class Role {
 	
 	private String description;
 	
-	@JoinColumn(name = "created_by")
-	@ManyToOne
-	private User createdBy;
+//	@Column(name = "created_by", nullable = true)
+//	@ManyToOne
+//	private User createdBy;
 	
 	@Column(name = "created_on")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
 	
-	@JoinColumn(name = "modified_by")
-	@ManyToOne
-	private User modifiedBy;
+//	@Column(name = "modified_by", nullable = true)
+//	@ManyToOne
+//	private User modifiedBy;
 	
 	@Column(name = "modified_on")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedOn;
 	
 	@Column(nullable = false)
@@ -79,13 +79,13 @@ public class Role {
 		this.description = description;
 	}
 	
-	public User getCreatedBy() {
-		return createdBy;
-	}
-	
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
-	}
+//	public User getCreatedBy() {
+//		return createdBy;
+//	}
+//	
+//	public void setCreatedBy(User createdBy) {
+//		this.createdBy = createdBy;
+//	}
 	
 	public Date getCreatedOn() {
 		return createdOn;
@@ -95,13 +95,13 @@ public class Role {
 		this.createdOn = createdOn;
 	}
 	
-	public User getModifiedBy() {
-		return modifiedBy;
-	}
-	
-	public void setModifiedBy(User modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
+//	public User getModifiedBy() {
+//		return modifiedBy;
+//	}
+//	
+//	public void setModifiedBy(User modifiedBy) {
+//		this.modifiedBy = modifiedBy;
+//	}
 	
 	public Date getModifiedOn() {
 		return modifiedOn;
