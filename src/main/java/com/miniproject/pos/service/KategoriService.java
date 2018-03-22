@@ -35,5 +35,4 @@ public class KategoriService {
 	public List<Kategori> selectAll(){
 		return kategoriDao.selectAll();
 	}
-	
 }

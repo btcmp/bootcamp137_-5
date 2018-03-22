@@ -222,23 +222,24 @@
 <script src="${baseUrl }assets/dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="${baseUrl }assets/dist/js/demo.js"></script>
-
+<script type="text/javascript">
+function displayNotif(keterangan, status){
+	var notice = new PNotify({
+		  target: document.body,
+		  data: {
+			  	title: status,
+				text: keterangan,
+				type: status,
+				styling:'bootstrap3'
+		  }
+		});
+	notice.on('click', function() {
+	    notice.close();
+	});
+}
+</script>
 <c:forEach items="${asset}" var="aset">
 	<script src="${baseUrl }assets/js/${aset}.js"></script>
 </c:forEach>
-<script type="text/javascript">
-var notice = new PNotify({
-	  target: document.body,
-	  data: {
-		  	title: "coba saja",
-			text: "coba lagi",
-			type: "success",
-			styling:'bootstrap3'
-	  }
-	});
-notice.on('click', function() {
-    notice.close();
-});
-</script>
 </body>
 </html>
