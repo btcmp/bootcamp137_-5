@@ -1,11 +1,17 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,15 +32,17 @@ public class Role {
 	
 	private String description;
 	
-	@Column(name = "created_by")
-	private long createdBy;
+	@JoinColumn(name = "created_by")
+	@ManyToOne
+	private User createdBy;
 	
 	@Column(name = "created_on")
 	@Temporal(TemporalType.DATE)
 	private Date createdOn;
 	
-	@Column(name = "modified_by")
-	private long modifiedBy;
+	@JoinColumn(name = "modified_by")
+	@ManyToOne
+	private User modifiedBy;
 	
 	@Column(name = "modified_on")
 	@Temporal(TemporalType.DATE)
@@ -42,6 +50,9 @@ public class Role {
 	
 	@Column(nullable = false)
 	private boolean active;
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade  =CascadeType.ALL, mappedBy = "role", orphanRemoval = true)
+	private List<User> listUser;
 	
 	//setters and getters
 	public String getId() {
@@ -68,11 +79,11 @@ public class Role {
 		this.description = description;
 	}
 	
-	public long getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 	
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 	
@@ -84,11 +95,11 @@ public class Role {
 		this.createdOn = createdOn;
 	}
 	
-	public long getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 	
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 	
@@ -106,6 +117,14 @@ public class Role {
 	
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public List<User> getListUser() {
+		return listUser;
+	}
+
+	public void setListUser(List<User> listUser) {
+		this.listUser = listUser;
 	}
 	
 }

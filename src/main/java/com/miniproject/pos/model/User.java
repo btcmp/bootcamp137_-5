@@ -6,17 +6,22 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.lang.UsesSunHttpServer;
 
 @Entity
-@Table(name = "user")
+@Table(name = "USER_XE")
 public class User {
 
 	//properties
+	
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy ="uuid2")
@@ -28,26 +33,34 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 	
-	@Column(name  = "created_by")
-	private long createdBy;
+	@JoinColumn(name  = "created_by")
+	@ManyToOne
+	private User createdBy;
 	
 	@Column(name  = "created_on")
 	@Temporal(TemporalType.DATE)
 	private Date createdOn;
 	
-	@Column(name  = "modified_by")
-	private long modifiedBy;
+	@JoinColumn(name  = "modified_by")
+	@ManyToOne
+	private User modifiedBy;
 	
-	@Column(name  = "modified_by")
+	@Column(name  = "modified_on")
 	@Temporal(TemporalType.DATE)
 	private Date modifiedOn;
 	
 	@Column(nullable = false)
 	private boolean active;
 
+	@OneToOne
+	private Employee employee;
+	
+	@ManyToOne
+	private Role role;
 	
 	
 	//Setters and Getters
+	
 	public String getId() {
 		return id;
 	}
@@ -72,11 +85,11 @@ public class User {
 		this.password = password;
 	}
 
-	public long getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -88,11 +101,11 @@ public class User {
 		this.createdOn = createdOn;
 	}
 
-	public long getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -110,6 +123,22 @@ public class User {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 	
 }
