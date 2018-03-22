@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -17,7 +18,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="Regionss_XE")
+@Table(name="REGIONSS_XE")
 public class Region {
 
 	//property
@@ -32,14 +33,14 @@ public class Region {
 	@Column(nullable=true, name="created_by")
 	private long createdBy;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
 	
 	@Column(nullable=true, name="modified_by")
 	private long modifiedBy;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;
 	
@@ -71,6 +72,10 @@ public class Region {
 		this.createdBy = createdBy;
 	}
 
+	public void setModifiedBy(long modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
 	public Date getCreatedOn() {
 		return createdOn;
 	}
@@ -82,11 +87,7 @@ public class Region {
 	public long getModifiedBy() {
 		return modifiedBy;
 	}
-
-	public void setModifiedBy(long modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-
+	
 	public Date getModifiedOn() {
 		return modifiedOn;
 	}

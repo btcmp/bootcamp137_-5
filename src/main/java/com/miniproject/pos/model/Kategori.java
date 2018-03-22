@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -30,24 +32,25 @@ public class Kategori {
 	@Column(nullable=false)
 	private String name;
 	
-	@Column(name="Created_By", nullable=true)
-	private long createdBy;
+	@ManyToOne
+	@JoinColumn(name="Created_By", nullable=true)
+	private User createdBy;
 	
 	@Column(name="Created_On", nullable=true)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
 	
-	@Column(name="modified_by", nullable=true)
-	private long modifiedBy;
+	@ManyToOne
+	@JoinColumn(name="modified_by", nullable=true)
+	private User modifiedBy;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;
 	
 	@Column(nullable=false)
 	private boolean active;
 
-	//setter n getter
 	public String getId() {
 		return id;
 	}
@@ -64,11 +67,11 @@ public class Kategori {
 		this.name = name;
 	}
 
-	public long getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -80,11 +83,11 @@ public class Kategori {
 		this.createdOn = createdOn;
 	}
 
-	public long getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
