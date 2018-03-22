@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -17,7 +19,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="province")
+@Table(name="PROVINCE")
 public class Provinsi {
 
 	//property
@@ -30,24 +32,25 @@ public class Provinsi {
 	@Size(max=50)
 	private String name;
 	
-	@Column(name="created_by", nullable=true)
-	private long createdBy;
+	@ManyToOne
+	@JoinColumn(name="created_by", nullable=true)
+	private User createdBy;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
 	
-	@Column(name="modified_by", nullable=true)
-	private long modifiedBy;
+	@ManyToOne
+	@JoinColumn(name="modified_by", nullable=true)
+	private User modifiedBy;
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;
 	
 	@Column(nullable=false)
 	private boolean active;
 	
-	//setter n getter
 	public String getId() {
 		return id;
 	}
@@ -64,11 +67,11 @@ public class Provinsi {
 		this.name = name;
 	}
 
-	public long getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -80,11 +83,11 @@ public class Provinsi {
 		this.createdOn = createdOn;
 	}
 
-	public long getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -103,7 +106,7 @@ public class Provinsi {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="provinsi")
 	private List<Region> regions;
 
