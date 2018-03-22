@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.miniproject.pos.service.ItemVariantService;
 import com.miniproject.pos.service.ItemsService;
+import com.miniproject.pos.service.KategoriService;
 import com.miniproject.pos.utils.ResponseMessage;
 
 @Controller
@@ -22,6 +23,8 @@ public class ItemsController {
 	
 	@RequestMapping("/index")
 	public String index(Model model) {
+		KategoriService ks = new KategoriService();
+		model.addAttribute("category", ks.getAllKategori());
 		model.addAttribute("title", "Data Items");
 		return "items/index";
 	}

@@ -23,7 +23,7 @@
 				<!-- /.box-header -->
 				<div class="box-body">
 				<p>
-					<button class="btn btn-primary" id="tambah-data">Tambah Data</button>
+					<button class="btn btn-primary" id="tambah-data">Add Items</button>
 					</p>
 					<table id="items-list" class="table table-stripped table-bordered table-hover">
 						<thead>
@@ -53,42 +53,103 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" id="myModal-title">Tambah Data Barang
-					Baru</h4>
+				<h4 class="modal-title" id="myModal-title">Create New Items</h4>
 			</div>
 			<div class="modal-body">
 				<div class="callout callout-warning hidden">
 					<h4>Oh snap!</h4>
 					<p>This form seems to be invalid :(</p>
 				</div>
-				<form id="form-barang" action="#" method="post"
+				<form id="form-items" action="#" method="post"
 					data-parsley-validate="">
-					<div class="form-group">
-						<label for="nim">Kode Barang:</label> <input name="kode-barang" type="text"
-							data-parsley-required="true" class="form-control" id="kode-barang"> <input
-							name="id" type="hidden" class="form-control" id="id">
+					<div class="col-md-4">
+						<img alt="" src="" style="width:100%;height:100%"/>
 					</div>
-					<div class="form-group">
-						<label for="nama">Nama Barang:</label> <input name="nama-barang"
-							data-parsley-required="true" type="text" class="form-control" id="nama-barang">
+					<div class="col-md-8">
+						<div class="form-group">
+							<input name="items-name" type="text" placeholder="Item Name"
+								data-parsley-required="true" class="form-control" id="items-name"> <input
+								name="items-id" type="hidden" class="form-control" id="items-id">
+						</div>
+						<div class="form-group">
+							<select id="items-category-id" class="form-control" data-parsley-required="true">
+							<option value="">Category</option>
+							<c:forEach items="${category}" var="jrs">
+								<option value="${jrs.id }">${jrs.name }</option>
+							</c:forEach>
+							</select>
+						</div>
 					</div>
-					<div class="form-group">
-						<label for="email">Harga :</label> <input type="text" data-parsley-required="true"
-							class="form-control" id="harga"> <input name="harga"
-							type="hidden" class="form-control" id="harga-mask">
-					</div>
-					<div class="form-group">
-						<label for="prodi">Stok:</label> <input name="stock" type="number"
-							data-parsley-min="1" required="" class="form-control" id="stock">
-					</div>
-					<div class="form-group">
-						<input type="submit" id="form-barang-action" value="Simpan"
-							class="btn btn-primary"> 
-					</div>
+					<h3>Variant</h3><button type="button" class="btn btn-primary" id="tambah-variant">Add Variant</button>
+					<table class="table table-bordered table-stripped" id="list-variant">
+						<thead>
+							<tr>
+								<th>Variant Name</th>
+								<th>Unit Price</th>
+								<th>SKU</th>
+								<th>Begining Stock</th>
+								<th>#</th>
+							</tr>
+						</thead>
+						<tbody id="list-variant-body">
+						
+						</tbody>
+					</table>
+					<button class="btn btn-primary" id="tambah-data">Back</button>
+					<button class="btn btn-primary" id="tambah-data">Cancel</button>
+					<button class="btn btn-primary" id="tambah-data">Save</button>
 				</form>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		</div>
+	</div>
+</div>
+
+<div id="modal-variant" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" id="myModal-title">Create New Variant</h4>
+			</div>
+			<div class="modal-body">
+				<div id ="warning-variant" class="callout callout-warning hidden">
+					<h4>Oh snap!</h4>
+					<p>This form seems to be invalid :(</p>
+				</div>
+				<form id="form-variant" action="#" method="post"
+					data-parsley-validate="">
+					
+					<div class="row">
+						<div class="col-md-4">
+							<input name="variant-name" type="text" placeholder="Variant Name"
+								data-parsley-required="true" class="form-control" id="variant-name"> 
+							<input name="variant-id" type="hidden" class="form-control" id="variant-id">
+						</div>
+						<div class="col-md-4">
+							<input name="variant-unit-price" type="text" placeholder="Unit Price"
+								data-parsley-required="true" class="form-control" id="variant-unit-price">
+						</div>
+						<div class="col-md-4">
+							<input name="variant-sku" type="text" placeholder="SKU"
+								data-parsley-required="true" class="form-control" id="variant-sku">
+						</div>
+					</div>
+		
+					<h3>Set Begining Stock</h3>
+					<div class="row">
+						<div class="col-md-6">
+					<input name="variant-begining-qty" type="text" placeholder="Begining Stock"
+								data-parsley-required="true" class="form-control" id="variant-begining-stock">
+						</div>
+						<div class="col-md-6">
+					<input name="variant-alert-at" type="text" placeholder="Alert At"
+								data-parsley-required="true" class="form-control" id="variant-alert-at">
+					</div>
+					</div>
+					<button class="btn btn-primary" id="tambah-data">Back</button>
+					<button class="btn btn-primary" id="tambah-data">Cancel</button>
+					<button class="btn btn-primary" id="tambah-data">Save</button>
+				</form>
 			</div>
 		</div>
 	</div>
