@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -41,15 +42,17 @@ public class Employee {
 	@Column(nullable = false)
 	private boolean haveAcount;
 	
-	@Column(name = "created_by")
-	private long createdBy;
+	@ManyToOne
+	@JoinColumn(name = "created_by")
+	private User createdBy;
 	
 	@Column(name = "created_on")
 	@Temporal(TemporalType.DATE)
 	private Date createdOn;
 	
-	@Column(name = "modified_by")
-	private long modifiedBy;
+	@ManyToOne
+	@JoinColumn(name = "modified_by")
+	private User modifiedBy;
 	
 	@Column(name = "modified_on")
 	@Temporal(TemporalType.DATE)
@@ -110,11 +113,11 @@ public class Employee {
 		this.haveAcount = haveAcount;
 	}
 	
-	public long getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 	
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 	
@@ -126,11 +129,11 @@ public class Employee {
 		this.createdOn = createdOn;
 	}
 	
-	public long getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 	
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 	
