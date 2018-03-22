@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -35,23 +36,27 @@ public class ItemVariant {
 	@Column(nullable=false)
 	private double price;
 	
-	@Column(name="created_by", nullable=true)
-	private long createdBy;
+	/*@Column(name="created_by", nullable=true)
+	private long createdBy;*/
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
 	
-	@Column(name="modified_by", nullable=true)
-	private long modifiedBy;
+	/*@Column(name="modified_by", nullable=true)
+	private long modifiedBy;*/
 	
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;
 	
 	@Column(nullable=false)
 	private boolean active;
 
+	@ManyToOne
+	@JoinColumn(name="item_id")
+	private Items itemId;
+	
 	//setter n getter
 	public String getId() {
 		return id;
@@ -85,13 +90,13 @@ public class ItemVariant {
 		this.price = price;
 	}
 
-	public long getCreatedBy() {
+	/*public long getCreatedBy() {
 		return createdBy;
 	}
 
 	public void setCreatedBy(long createdBy) {
 		this.createdBy = createdBy;
-	}
+	}*/
 
 	public Date getCreatedOn() {
 		return createdOn;
@@ -101,13 +106,13 @@ public class ItemVariant {
 		this.createdOn = createdOn;
 	}
 
-	public long getModifiedBy() {
+	/*public long getModifiedBy() {
 		return modifiedBy;
 	}
 
 	public void setModifiedBy(long modifiedBy) {
 		this.modifiedBy = modifiedBy;
-	}
+	}*/
 
 	public Date getModifiedOn() {
 		return modifiedOn;
@@ -124,19 +129,15 @@ public class ItemVariant {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+
+	public Items getItems() {
+		return itemId;
+	}
+
+	public void setItems(Items items) {
+		this.itemId = items;
+	}
 	
-	/*//relasi
-	@ManyToOne
-	private Itemms itemms;
-
-	public Itemms getItemms() {
-		return itemms;
-	}
-
-	public void setItemms(Itemms itemms) {
-		this.itemms = itemms;
-	}
-	*/
 	
 	
 }
