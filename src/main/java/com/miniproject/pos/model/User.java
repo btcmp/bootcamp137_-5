@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.lang.UsesSunHttpServer;
 
 @Entity
-@Table(name = "USER_XE")
+@Table(name = "pos_mst_user")
 public class User {
 
 	//properties
@@ -33,20 +33,20 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 	
-	@JoinColumn(name  = "created_by")
-	@ManyToOne
-	private User createdBy;
+//	@Column(name  = "created_by", nullable = true)
+//	@ManyToOne
+//	private User createdBy;
 	
 	@Column(name  = "created_on")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
 	
-	@JoinColumn(name  = "modified_by")
-	@ManyToOne
-	private User modifiedBy;
+//	@Column(name  = "modified_by", nullable = true)
+//	@ManyToOne
+//	private User modifiedBy;
 	
 	@Column(name  = "modified_on")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedOn;
 	
 	@Column(nullable = false)
@@ -85,13 +85,13 @@ public class User {
 		this.password = password;
 	}
 
-	public User getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
-	}
+//	public User getCreatedBy() {
+//		return createdBy;
+//	}
+//
+//	public void setCreatedBy(User createdBy) {
+//		this.createdBy = createdBy;
+//	}
 
 	public Date getCreatedOn() {
 		return createdOn;
@@ -101,13 +101,13 @@ public class User {
 		this.createdOn = createdOn;
 	}
 
-	public User getModifiedBy() {
-		return modifiedBy;
-	}
-
-	public void setModifiedBy(User modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
+//	public User getModifiedBy() {
+//		return modifiedBy;
+//	}
+//
+//	public void setModifiedBy(User modifiedBy) {
+//		this.modifiedBy = modifiedBy;
+//	}
 
 	public Date getModifiedOn() {
 		return modifiedOn;
