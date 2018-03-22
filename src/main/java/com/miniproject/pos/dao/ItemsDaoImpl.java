@@ -1,4 +1,4 @@
-package com.miniproject.pos.impl;
+package com.miniproject.pos.dao;
 
 import java.util.List;
 
@@ -7,47 +7,46 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.miniproject.pos.dao.ItemVariantDao;
-import com.miniproject.pos.model.ItemVariant;
+import com.miniproject.pos.model.Items;
 
 @Repository
-public class ItemVariantDaoImpl implements ItemVariantDao {
+public class ItemsDaoImpl implements ItemsDao {
 
 	@Autowired
 	SessionFactory sf;
 	
-	public void save(ItemVariant itemVariant) {
+	public void save(Items items) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		session.save(itemVariant);
+		session.save(items);
 		session.flush();
 	}
 
-	public void update(ItemVariant itemVariant) {
+	public void update(Items items) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		session.update(itemVariant);
+		session.update(items);
 		session.flush();
 	}
 
-	public void delete(ItemVariant itemVariant) {
+	public void delete(Items items) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		session.delete(itemVariant);
+		session.delete(items);
 		session.flush();
 	}
 
-	public ItemVariant getItemVariantById(String id) {
+	public Items getItemsById(String id) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		return session.get(ItemVariant.class, id);
+		return session.get(Items.class, id);
 	}
 
-	public List<ItemVariant> getAllItemVariant() {
+	public List<Items> getAllItems() {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "from ItemVariant";
-		List<ItemVariant> list = session.createQuery(hql).list();
+		String hql = "from Items";
+		List<Items> list = session.createQuery(hql).list();
 		return list;
 	}
 
