@@ -1,13 +1,18 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -58,11 +63,19 @@ public class Employee {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedOn;
 	
-	@Column(nullable = false)
+	@Column
 	private boolean active;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, mappedBy="employee", fetch =FetchType.LAZY)
 	private User user;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+		name = "employee_outlet",
+		joinColumns = {@JoinColumn(name = "employee_id")},
+		inverseJoinColumns = {@JoinColumn(name = "outlet_id")}
+	)
+	List<Outlet> listOutlet;
 	
 	//setters and getters
 	public String getId() {
@@ -160,5 +173,7 @@ public class Employee {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	
 	
 }
