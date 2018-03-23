@@ -1,12 +1,14 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -17,7 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Email;
 
 @Entity
-@Table(name="Outlet")
+@Table(name="pos_mst_outlet")
 public class Outlet {
 
 	//property
@@ -154,6 +156,54 @@ public class Outlet {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
+	//relasi
+	@ManyToOne
+	private Provinsi provinsi;
+	
+	@ManyToOne
+	private Region region;
+	
+	@ManyToOne
+	private District district;
+
+
+	public Provinsi getProvinsi() {
+		return provinsi;
+	}
+
+	public void setProvinsi(Provinsi provinsi) {
+		this.provinsi = provinsi;
+	}
+
+	public Region getRegion() {
+		return region;
+	}
+
+	public void setRegion(Region region) {
+		this.region = region;
+	}
+
+	public District getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(District district) {
+		this.district = district;
+	}
+
+	//relasi employee
+	@ManyToMany(mappedBy="listOutlet")
+	private List<Employee> listEmployee;
+
+	public List<Employee> getListEmployee() {
+		return listEmployee;
+	}
+
+	public void setListEmployee(List<Employee> listEmployee) {
+		this.listEmployee = listEmployee;
+	}
+	
 
 	
 }
