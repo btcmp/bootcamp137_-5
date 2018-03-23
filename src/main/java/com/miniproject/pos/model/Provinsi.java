@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="PROVINCE")
+@Table(name="pos_mst_province")
 public class Provinsi {
 
 	//property
@@ -116,6 +116,17 @@ public class Provinsi {
 
 	public void setRegions(List<Region> regions) {
 		this.regions = regions;
+	}
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="provinsi")
+	private List<Outlet> outlets;
+
+	public List<Outlet> getOutlets() {
+		return outlets;
+	}
+
+	public void setOutlets(List<Outlet> outlets) {
+		this.outlets = outlets;
 	}
 	
 	

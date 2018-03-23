@@ -24,7 +24,7 @@ public class ItemsController {
 	@RequestMapping("/index")
 	public String index(Model model) {
 		KategoriService ks = new KategoriService();
-		model.addAttribute("category", ks.getAllKategori());
+		/*model.addAttribute("category", ks.getAllKategori());*/
 		model.addAttribute("title", "Data Items");
 		return "items/index";
 	}

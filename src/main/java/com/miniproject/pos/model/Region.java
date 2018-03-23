@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="REGIONSS_XE")
+@Table(name="pos_mst_region")
 public class Region {
 
 	//property
@@ -30,15 +30,17 @@ public class Region {
 	@Column(nullable=false, name="name_region")
 	private String name;
 	
-	@Column(nullable=true, name="created_by")
-	private long createdBy;
+	@ManyToOne
+	@JoinColumn(nullable=true, name="created_by")
+	private User createdBy;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
 	
-	@Column(nullable=true, name="modified_by")
-	private long modifiedBy;
+	@ManyToOne
+	@JoinColumn(nullable=true, name="modified_by")
+	private User modifiedBy;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
@@ -64,15 +66,15 @@ public class Region {
 		this.name = name;
 	}
 
-	public long getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -84,7 +86,7 @@ public class Region {
 		this.createdOn = createdOn;
 	}
 
-	public long getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 	
@@ -126,6 +128,18 @@ public class Region {
 	public void setDistricts(List<District> districts) {
 		this.districts = districts;
 	}
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="region")
+	private List<Outlet> outlets;
+
+	public List<Outlet> getOutlets() {
+		return outlets;
+	}
+
+	public void setOutlets(List<Outlet> outlets) {
+		this.outlets = outlets;
+	}
+	
 	
 	
 }

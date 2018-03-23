@@ -23,11 +23,11 @@ public class KategoriController {
 	@Autowired
 	KategoriService kategoriService;
 	
-	@RequestMapping
+	@RequestMapping("/index")
 	public String index(Model model) {
 		List<Kategori> kat = kategoriService.selectAll();
 		model.addAttribute("kats", kat);
-		return "jspfolder/kategori";
+		return "kategori/index";
 	}
 	
 	@RequestMapping(value="/save", method= RequestMethod.POST)
@@ -53,6 +53,6 @@ public class KategoriController {
 	public void delete(@PathVariable String id) {
 		Kategori kat = new Kategori();
 		kat.setId(id);
-		kategoriService.delete(kat);;
+		kategoriService.delete(kat);
 	}
 }

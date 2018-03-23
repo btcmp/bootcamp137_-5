@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Email;
 
 @Entity
-@Table(name="Supplier")
+@Table(name="pos_mst_supplier")
 public class Supplier {
 
 	@Id
