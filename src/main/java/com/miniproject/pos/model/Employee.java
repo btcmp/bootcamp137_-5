@@ -173,7 +173,17 @@ public class Employee {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	
+
+	public List<Outlet> getListOutlet() {
+		return listOutlet;
+	}
+
+	public void setListOutlet(List<Outlet> listOutlet) {
+		this.listOutlet = listOutlet;
+	}
+
+	public void setHaveAccount(boolean haveAccount) {
+		this.haveAccount = haveAccount;
+	}
 	
 }
