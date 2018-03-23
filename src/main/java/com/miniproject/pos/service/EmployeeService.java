@@ -42,4 +42,9 @@ public class EmployeeService {
 		employeeDAO.delete(e);
 	}
 	
+	public void deactivate(Employee e) {
+		e.setActive(false);
+		employeeDAO.update(e);
+	}
+	
 }

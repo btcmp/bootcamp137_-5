@@ -190,6 +190,72 @@ $(document).ready(function() {
     });
     
     $('#tambah-variant').on('click', function() {
+    	formVariantShow();
+    });
+    
+    var listVariant = [];
+    $('#btn-add-variant').on('click', function() {
+    	var variant = {
+    			"name" : $("#variant-name").val(),
+    			"price" : $("#variant-price").val(),
+    			"sku" : $("#variant-sku").val(),
+    			"inventory" : {
+    				"begining": $("#inventory-begining").val(),
+    				"alertAtQty": $("#inventory-alert-at").val()
+    			},
+    	}
+    	listVariant.push(variant);
+    	createTableVariant(listVariant);
+    	formVariantHide();
+    });
+    
+    function formVariantHide(){
+    	$('#modal-variant').modal('hide');
+    	resetFormVariant();
+    }
+    
+    function formVariantShow(){
+    	$('#modal-variant').modal('show');
+    	resetFormVariant();
+    }
+    
+    function resetFormVariant(){
+    	$("#variant-name").val("");
+    	$("#variant-price").val("");
+    	$("#variant-sku").val("");
+    	$("#inventory-begining").val("");
+    	$("#inventory-alert-at").val("");
+    }
+    
+    $('#list-variant').delegate('.edit-variant','click', function() {
+    	var state = $(this).attr("state");
+    	var id = $(this).attr("data-id");
+    	if(state == "new"){
+    		var data = listVariant[id];
+    		$("#variant-name").val(data.name);
+        	$("#variant-price").val(data.price);
+        	$("#variant-sku").val(data.sku);
+        	$("#inventory-begining").val(data.inventory.begining);
+        	$("#inventory-alert-at").val(data.inventory.alertAtQty);
+    	}
     	$('#modal-variant').modal('show');
     });
+    
+    function createTableVariant(data){
+    	var id = "";
+    	var state = "";
+    	var index = 0;
+    	$("#list-variant-body").empty();
+    	$.each(data, function(key, val){
+    		if(val.id == null){
+    			id = index;
+    			state = "new";
+    		}else{
+    			id = val.id;
+    			state = "update";
+    		}
+    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>"+val.price+"</td><td>"+val.sku+"</td><td>"+val.inventory.begining+"</td><td><button type='button' class='btn btn-success edit-variant' state="+state+" data-id="+id+">edit</button></td></tr>");
+    		index++;
+    	});
+    }
 } );

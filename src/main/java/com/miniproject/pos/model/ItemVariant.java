@@ -67,6 +67,22 @@ public class ItemVariant {
 		return id;
 	}
 
+	public Items getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(Items itemId) {
+		this.itemId = itemId;
+	}
+
+	public ItemInventory getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(ItemInventory inventory) {
+		this.inventory = inventory;
+	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
