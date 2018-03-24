@@ -4,12 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,11 +23,13 @@ public class ItemInventory {
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne
     @JoinColumn(name = "variant_id")
 	private ItemVariant variantId;
 	
-	//private String outletId;
+	@ManyToOne
+	@JoinColumn(name="outlet_id")
+	private Outlet outletId;
 	
 	private int begining;
 	
@@ -51,15 +51,17 @@ public class ItemInventory {
 	@Column(name="alert_at_qty")
 	private int alertAtQty;
 	
-	//@Column(name="created_by", nullable=true)
-	//private long createdBy;
+	@ManyToOne
+	@JoinColumn(name="created_by", nullable=true)
+	private User createdBy;
 	
 	@Column(name="created_on", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
 	
-	//@Column(name="modified_by", nullable=true)
-	//private long modifiedBy;
+	@ManyToOne
+	@JoinColumn(name="modified_by", nullable=true)
+	private User modifiedBy;
 	
 	@Column(name="modified_on", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -152,4 +154,30 @@ public class ItemInventory {
 	public void setModifiedOn(Date modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
+
+	public Outlet getOutletId() {
+		return outletId;
+	}
+
+	public void setOutletId(Outlet outletId) {
+		this.outletId = outletId;
+	}
+
+	public User getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public User getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(User modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+	
+	
 }

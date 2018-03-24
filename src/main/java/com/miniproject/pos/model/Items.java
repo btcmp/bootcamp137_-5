@@ -25,26 +25,27 @@ public class Items {
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
-	
 	private String id;
 	@Column(nullable=true)
 	
 	@Size(max=255)
 	private String name;
 	
-	/*@ManyToOne
+	@ManyToOne
 	@JoinColumn(name="category_id")
-	private Kategori categoryId;*/
+	private Kategori categoryId;
 	
-	//@Column(name="created_by", nullable=true)
-	//private long createdBy;
+	@ManyToOne
+	@JoinColumn(name="created_by", nullable=true)
+	private User createdBy;
 	
 	@Column(name="created_on", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
 	
-	//@Column(name="modified_by", nullable=true)
-	//private long modifiedBy;
+	@ManyToOne
+	@JoinColumn(name="modified_by", nullable=true)
+	private User modifiedBy;
 	
 	@Column(name="modified_on", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -52,8 +53,13 @@ public class Items {
 	
 	private boolean active;
 	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="itemId")
+	@OneToMany( fetch = FetchType.LAZY,mappedBy="itemId")
 	private List<ItemVariant> variants;
+	
+	
+	public Items() {
+		this.active = true;
+	}
 	
 	public String getId() {
 		return id;
@@ -71,13 +77,13 @@ public class Items {
 		this.name = name;
 	}
 	
-	/*public long getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 	
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
-	}*/
+	}
 	
 	public Date getCreatedOn() {
 		return createdOn;
@@ -87,13 +93,13 @@ public class Items {
 		this.createdOn = createdOn;
 	}
 	
-	/*public long getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 	
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
-	}*/
+	}
 	
 	public Date getModifiedOn() {
 		return modifiedOn;
@@ -111,13 +117,13 @@ public class Items {
 		this.active = active;
 	}
 
-	/*public Kategori getCategoryId() {
+	public Kategori getCategoryId() {
 		return categoryId;
 	}
 
 	public void setCategoryId(Kategori categoryId) {
 		this.categoryId = categoryId;
-	}*/
+	}
 
 	public List<ItemVariant> getVariants() {
 		return variants;

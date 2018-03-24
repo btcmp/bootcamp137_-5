@@ -39,7 +39,9 @@ public class ItemsDaoImpl implements ItemsDao {
 	public Items getItemsById(String id) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		return session.get(Items.class, id);
+		Items items = session.get(Items.class, id);
+		session.flush();
+		return items;
 	}
 
 	public List<Items> getAllItems() {

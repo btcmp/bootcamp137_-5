@@ -1,13 +1,49 @@
 $(document).ready(function() {
-    $('#items-list').DataTable( {
+    var table = $('#items-list').DataTable( {
         "ajax": baseUrl+"items/get-all-data",
-        "columns": [
-            { "data": "id" },
-            { "data": "id" },
-            { "data": "id" },
-            { "data": "id" },
-            { "data": "id" },
-            { "data": "id" }
+        "columnDefs": [ 
+        {
+            "targets": 0,
+            "data": null,
+            "render": function(data){
+            	return data.variantId.itemId.name+" - "+data.variantId.name;
+            }
+        },
+        {
+            "targets": 1,
+            "data": null,
+            "render": function(data){
+            	return data.variantId.itemId.categoryId.name;
+            }
+        },
+        {
+            "targets": 2,
+            "data": null,
+            "render": function(data){
+            	return data.variantId.price;
+            }
+        },
+        {
+            "targets": 3,
+            "data": null,
+            "render": function(data){
+            	return "in stock";
+            }
+        },
+        {
+            "targets": 4,
+            "data": null,
+            "render": function(data){
+            	return "alert";
+            }
+        },
+        {
+            "targets": 5,
+            "data":null,
+            "render": function(data){
+            	return "<button class='btn btn-success update-items' data-id='"+data.variantId.itemId.id+"'>Edit</button>";
+            }
+        }
         ]
     } );
     
@@ -30,59 +66,54 @@ $(document).ready(function() {
         $('#harga-mask').trigger('change');
     });
         
-    function clearForm(){
-    	$('#id').val('');
-       	$('#nama-barang').val('');
-       	$('#kode-barang').val('');
-    	$('#harga').val('');
-    	$('#harga-mask').val('');
-    	$('#stock').val('');
-    }
-        
     var ok;
     var state;
+    var listVariant = [];
     $('#form-items').parsley().on('field:validated', function() {
         ok = $('.parsley-error').length === 0;
         $('.callout-warning').toggleClass('hidden', ok);
-    })
-    .on('form:submit', function() {
+    });
+    $(document).on('submit','#form-items', function(e) {
+    	e.preventDefault();
     	if(ok){
-    		var barang;
+    		var items;
     		var link;
     		var method;
     		if(state == 'simpan'){
-    			barang = {
-    				'namaBarang'	: $('#nama-barang').val(),
-    				'kodeBarang'	: $('#kode-barang').val(),
-    				'harga' : $('#harga-mask').val(),
-    				'stock' : $('#stock').val()
+    			items = {
+    				'name'	: $('#items-name').val(),
+    				'categoryId'	: {
+    					'id' : $('#items-category-id').val(),
+    				},
+    				'variants' : listVariant
     			};
-    			link = baseUrl+'barang/save'
+    			link = baseUrl+'items/save'
     			method = 'POST';
     		}else{
-    			barang = {
-    					'id' : $('#id').val(),
-    					'namaBarang'	: $('#nama-barang').val(),
-    					'kodeBarang'	: $('#kode-barang').val(),
-    					'harga' : $('#harga-mask').val(),
-    					'stock' : $('#stock').val()
-    				};
-    			link = baseUrl+'barang/update';
+    			items = {
+    					'id'	: $('#items-id').val(),
+        				'name'	: $('#items-name').val(),
+        				'categoryId'	: {
+        					'id' : $('#items-category-id').val(),
+        				},
+        				'variants' : listVariant
+        			};
+    			link = baseUrl+'items/update';
     			method = 'PUT';
     		}
     		
     		$.ajax({
     			type : method,
     			url :link,
-    			data :JSON.stringify(barang),
+    			data :JSON.stringify(items),
     			contentType: 'application/json',
     			success:function(data){
     				if(data.status == 'success'){
-    					createTable(data);
+    					table.ajax.reload( null, false );
     					$('#myModal').modal('hide');
     					clearForm();
     					displayNotif(data.keterangan, data.status);
-    					$('#form-barang').parsley().reset();
+    					$('#form-items').parsley().reset();
     				}else{
     					$.each(data.error, function(key, value) {
     						$('#'+value[0]).parsley().removeError(value[0]+'-error', {updateClass: true});
@@ -100,35 +131,40 @@ $(document).ready(function() {
         return false;
     });
 
-    function ambilDataById(id, env){
+    function clearForm(){
+    	$('#items-id').val('');
+       	$('#items-name').val('');
+       	$('#items-category-id').val('');
+    	listVariant = [];
+    }
+    
+    function ambilDataById(id){
     	$.ajax({
     			type : 'GET',
-    			url :baseUrl+'barang/get-one/'+id,
-    			success:function(data){
-    				if(data.status == 'success'){
-    					var value = data.data;
-    					if(env == 'update'){
-    						$('#id').val(value.id);
-    					   	$('#nama-barang').val(value.namaBarang);
-    					   	$('#kode-barang').val(value.kodeBarang);
-    					   	$('#stock').val(value.stock);
-    					   	$('#harga').val(value.harga);
-    						$('#harga').trigger('change');
-    					}else{
-    						$('#barang-detail-id').html(value.id);
-    						$('#barang-detail-kode').html(value.kodeBarang);
-    					   	$('#barang-detail-nama').html(value.namaBarang);
-    						$('#barang-detail-harga').html(value.formatedHarga);
-    						$('#barang-detail-stock').html(value.stock);
-    					}
-    				}else{
-    					$('#barang-detail-id').html('');
-    					$('#barang-detail-kode').html('');
-    				   	$('#barang-detail-nama').html('');
-    					$('#barang-detail-harga').html('');
-    					$('#barang-detail-stock').html('');
-    					createTable(data);
-    					displayNotif(data.keterangan, data.status);
+    			url :baseUrl+'items/get-one/'+id,
+    			success:function(response){
+    				if(response.status == 'success'){
+    					var tampung;
+    					listVariant = [];
+        				$.each(response.data, function(key, val){
+        					var variant = {
+        							"id" : val.variantId.id,
+        			    			"name" : val.variantId.name,
+        			    			"price" : val.variantId.price,
+        			    			"sku" : val.variantId.sku,
+        			    			"inventory" : [{
+        			    				"id" : val.id,
+        			    				"begining": val.begining,
+        			    				"alertAtQty": val.alertAtQty
+        			    			}]
+        			    	}
+        					listVariant.push(variant);
+        					tampung = val.variantId.itemId;
+        				});
+        				$('#items-name').val(tampung.name);
+    					$('#items-id').val(tampung.id);
+        				$('#items-category-id').val(tampung.categoryId.id);
+        				createTableVariant(listVariant);
     				}
     			},
     			error:function(){
@@ -137,29 +173,6 @@ $(document).ready(function() {
     		});
     }
         
-    $('#data-barang').delegate('.hapus-data', 'click', function() {
-    	var id = $(this).attr('data-id');
-    	$('#hapus-data').attr('data-id', id);
-    	$('#modal-danger').modal('show');
-    });
-
-    $('#data-barang').delegate('.update-data','click', function() {
-    	state = 'update';
-    	var id = $(this).attr('data-id');
-    	ambilDataById(id, 'update');
-    	clearForm();
-    	$('.callout-warning').toggleClass('hidden', true);
-    	$('#form-barang').parsley().reset();
-    	$('#form-barang-action').attr('value', 'Update');
-    	$('#myModal-title').html('Ubah data barang');
-    	$('#myModal').modal('show');
-    });
-
-    $('#data-barang').delegate('.lihat-data', 'click',function() {
-    	var id = $(this).attr('data-id');
-    	ambilDataById(id, 'lihat');
-    	$('#modal-detail').modal('show');
-    });
 
     $('#hapus-data').on('click', function() {
     	var id = $(this).attr('data-id');
@@ -183,6 +196,7 @@ $(document).ready(function() {
     	state = 'simpan';
     	$('#form-items').parsley().reset();
     	clearForm();
+    	createTableVariant(listVariant);
     	$('.callout-warning').toggleClass('hidden', true);
     	$('#form-barang-action').attr('value', 'Simpan');
     	$('#myModal-title').html('Tambah data barang baru');
@@ -190,23 +204,44 @@ $(document).ready(function() {
     });
     
     $('#tambah-variant').on('click', function() {
+    	$("#btn-add-variant").attr("state", "create");
     	formVariantShow();
     });
     
-    var listVariant = [];
+    
     $('#btn-add-variant').on('click', function() {
-    	var variant = {
-    			"name" : $("#variant-name").val(),
-    			"price" : $("#variant-price").val(),
-    			"sku" : $("#variant-sku").val(),
-    			"inventory" : {
-    				"begining": $("#inventory-begining").val(),
-    				"alertAtQty": $("#inventory-alert-at").val()
-    			},
+    	var state = $(this).attr("state");
+    	if(state == "create"){
+    		var variant = {
+        			"name" : $("#variant-name").val(),
+        			"price" : $("#variant-price").val(),
+        			"sku" : $("#variant-sku").val(),
+        			"inventory" : [{
+        				"begining": $("#inventory-begining").val(),
+        				"alertAtQty": $("#inventory-alert-at").val()
+        			}],
+        	};
+    		listVariant.push(variant);
+    	}else{
+    		var index = $(this).attr("data-id");
+    		var variant = listVariant[index];
+    		variant.name = $("#variant-name").val();
+    		variant.price = $("#variant-price").val();
+    		variant.sku = $("#variant-sku").val();
+    		variant.inventory.begining = $("#inventory-begining").val();
+    		variant.inventory.alertAtQty = $("#inventory-alert-at").val();
+    		listVariant[index] = variant;
     	}
-    	listVariant.push(variant);
     	createTableVariant(listVariant);
     	formVariantHide();
+    });
+    
+    $('#items-list').delegate('.update-items','click', function() {
+    	var id = $(this).attr("data-id");
+    	ambilDataById(id);
+    	$('#form-items').parsley().reset();
+    	clearForm();
+        $('#myModal').modal('show');
     });
     
     function formVariantHide(){
@@ -228,33 +263,48 @@ $(document).ready(function() {
     }
     
     $('#list-variant').delegate('.edit-variant','click', function() {
-    	var state = $(this).attr("state");
     	var id = $(this).attr("data-id");
-    	if(state == "new"){
-    		var data = listVariant[id];
-    		$("#variant-name").val(data.name);
-        	$("#variant-price").val(data.price);
-        	$("#variant-sku").val(data.sku);
-        	$("#inventory-begining").val(data.inventory.begining);
-        	$("#inventory-alert-at").val(data.inventory.alertAtQty);
+    	var data = listVariant[id];
+    	$("#variant-name").val(data.name);
+        $("#variant-price").val(data.price);
+        $("#variant-sku").val(data.sku);
+        $("#inventory-begining").val(data.inventory[0].begining);
+        $("#inventory-alert-at").val(data.inventory[0].alertAtQty);
+    	$("#btn-add-variant").attr("state", "update");
+    	$("#btn-add-variant").attr("data-id", id);
+        $('#modal-variant').modal('show');
+    });
+    
+    $('#list-variant').delegate('.delete-variant','click', function() {
+    	var id = $(this).attr("data-id");
+    	if(confirm("delete variant ?")){
+    		var tamp = listVariant[id];
+    		if(tamp.id == null){
+    			listVariant.splice(id, 1);
+	    		createTableVariant(listVariant);
+    		}else{
+	    		$.ajax({
+	        		type : 'DELETE',
+	        		url :baseUrl+'items/delete-variant/'+tamp.id,
+	        		success:function(data){
+	        			if(data.status == 'success' || data.status =='warning'){
+	        				listVariant.splice(id, 1);
+	        	    		createTableVariant(listVariant);
+	        			}
+	        		},
+	        		error:function(){
+	        			alert('gagal menghapus data');
+	        		}
+	        	});
+    		}
     	}
-    	$('#modal-variant').modal('show');
     });
     
     function createTableVariant(data){
-    	var id = "";
-    	var state = "";
     	var index = 0;
     	$("#list-variant-body").empty();
     	$.each(data, function(key, val){
-    		if(val.id == null){
-    			id = index;
-    			state = "new";
-    		}else{
-    			id = val.id;
-    			state = "update";
-    		}
-    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>"+val.price+"</td><td>"+val.sku+"</td><td>"+val.inventory.begining+"</td><td><button type='button' class='btn btn-success edit-variant' state="+state+" data-id="+id+">edit</button></td></tr>");
+    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>"+val.price+"</td><td>"+val.sku+"</td><td>"+val.inventory[0].begining+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> <button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button></td></tr>");
     		index++;
     	});
     }

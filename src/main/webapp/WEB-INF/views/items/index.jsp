@@ -28,7 +28,7 @@
 							Items</button>
 					</p>
 					<table id="items-list"
-						class="table table-stripped table-bordered table-hover">
+						class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
 								<th>Name</th>
@@ -101,7 +101,7 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<table class="table table-bordered table-stripped"
+						<table class="table table-bordered table-striped"
 							id="list-variant">
 							<thead>
 								<tr>
@@ -119,9 +119,9 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-md-4"><button class="btn btn-primary" id="tambah-data">Back</button></div>
-							<div class="col-md-4 text-center"><button class="btn btn-primary" id="tambah-data">Cancel</button></div>
-							<div class="col-md-4"><button class="btn btn-primary pull-right" id="tambah-data">Save</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="tambah-data">Back</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="tambah-data">Cancel</button></div>
+							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-items-save">Save</button></div>
 						</div>
 					</div>
 				</form>
@@ -186,7 +186,7 @@
 						<div class="row">
 							<div class="col-md-4"><button type="button" class="btn btn-primary" id="tambah-data">Back</button></div>
 							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="tambah-data">Cancel</button></div>
-							<div class="col-md-4"><button type="button" class="btn btn-primary pull-right" id="btn-add-variant">Add</button></div>
+							<div class="col-md-4"><button type="button" state="create" class="btn btn-primary pull-right" id="btn-add-variant">Add</button></div>
 						</div>
 					</div>
 				</form>
