@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="${baseUrl }assets/node_modules/datatables.net-bs/css/dataTables.bootstrap.css">
 
 <link rel="stylesheet" href="${baseUrl }assets/node_modules/easy-autocomplete/dist/easy-autocomplete.min.css">
+<link rel="stylesheet" href="${baseUrl }assets/node_modules/easy-autocomplete/dist/easy-autocomplete.themes.min.css">
 <style type="text/css">
 input.parsley-success,
 select.parsley-success,
@@ -55,6 +56,17 @@ textarea.parsley-error {
 
 .parsley-errors-list.filled {
   opacity: 1;
+}
+.easy-autocomplete{
+  width:100% !important
+}
+
+.easy-autocomplete input{
+  width: 100%;
+}
+
+.form-wrapper{
+  width: 500px;
 }
 </style>
   <!-- Theme style -->

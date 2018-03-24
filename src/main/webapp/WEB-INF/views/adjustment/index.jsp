@@ -21,9 +21,9 @@
 				<!-- /.box-header -->
 				<div class="box-body">
 					<p>
-						<button class="btn btn-primary" id="tambah-data">Create</button>
+						<button class="btn btn-primary" id="add-data">Create</button>
 					</p>
-					<table id="adjustment-list"
+					<table id="adjust-list"
 						class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
@@ -57,7 +57,7 @@
 					<h4>Oh snap!</h4>
 					<p>This form seems to be invalid :(</p>
 				</div>
-				<form id="form-adjustment" action="#" method="post"
+				<form id="form-adjust" action="#" method="post"
 					data-parsley-validate="">
 					<div class="form-group">
 						<label for="nama" class="form-control">Create Adjustment : <span>Nama Outlet</span></label> 
@@ -69,10 +69,7 @@
 					<div class="form-group">
 						<label for="nama">Adjustment Stock:</label>
 					</div>
-					<div class="form-group">
-						<button type="button" class="btn btn-primary pull-right"
-									id="add-item">Add Item</button>
-					</div>
+					
 					<div class="form-group">
 						<table class="table table-bordered table-striped"
 							id="list-item">
@@ -89,10 +86,16 @@
 							</tbody>
 						</table>
 					</div>
+					
+					<div class="form-group">
+						<button type="button" class="btn btn-primary btn-block"
+									id="add-item">Add Item</button>
+					</div>
+					
 					<div class="form-group">
 						<div class="row">
-							<div class="col-md-4"><button type="button" class="btn btn-primary" id="tambah-data">Back</button></div>
-							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="tambah-data">Cancel</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
 							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-adjust-save">Save</button></div>
 						</div>
 					</div>
@@ -118,17 +121,17 @@
 					data-parsley-validate="">
 
 					<div class="form-group">
-						<input id="item-name-variant" class="form-control"/>
+						<input id="item-name-variant"/>
 					</div>
 
 					<div class="form-group">
-						<table class="table table-bordered table-striped"
-							id="form-list-item">
+						<table class="table table-striped">
 							<thead>
 								<tr>
 									<th>Item</th>
 									<th>In Stock</th>
 									<th>Adj.Qty.</th>
+									<th>#</th>
 								</tr>
 							</thead>
 							<tbody id="form-list-item">
@@ -138,8 +141,8 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-md-4"><button type="button" class="btn btn-primary" id="tambah-data">Back</button></div>
-							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="tambah-data">Cancel</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
 							<div class="col-md-4"><button type="button" class="btn btn-primary pull-right" id="btn-add-item">Add</button></div>
 						</div>
 					</div>

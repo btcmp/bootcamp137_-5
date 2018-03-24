@@ -1,5 +1,7 @@
 package com.miniproject.pos.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,6 +59,12 @@ public class ItemsController {
 		rm.setStatus("success");
 		rm.setData(itemInventoryService.getItemInventoryByIdItems(id));
 		return rm;
+	}
+	
+	@RequestMapping("/get-all-variant")
+	@ResponseBody
+	public List<ItemVariant> getVariant() {
+		return itemVariantService.getAllItemVariant();
 	}
 	
 	@RequestMapping(value="/delete-variant/{id}", method=RequestMethod.DELETE)
