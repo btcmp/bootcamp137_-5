@@ -192,18 +192,18 @@ $(document).ready(function() {
     	});
     });
 
-    $('#tambah-data').on('click', function() {
+    $('#add-data').on('click', function() {
     	state = 'simpan';
     	$('#form-items').parsley().reset();
     	clearForm();
     	createTableVariant(listVariant);
     	$('.callout-warning').toggleClass('hidden', true);
     	$('#form-barang-action').attr('value', 'Simpan');
-    	$('#myModal-title').html('Tambah data barang baru');
+    	$('#myModal-title').html('Add data barang baru');
     	$('#myModal').modal('show');
     });
     
-    $('#tambah-variant').on('click', function() {
+    $('#add-variant').on('click', function() {
     	$("#btn-add-variant").attr("state", "create");
     	formVariantShow();
     });
