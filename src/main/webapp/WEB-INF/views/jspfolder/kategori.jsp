@@ -38,9 +38,9 @@
 		$('#btn-save').on('click', function(evt) {
 			evt.preventDefault();
 			var kat = {
-					name : $('#save-name').val(),
+					name : $('#save-name').val()
 			}
-			//console.log(contry);
+			//console.log(kat);
 		
 		
 			$.ajax({
@@ -49,12 +49,12 @@
 				contentType : 'application/json',
 				data : JSON.stringify(kat),
 				success : function(data) {
-					console.log(data);
+					//console.log(data);
 					alert('save success');
 					window.location = '${pageContext.request.contextPath}/jspfolder/kategori';
 				},
 				error : function() {
-					alert('saving failed!')
+					alert('saving failed!');
 				}                              
 			});
 			
@@ -152,7 +152,10 @@
 <body>
 <div class="container">
 	<h4 style="text-align: left; margin-bottom: 20px">Category</h4>
-	<a style="float: right; width: 15%; margin-bottom: 20px;" id="add" class="btn btn-info" href="#">Create</a>
+	<div>
+		<input type="text" id="search" placeholder="Search" style="float: left;">
+		<a style="float: right; width: 15%; margin-bottom: 20px;" id="add" class="btn btn-info" href="#">Create</a>
+	</div>
 	<table border="2px" id="kat-tbl" width="100%">
 		<thead>
 			<tr>
@@ -164,13 +167,13 @@
 		<tbody>
 			<c:forEach items= "${kats}" var="kats">
 			 	<tr>
-			 		<td>${kat.name}</td>
+			 		<td>${kats.name}</td>
 			 		<td></td>
 			 		<td>
 			 			<!-- class untuk selektor -->
 			 			<%-- <a id="${kats.id}" class="delete btn btn-danger" href="#">Delete</a> |
 			 			 --%>
-			 			 <a id="${kats.id}" href="#">view/a>
+			 			 <a id="${kats.id}" href="#" >view</a>
 			 		</td>
 			 	</tr>
 			</c:forEach>

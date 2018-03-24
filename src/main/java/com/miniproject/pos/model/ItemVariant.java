@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
-@Table(name="Item_variant")
+@Table(name="pos_item_variant")
 public class ItemVariant {
 
 	//properties

@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="KATEGORI")
+@Table(name="pos_mst_category")
 public class Kategori {
 
 	//property

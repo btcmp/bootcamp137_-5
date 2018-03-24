@@ -8,16 +8,19 @@ import org.hibernate.annotations.GenericGenerator;
 
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
-@Table(name="DISTRICT")
+@Table(name="pos_mst_district")
 public class District {
 
 	@Id
@@ -28,15 +31,17 @@ public class District {
 	@Column(nullable=false)
 	private String name;
 	
-	@Column(name="created_by", nullable=true)
-	private long createdBy;
+	@ManyToOne
+	@JoinColumn(name="created_by", nullable=true)
+	private User createdBy;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
 	
-	@Column(name="modified_by", nullable=true)
-	private long modifiedBy;
+	@ManyToOne
+	@JoinColumn(name="modified_by", nullable=true)
+	private User modifiedBy;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
@@ -62,11 +67,11 @@ public class District {
 		this.name = name;
 	}
 
-	public long getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -78,11 +83,11 @@ public class District {
 		this.createdOn = createdOn;
 	}
 
-	public long getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -112,6 +117,19 @@ public class District {
 	public void setRegion(Region region) {
 		this.region = region;
 	}
+	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="district")
+	private List<Outlet> outlets;
+
+
+	public List<Outlet> getOutlets() {
+		return outlets;
+	}
+
+	public void setOutlets(List<Outlet> outlets) {
+		this.outlets = outlets;
+	}
+	
 	
 	
 	
