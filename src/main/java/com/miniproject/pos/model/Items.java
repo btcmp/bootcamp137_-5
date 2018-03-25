@@ -16,7 +16,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="pos_mst_item")
@@ -39,6 +41,7 @@ public class Items {
 	@JoinColumn(name="created_by", nullable=true)
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Column(name="created_on", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
@@ -47,6 +50,7 @@ public class Items {
 	@JoinColumn(name="modified_by", nullable=true)
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Column(name="modified_on", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedOn;

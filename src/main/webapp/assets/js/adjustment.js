@@ -1,12 +1,12 @@
 $(document).ready(function() {
-    var table = $('#adjust-list').DataTable( {
+    var table = $('#adjust-list').DataTable({
         "ajax": baseUrl+"adjustment/get-all-data",
         "columnDefs": [ 
         {
             "targets": 0,
             "data": null,
             "render": function(data){
-            	return data.createdOn;
+            	return data.createdOnFormatted;
             }
         },
         {
@@ -31,7 +31,7 @@ $(document).ready(function() {
             }
         }
         ]
-    } );
+    });
     var detailAdjust = [];
     var options = {
     		url: baseUrl+"items/get-all-variant",
@@ -48,12 +48,14 @@ $(document).ready(function() {
     						return obj.variantId.id === value.id;
     				});
     				if(check[0] == null){
+    					delete value.priceFormatted;
     					var adjust = {
     							"variantId":value,
-    							"actualStock":0
+    							"actualStock":0,
+    							"inStock":10
     					}
     					detailAdjust.push(adjust);
-    					$("#form-list-item").append("<tr id='"+value.id+"'><td>"+value.itemId.name+" - "+value.name+"</td><td>10</td><td><input type='number' class='form-control adjust-qty' data-id='"+value.id+"' value='0' requeired/></td><td><button type='button' class='btn btn-danger delete-item-form' data-id='"+value.id+"'>X</button></td></tr>");
+    					$("#form-list-item").append("<tr id='"+value.id+"'><td>"+value.itemId.name+" - "+value.name+"</td><td>10</td><td><input type='number' class='form-control adjust-qty' data-id='"+value.id+"' value='0' min='0' requeired/></td><td><button type='button' class='btn btn-danger delete-item-form' data-id='"+value.id+"'>X</button></td></tr>");
     					$("#item-name-variant").val('');
     				}
     			}
@@ -62,65 +64,17 @@ $(document).ready(function() {
     	};
 
     	$("#item-name-variant").easyAutocomplete(options);
-    
-    $('#harga').inputmask('numeric', {
-        radixPoint: '.',
-        groupSeparator: ',',
-        digits: 0,
-        autoGroup: true,
-        prefix: 'Rp', //No Space, this will truncate the first character
-        rightAlign: false,
-        oncleared: function () { self.Value(''); }
-    });
-
-    $('#harga').trigger('change');
-
-    $('#harga').on('change', function () {
-        var value = $(this).val().split('.');
-        var numDecimal = Number(value[0].replace(/[^0-9]+/g,''));
-        $('#harga-mask').val(numDecimal);
-        $('#harga-mask').trigger('change');
-    });
         
-    var ok;
-    var state;
-    var listVariant = [];
-    $('#form-adjust').parsley().on('field:validated', function() {
-        ok = $('.parsley-error').length === 0;
-        $('.callout-warning').toggleClass('hidden', ok);
-    });
     $(document).on('submit','#form-adjust', function(e) {
     	e.preventDefault();
-    	if(ok){
-    		var adjust;
-    		var link;
-    		var method;
-    		if(state == 'simpan'){
-    			adjust = {
-    				'name'	: $('#adjust-name').val(),
-    				'categoryId'	: {
-    					'id' : $('#adjust-category-id').val(),
-    				},
-    				'items' : listVariant
+    		var adjust = {
+    				'notes'	: $('#adjust-notes').val(),
+    				'adjustmentDetail' : detailAdjust
     			};
-    			link = baseUrl+'adjust/save'
-    			method = 'POST';
-    		}else{
-    			adjust = {
-    					'id'	: $('#adjust-id').val(),
-        				'name'	: $('#adjust-name').val(),
-        				'categoryId'	: {
-        					'id' : $('#adjust-category-id').val(),
-        				},
-        				'items' : listVariant
-        			};
-    			link = baseUrl+'adjust/update';
-    			method = 'PUT';
-    		}
     		
     		$.ajax({
-    			type : method,
-    			url :link,
+    			type : "POST",
+    			url :baseUrl+'adjustment/save',
     			data :JSON.stringify(adjust),
     			contentType: 'application/json',
     			success:function(data){
@@ -142,8 +96,6 @@ $(document).ready(function() {
     				alert('Terjadi kesalahan saat menghubugni server');
     			}
     		});
-    	}
-      	ok = false;
         return false;
     });
 
@@ -234,6 +186,7 @@ $(document).ready(function() {
     		});
     	});
     	createTableAdjust(detailAdjust);
+    	formItemsHide();
     });
     
     function formItemsHide(){
@@ -247,24 +200,23 @@ $(document).ready(function() {
     }
     
     function resetFormVariant(){
-    	$("#item-name").val("");
-    	$("#item-price").val("");
-    	$("#item-sku").val("");
-    	$("#inventory-begining").val("");
-    	$("#inventory-alert-at").val("");
+    	$("#form-list-item").empty();
     }
     
-    $('#list-item').delegate('.edit-item','click', function() {
+    $('#adjust-list').delegate('.view-adjust','click', function() {
     	var id = $(this).attr("data-id");
-    	var data = listVariant[id];
-    	$("#item-name").val(data.name);
-        $("#item-price").val(data.price);
-        $("#item-sku").val(data.sku);
-        $("#inventory-begining").val(data.inventory[0].begining);
-        $("#inventory-alert-at").val(data.inventory[0].alertAtQty);
-    	$("#btn-add-item").attr("state", "update");
-    	$("#btn-add-item").attr("data-id", id);
-        $('#modal-item').modal('show');
+    	$.ajax({
+	        		type : 'GET',
+	        		url :baseUrl+'adjustment/get-adjustment-detail/'+id,
+	        		success:function(data){
+	        			if(data.status == 'success' || data.status =='warning'){
+	        				$('#modal-detail').modal('show');
+	        			}
+	        		},
+	        		error:function(){
+	        			alert('gagal menghubungi server');
+	        		}
+	        	});
     });
     
     $('#list-item').delegate('.delete-item','click', function() {
@@ -296,7 +248,7 @@ $(document).ready(function() {
     	var index = 0;
     	$("#list-item-body").empty();
     	$.each(data, function(key, val){
-    		$("#list-item-body").append("<tr><td>"+val.variantId.itemId.name+" - "+val.variantId.name+"</td><td>"+10+"</td><td>"+val.actualStock+"</td><td><button type='button' class='btn btn-danger delete-item' data-id="+index+">X</button></td></tr>");
+    		$("#list-item-body").append("<tr><td>"+val.variantId.itemId.name+" - "+val.variantId.name+"</td><td>"+val.inStock+"</td><td>"+val.actualStock+"</td><td><button type='button' class='btn btn-danger delete-item' data-id="+index+">X</button></td></tr>");
     		index++;
     	});
     }

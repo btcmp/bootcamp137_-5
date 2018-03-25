@@ -3,9 +3,13 @@ package com.miniproject.pos.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.miniproject.pos.model.Adjustment;
 import com.miniproject.pos.service.AdjustmentService;
 import com.miniproject.pos.utils.ResponseMessage;
 
@@ -28,6 +32,25 @@ public class AdjustmentController {
 		ResponseMessage rm = new ResponseMessage();
 		rm.setStatus("success");
 		rm.setData(as.getAllAdjustment());
+		return rm;
+	}
+	
+	@RequestMapping("get-adjustment-detail/{id}")
+	@ResponseBody
+	public ResponseMessage getAdjustmentDetail(@PathVariable String id) {
+		ResponseMessage rm = new ResponseMessage();
+		rm.setStatus("success");
+		rm.setData(as.getAdjustmentDetailByAdjustmentId(id));
+		return rm;
+	}
+	
+	@RequestMapping(value="/save", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseMessage save(@RequestBody Adjustment adjustment) {
+		ResponseMessage rm = new ResponseMessage();
+		as.save(adjustment);
+		rm.setStatus("success");
+		rm.setKeterangan("Data Berhasil Disimpan");
 		return rm;
 	}
 }

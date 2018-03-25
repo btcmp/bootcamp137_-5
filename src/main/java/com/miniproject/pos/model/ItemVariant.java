@@ -17,7 +17,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.miniproject.pos.utils.Formatter;
 
 
 @Entity
@@ -45,6 +49,7 @@ public class ItemVariant {
 	@JoinColumn(name="created_by", nullable=true)
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
@@ -53,6 +58,7 @@ public class ItemVariant {
 	@JoinColumn(name="modified_by", nullable=true)
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;
@@ -114,6 +120,10 @@ public class ItemVariant {
 		this.sku = sku;
 	}
 
+	public String getPriceFormatted() {
+		return Formatter.currency(price);
+	}
+	
 	public double getPrice() {
 		return price;
 	}

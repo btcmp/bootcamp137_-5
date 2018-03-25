@@ -37,6 +37,7 @@ public class ItemsService {
 			iv.setItemId(items);
 			ivDao.save(iv);
 			itemI.setVariantId(iv);
+			itemI.setEndingQty(itemI.getBegining());
 			iiDao.save(itemI);
 		}
 	}

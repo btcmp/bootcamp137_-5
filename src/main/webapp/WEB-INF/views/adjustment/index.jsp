@@ -64,7 +64,7 @@
 					</div>
 					<div class="form-group">
 						<label for="nama">Notes:</label> <textarea name="adjust-notes"
-							data-parsley-required="true" class="form-control" id="adjust-notes"></textarea>
+							class="form-control" id="adjust-notes"></textarea>
 					</div>
 					<div class="form-group">
 						<label for="nama">Adjustment Stock:</label>
@@ -113,10 +113,6 @@
 				<h4 class="modal-title" id="modal-item-title">Create New Variant</h4>
 			</div>
 			<div class="modal-body">
-				<div id="warning-variant" class="callout callout-warning hidden">
-					<h4>Oh snap!</h4>
-					<p>This form seems to be invalid :(</p>
-				</div>
 				<form id="form-variant" action="#" method="post"
 					data-parsley-validate="">
 
@@ -157,36 +153,42 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title">Detail Data Barang</h4>
+				<h4 class="modal-title">Adjustment Detail</h4>
 			</div>
 			<div class="modal-body">
-				<table class="table table-stripped table-hover">
-					<tr>
-						<td>ID</td>
-						<td>:</td>
-						<td id="barang-detail-id"></td>
-					</tr>
-					<tr>
-						<td>Kode Barang</td>
-						<td>:</td>
-						<td id="barang-detail-kode"></td>
-					</tr>
-					<tr>
-						<td>Nama Barang</td>
-						<td>:</td>
-						<td id="barang-detail-nama"></td>
-					</tr>
-					<tr>
-						<td>Harga</td>
-						<td>:</td>
-						<td id="barang-detail-harga"></td>
-					</tr>
-					<tr>
-						<td>Stock</td>
-						<td>:</td>
-						<td id="barang-detail-stock"></td>
-					</tr>
-				</table>
+				<div class="form-group">
+					<span>Created By : </span>
+				</div>
+				<div class="form-group">
+					<span>Adjustment Status : </span>
+				</div>
+				<div class="form-group">
+						<span>Notes:</span> <textarea name="adjust-notes"
+							class="form-control" id="adjust-notes-label" disabled></textarea>
+				</div>
+				<div class="form-group">
+						<label for="nama">Status History:</label>
+						<div id="status-history"></div>
+				</div>
+				
+				<div class="form-group">
+						<label for="nama">Adjustment Stock:</label>
+				</div>
+				
+				<div class="form-group">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Item</th>
+									<th>In Stock</th>
+									<th>Adj.Qty.</th>
+								</tr>
+							</thead>
+							<tbody id="label-list-item">
+
+							</tbody>
+						</table>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

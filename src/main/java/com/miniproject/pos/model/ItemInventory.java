@@ -12,7 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="pos_item_inventory")
@@ -55,6 +57,7 @@ public class ItemInventory {
 	@JoinColumn(name="created_by", nullable=true)
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Column(name="created_on", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
@@ -63,6 +66,7 @@ public class ItemInventory {
 	@JoinColumn(name="modified_by", nullable=true)
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Column(name="modified_on", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedOn;

@@ -19,7 +19,7 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<h3>Daftar Items</h3>
+					<h3>List Items</h3>
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
@@ -155,9 +155,10 @@
 									id="variant-id">
 							</div>
 							<div class="col-md-4">
-								<input name="variant-price" type="text"
-									placeholder="Unit Price" data-parsley-required="true"
-									class="form-control" id="variant-price">
+								<input name="variant-price-mask" type="text"
+									placeholder="Unit Price" value="0" data-parsley-required="true"
+									class="form-control" id="variant-price-mask">
+								<input name="variant-price" type="hidden" data-parsley-required="true" id="variant-price">
 							</div>
 							<div class="col-md-4">
 								<input name="variant-sku" type="text" placeholder="SKU"
