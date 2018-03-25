@@ -31,6 +31,9 @@ public class EmployeeService {
 	}
 	
 	public void save(Employee e) {
+		if(e.getUser() != null) {
+			e.getUser().setEmployee(e);
+		}
 		employeeDAO.save(e);
 	}
 	

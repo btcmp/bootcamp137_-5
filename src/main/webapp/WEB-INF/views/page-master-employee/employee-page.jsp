@@ -82,12 +82,12 @@
 								<tr>
 									<td>${employee.firstName} ${employee.lastName}</td>
 									<td>${employee.email}</td>
-									<td><input type="checkbox" checked disabled></td>
+									<td><input type="checkbox" <c:if test="${employee.haveAccount == true}">checked</c:if> disabled></td>
 									<td></td>
 									<td>${employee.user.role.name}</td>
 									<td>
-										<button type="button" class="edit btn btn-secondary">Edit</button>
-										<button type="button" class="deactivate btn btn-secondary">Deactivate</button>
+										<button type="button" class="edit btn btn-secondary" id="${employee.id}">Edit</button>
+										<button type="button" class="deactivate btn btn-secondary" id="${employee.id}">Deactivate</button>
 									</td>
 								</tr>
 								</c:forEach>
@@ -120,7 +120,7 @@
 								<c:forEach items="${listOutlet}" var="outlet">
 								<tr>
 									<td>${outlet.name}</td>
-									<td><input type="checkbox" id="${outlet.id}"></td>
+									<td><input type="checkbox" class="selected-outlet" id="${outlet.id}"></td>
 								</tr>
 								</c:forEach>
 							</tbody>
@@ -142,9 +142,10 @@
 					<h2 class="modal-title">Deactivate Employee</h2>
 				</div>
 				<div class="modal-body">
-					<p>Are You Sure..?</p>
+					<p id="selected-emp">Are You Sure..?</p>
 				</div>
 				<div class="modal-footer">
+					<button type="button" id="btn-cancel-deactivate" class="btn btn-primary" data-dismiss="modal">Cancel</button>
 					<button type="button" id="btn-exec-deactivate" class="btn btn-primary">Deactivate</button>
 				</div>
 			</div>
