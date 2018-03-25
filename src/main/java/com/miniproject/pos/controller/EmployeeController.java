@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.miniproject.pos.model.Employee;
+import com.miniproject.pos.model.User;
 import com.miniproject.pos.service.EmployeeService;
+import com.miniproject.pos.service.OutletService;
 import com.miniproject.pos.service.RoleService;
 import com.miniproject.pos.service.UserService;
 
@@ -29,23 +31,29 @@ public class EmployeeController {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	OutletService outletService;
+	
 	@RequestMapping
 	public String index(Model model) {
 		model.addAttribute("listEmployee", employeeService.getAll());
 		model.addAttribute("listRole", roleService.getAll());
 		model.addAttribute("listUser", userService.getAll());
+		model.addAttribute("listOutlet", outletService.selectAll());
+		model.addAttribute("listActiveEmployee", employeeService.getAllActiveEmployee());
 		return "page-master-employee/employee-page";
 	}
 	
 	@RequestMapping(value="/get-employee/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public Employee getEmployee(@PathVariable String id) {
-		return employeeService.get(id);
+		Employee selectedEmployee = employeeService.get(id);
+		return selectedEmployee;
 	}
 	
-	@RequestMapping(value="/save", method = RequestMethod.POST)
+	@RequestMapping(value="/save-emp", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	public void save(@RequestBody Employee e) {
+	public void saveEmpUsr(@RequestBody Employee e) {
 		employeeService.save(e);
 	}
 	
