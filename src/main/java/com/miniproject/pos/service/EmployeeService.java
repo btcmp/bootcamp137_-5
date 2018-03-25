@@ -42,9 +42,14 @@ public class EmployeeService {
 		employeeDAO.delete(e);
 	}
 	
-	public void deactivate(Employee e) {
-		e.setActive(false);
-		employeeDAO.update(e);
+	public List<Employee> getAllActiveEmployee(){
+		return employeeDAO.getAllActiveEmployee();
 	}
 	
+	public void deactivate(Employee e) {
+		if(e.isActive()) {
+			e.setActive(false);
+		}
+		employeeDAO.update(e);
+	}
 }

@@ -48,4 +48,16 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 		session.flush();
 	}
 
+	public List<Employee> getAllActiveEmployee() {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "from Employee e where e.active = 1";
+		List<Employee> listEmployee = session.createQuery(hql).list();
+		
+		if (listEmployee.isEmpty()) {
+			return null;
+		} else {
+			return listEmployee;
+		}	
+	}
 }
