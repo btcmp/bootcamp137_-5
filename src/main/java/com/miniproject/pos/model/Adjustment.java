@@ -3,8 +3,10 @@ package com.miniproject.pos.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -19,6 +21,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.miniproject.pos.utils.Formatter;
 
 @Entity
@@ -59,8 +62,12 @@ public class Adjustment {
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;
 
+	@JsonManagedReference
 	@OneToMany(mappedBy="adjustmentId")
 	private List<AdjustmentDetail> adjustmentDetail;
+	
+	@OneToMany(mappedBy="adjustmentId")
+	private List<AdjustmentHistory> adjustmentHistory;
 	
 	public Adjustment() {
 		this.status = "Submitted";
@@ -72,6 +79,14 @@ public class Adjustment {
 
 	public void setAdjustmentDetail(List<AdjustmentDetail> adjustmentDetail) {
 		this.adjustmentDetail = adjustmentDetail;
+	}
+
+	public List<AdjustmentHistory> getAdjustmentHistory() {
+		return adjustmentHistory;
+	}
+
+	public void setAdjustmentHistory(List<AdjustmentHistory> adjustmentHistory) {
+		this.adjustmentHistory = adjustmentHistory;
 	}
 
 	public String getId() {

@@ -44,6 +44,15 @@ public class AdjustmentController {
 		return rm;
 	}
 	
+	@RequestMapping("get-adjustment/{id}")
+	@ResponseBody
+	public ResponseMessage getAdjustment(@PathVariable String id) {
+		ResponseMessage rm = new ResponseMessage();
+		rm.setStatus("success");
+		rm.setData(as.getAdjustmentById(id));
+		return rm;
+	}
+	
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	@ResponseBody
 	public ResponseMessage save(@RequestBody Adjustment adjustment) {

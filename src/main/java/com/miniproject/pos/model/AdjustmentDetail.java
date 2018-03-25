@@ -2,8 +2,10 @@ package com.miniproject.pos.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -15,6 +17,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name="pos_t_adjustment_detail")
 public class AdjustmentDetail {
@@ -24,6 +28,7 @@ public class AdjustmentDetail {
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="adjustment_id")
 	private Adjustment adjustmentId;

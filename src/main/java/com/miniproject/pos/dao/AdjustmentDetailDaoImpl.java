@@ -25,7 +25,7 @@ public class AdjustmentDetailDaoImpl implements AdjustmentDetailDao{
 	
 	public List<AdjustmentDetail> getAdjustmentDetailByAdjustmentId(String id){
 		Session session = sf.getCurrentSession();
-		String hql = "select ad from AdjustmentDetail as ad join ad.adjustmentId as ai where ai.id=:id";
+		String hql = "from AdjustmentDetail as ad where ad.adjustmentId.id=:id";
 		List<AdjustmentDetail> list = session.createQuery(hql).setParameter("id", id).list();
 		return list;
 	}
