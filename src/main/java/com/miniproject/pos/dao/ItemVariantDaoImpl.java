@@ -49,5 +49,14 @@ public class ItemVariantDaoImpl implements ItemVariantDao {
 		List<ItemVariant> list = session.createQuery(hql).list();
 		return list;
 	}
+	
+	public List<ItemVariant> getItemVariantByItem(String itemId) {
+		// TODO Auto-generated method stub
+		Session session = sf.getCurrentSession();
+		String hql = "from ItemVariant where itemId.id=:id";
+		List<ItemVariant> list = session.createQuery(hql).setParameter("id", itemId).list();
+		session.flush();
+		return list;
+	}
 
 }

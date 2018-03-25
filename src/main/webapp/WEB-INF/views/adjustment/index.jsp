@@ -1,5 +1,3 @@
-<%@page import="com.miniproject.pos.model.ItemVariant"%>
-<%@page import="com.miniproject.pos.model.Items"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.HashMap"%>
@@ -9,8 +7,7 @@
 			(String) request.getAttribute("title"));
 	request.setAttribute("bc", bc);
 	List<String> asset = new ArrayList();
-	;
-	asset.add("items");
+	asset.add("adjustment");
 	request.setAttribute("asset", asset);
 %>
 <%@ include file="/WEB-INF/views/template/menu.jsp"%>
@@ -19,23 +16,20 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<h3>Daftar Items</h3>
+					<h3>Adjustment List</h3>
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
 					<p>
-						<button class="btn btn-primary" id="add-data">Add
-							Items</button>
+						<button class="btn btn-primary" id="add-data">Create</button>
 					</p>
-					<table id="items-list"
+					<table id="adjust-list"
 						class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
-								<th>Name</th>
-								<th>Category</th>
-								<th>Unit Price</th>
-								<th>In Stock</th>
-								<th>Stock Alert</th>
+								<th>Adjustment Date</th>
+								<th>Notes</th>
+								<th>Status</th>
 								<th>#</th>
 							</tr>
 						</thead>
@@ -63,65 +57,46 @@
 					<h4>Oh snap!</h4>
 					<p>This form seems to be invalid :(</p>
 				</div>
-				<form id="form-items" action="#" method="post"
+				<form id="form-adjust" action="#" method="post"
 					data-parsley-validate="">
 					<div class="form-group">
-						<div class="row">
-							<div class="col-md-4">
-								<img alt="" src="" style="width: 100%; height: 100%" />
-							</div>
-							<div class="col-md-8">
-								<div class="form-group">
-									<input name="items-name" type="text" placeholder="Item Name"
-										data-parsley-required="true" class="form-control"
-										id="items-name"> <input name="items-id" type="hidden"
-										class="form-control" id="items-id">
-								</div>
-								<div class="form-group">
-									<select id="items-category-id" class="form-control"
-										data-parsley-required="true">
-										<option value="">Category</option>
-										<c:forEach items="${category}" var="jrs">
-											<option value="${jrs.id }">${jrs.name }</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-						</div>
+						<label for="nama" class="form-control">Create Adjustment : <span>Nama Outlet</span></label> 
 					</div>
 					<div class="form-group">
-						<div class="row">
-							<div class="col-md-6">
-								<span style="font-size: 26px; font-weight: 600;">Variant</span>
-							</div>
-							<div class="col-md-6">
-								<button type="button" class="btn btn-primary pull-right"
-									id="add-variant">Add Variant</button>
-							</div>
-						</div>
+						<label for="nama">Notes:</label> <textarea name="adjust-notes"
+							data-parsley-required="true" class="form-control" id="adjust-notes"></textarea>
 					</div>
+					<div class="form-group">
+						<label for="nama">Adjustment Stock:</label>
+					</div>
+					
 					<div class="form-group">
 						<table class="table table-bordered table-striped"
-							id="list-variant">
+							id="list-item">
 							<thead>
 								<tr>
-									<th>Variant Name</th>
-									<th>Unit Price</th>
-									<th>SKU</th>
-									<th>Begining Stock</th>
+									<th>Item</th>
+									<th>In Stock</th>
+									<th>Adj.Qty.</th>
 									<th>#</th>
 								</tr>
 							</thead>
-							<tbody id="list-variant-body">
+							<tbody id="list-item-body">
 
 							</tbody>
 						</table>
 					</div>
+					
+					<div class="form-group">
+						<button type="button" class="btn btn-primary btn-block"
+									id="add-item">Add Item</button>
+					</div>
+					
 					<div class="form-group">
 						<div class="row">
 							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
 							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
-							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-items-save">Save</button></div>
+							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-adjust-save">Save</button></div>
 						</div>
 					</div>
 				</form>
@@ -130,12 +105,12 @@
 	</div>
 </div>
 
-<div id="modal-variant" class="modal fade" role="dialog">
+<div id="modal-item" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" id="myModal-title">Create New Variant</h4>
+				<h4 class="modal-title" id="modal-item-title">Create New Variant</h4>
 			</div>
 			<div class="modal-body">
 				<div id="warning-variant" class="callout callout-warning hidden">
@@ -146,47 +121,29 @@
 					data-parsley-validate="">
 
 					<div class="form-group">
-						<div class="row">
-							<div class="col-md-4">
-								<input name="variant-name" type="text"
-									placeholder="Variant Name" data-parsley-required="true"
-									class="form-control" id="variant-name"> <input
-									name="variant-id" type="hidden" class="form-control"
-									id="variant-id">
-							</div>
-							<div class="col-md-4">
-								<input name="variant-price" type="text"
-									placeholder="Unit Price" data-parsley-required="true"
-									class="form-control" id="variant-price">
-							</div>
-							<div class="col-md-4">
-								<input name="variant-sku" type="text" placeholder="SKU"
-									data-parsley-required="true" class="form-control"
-									id="variant-sku">
-							</div>
-						</div>
+						<input id="item-name-variant"/>
 					</div>
 
 					<div class="form-group">
-						<h3>Set Begining Stock</h3>
-						<div class="row">
-							<div class="col-md-6">
-								<input name="inventory-begining" type="text"
-									placeholder="Begining Stock" data-parsley-required="true"
-									class="form-control" id="inventory-begining">
-							</div>
-							<div class="col-md-6">
-								<input name="inventory-alert-at" type="text"
-									placeholder="Alert At" data-parsley-required="true"
-									class="form-control" id="inventory-alert-at">
-							</div>
-						</div>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Item</th>
+									<th>In Stock</th>
+									<th>Adj.Qty.</th>
+									<th>#</th>
+								</tr>
+							</thead>
+							<tbody id="form-list-item">
+
+							</tbody>
+						</table>
 					</div>
 					<div class="form-group">
 						<div class="row">
 							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
 							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
-							<div class="col-md-4"><button type="button" state="create" class="btn btn-primary pull-right" id="btn-add-variant">Add</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary pull-right" id="btn-add-item">Add</button></div>
 						</div>
 					</div>
 				</form>

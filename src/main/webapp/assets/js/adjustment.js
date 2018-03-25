@@ -1,51 +1,67 @@
 $(document).ready(function() {
-    var table = $('#items-list').DataTable( {
-        "ajax": baseUrl+"items/get-all-data",
+    var table = $('#adjust-list').DataTable( {
+        "ajax": baseUrl+"adjustment/get-all-data",
         "columnDefs": [ 
         {
             "targets": 0,
             "data": null,
             "render": function(data){
-            	return data.variantId.itemId.name+" - "+data.variantId.name;
+            	return data.createdOn;
             }
         },
         {
             "targets": 1,
             "data": null,
             "render": function(data){
-            	return data.variantId.itemId.categoryId.name;
+            	return data.notes;
             }
         },
         {
             "targets": 2,
             "data": null,
             "render": function(data){
-            	return data.variantId.price;
+            	return data.status;
             }
         },
         {
             "targets": 3,
-            "data": null,
-            "render": function(data){
-            	return "in stock";
-            }
-        },
-        {
-            "targets": 4,
-            "data": null,
-            "render": function(data){
-            	return "alert";
-            }
-        },
-        {
-            "targets": 5,
             "data":null,
             "render": function(data){
-            	return "<button class='btn btn-success update-items' data-id='"+data.variantId.itemId.id+"'>Edit</button>";
+            	return "<button class='btn btn-success view-adjust' data-id='"+data.id+"'>View</button>";
             }
         }
         ]
     } );
+    var detailAdjust = [];
+    var options = {
+    		url: baseUrl+"items/get-all-variant",
+    		getValue: function(response) {
+    			return response.itemId.name+" - "+response.name;
+    		},
+    		list: {
+    			match: {
+    				enabled: true
+    			},
+    			onClickEvent: function() {
+    				var value = $("#item-name-variant").getSelectedItemData();
+    				var check = $.grep(detailAdjust, function(obj){
+    						return obj.variantId.id === value.id;
+    				});
+    				if(check[0] == null){
+    					var adjust = {
+    							"variantId":value,
+    							"actualStock":0
+    					}
+    					detailAdjust.push(adjust);
+    					$("#form-list-item").append("<tr id='"+value.id+"'><td>"+value.itemId.name+" - "+value.name+"</td><td>10</td><td><input type='number' class='form-control adjust-qty' data-id='"+value.id+"' value='0' requeired/></td><td><button type='button' class='btn btn-danger delete-item-form' data-id='"+value.id+"'>X</button></td></tr>");
+    					$("#item-name-variant").val('');
+    				}
+    			}
+    		},
+    		adjustWidth: false
+    	};
+
+    	$("#item-name-variant").easyAutocomplete(options);
     
     $('#harga').inputmask('numeric', {
         radixPoint: '.',
@@ -69,43 +85,43 @@ $(document).ready(function() {
     var ok;
     var state;
     var listVariant = [];
-    $('#form-items').parsley().on('field:validated', function() {
+    $('#form-adjust').parsley().on('field:validated', function() {
         ok = $('.parsley-error').length === 0;
         $('.callout-warning').toggleClass('hidden', ok);
     });
-    $(document).on('submit','#form-items', function(e) {
+    $(document).on('submit','#form-adjust', function(e) {
     	e.preventDefault();
     	if(ok){
-    		var items;
+    		var adjust;
     		var link;
     		var method;
     		if(state == 'simpan'){
-    			items = {
-    				'name'	: $('#items-name').val(),
+    			adjust = {
+    				'name'	: $('#adjust-name').val(),
     				'categoryId'	: {
-    					'id' : $('#items-category-id').val(),
+    					'id' : $('#adjust-category-id').val(),
     				},
-    				'variants' : listVariant
+    				'items' : listVariant
     			};
-    			link = baseUrl+'items/save'
+    			link = baseUrl+'adjust/save'
     			method = 'POST';
     		}else{
-    			items = {
-    					'id'	: $('#items-id').val(),
-        				'name'	: $('#items-name').val(),
+    			adjust = {
+    					'id'	: $('#adjust-id').val(),
+        				'name'	: $('#adjust-name').val(),
         				'categoryId'	: {
-        					'id' : $('#items-category-id').val(),
+        					'id' : $('#adjust-category-id').val(),
         				},
-        				'variants' : listVariant
+        				'items' : listVariant
         			};
-    			link = baseUrl+'items/update';
+    			link = baseUrl+'adjust/update';
     			method = 'PUT';
     		}
     		
     		$.ajax({
     			type : method,
     			url :link,
-    			data :JSON.stringify(items),
+    			data :JSON.stringify(adjust),
     			contentType: 'application/json',
     			success:function(data){
     				if(data.status == 'success'){
@@ -113,7 +129,7 @@ $(document).ready(function() {
     					$('#myModal').modal('hide');
     					clearForm();
     					displayNotif(data.keterangan, data.status);
-    					$('#form-items').parsley().reset();
+    					$('#form-adjust').parsley().reset();
     				}else{
     					$.each(data.error, function(key, value) {
     						$('#'+value[0]).parsley().removeError(value[0]+'-error', {updateClass: true});
@@ -132,39 +148,39 @@ $(document).ready(function() {
     });
 
     function clearForm(){
-    	$('#items-id').val('');
-       	$('#items-name').val('');
-       	$('#items-category-id').val('');
+    	$('#adjust-id').val('');
+       	$('#adjust-name').val('');
+       	$('#adjust-category-id').val('');
     	listVariant = [];
     }
     
     function ambilDataById(id){
     	$.ajax({
     			type : 'GET',
-    			url :baseUrl+'items/get-one/'+id,
+    			url :baseUrl+'adjust/get-one/'+id,
     			success:function(response){
     				if(response.status == 'success'){
     					var tampung;
     					listVariant = [];
         				$.each(response.data, function(key, val){
-        					var variant = {
-        							"id" : val.variantId.id,
-        			    			"name" : val.variantId.name,
-        			    			"price" : val.variantId.price,
-        			    			"sku" : val.variantId.sku,
+        					var item = {
+        							"id" : val.itemId.id,
+        			    			"name" : val.itemId.name,
+        			    			"price" : val.itemId.price,
+        			    			"sku" : val.itemId.sku,
         			    			"inventory" : [{
         			    				"id" : val.id,
         			    				"begining": val.begining,
         			    				"alertAtQty": val.alertAtQty
         			    			}]
         			    	}
-        					listVariant.push(variant);
-        					tampung = val.variantId.itemId;
+        					listVariant.push(item);
+        					tampung = val.itemId.itemId;
         				});
-        				$('#items-name').val(tampung.name);
-    					$('#items-id').val(tampung.id);
-        				$('#items-category-id').val(tampung.categoryId.id);
-        				createTableVariant(listVariant);
+        				$('#adjust-name').val(tampung.name);
+    					$('#adjust-id').val(tampung.id);
+        				$('#adjust-category-id').val(tampung.categoryId.id);
+        				createTableAdjust(listVariant);
     				}
     			},
     			error:function(){
@@ -194,102 +210,78 @@ $(document).ready(function() {
 
     $('#add-data').on('click', function() {
     	state = 'simpan';
-    	$('#form-items').parsley().reset();
+    	$('#form-adjust').parsley().reset();
     	clearForm();
-    	createTableVariant(listVariant);
+    	createTableAdjust(listVariant);
     	$('.callout-warning').toggleClass('hidden', true);
     	$('#form-barang-action').attr('value', 'Simpan');
     	$('#myModal-title').html('Add data barang baru');
     	$('#myModal').modal('show');
     });
     
-    $('#add-variant').on('click', function() {
-    	$("#btn-add-variant").attr("state", "create");
-    	formVariantShow();
+    $('#add-item').on('click', function() {
+    	formItemsShow();
     });
     
     
-    $('#btn-add-variant').on('click', function() {
-    	var state = $(this).attr("state");
-    	if(state == "create"){
-    		var variant = {
-        			"name" : $("#variant-name").val(),
-        			"price" : $("#variant-price").val(),
-        			"sku" : $("#variant-sku").val(),
-        			"inventory" : [{
-        				"begining": $("#inventory-begining").val(),
-        				"alertAtQty": $("#inventory-alert-at").val()
-        			}],
-        	};
-    		listVariant.push(variant);
-    	}else{
-    		var index = $(this).attr("data-id");
-    		var variant = listVariant[index];
-    		variant.name = $("#variant-name").val();
-    		variant.price = $("#variant-price").val();
-    		variant.sku = $("#variant-sku").val();
-    		variant.inventory.begining = $("#inventory-begining").val();
-    		variant.inventory.alertAtQty = $("#inventory-alert-at").val();
-    		listVariant[index] = variant;
-    	}
-    	createTableVariant(listVariant);
-    	formVariantHide();
+    $('#btn-add-item').on('click', function() {
+    	$.each($('.adjust-qty'), function(key, val){
+    		var id = val.getAttribute("data-id");
+    		$.map(detailAdjust, function(obj, index) {
+    		    if(obj.variantId.id == id) {
+    		        obj.actualStock = val.value;
+    		    }
+    		});
+    	});
+    	createTableAdjust(detailAdjust);
     });
     
-    $('#items-list').delegate('.update-items','click', function() {
-    	var id = $(this).attr("data-id");
-    	ambilDataById(id);
-    	$('#form-items').parsley().reset();
-    	clearForm();
-        $('#myModal').modal('show');
-    });
-    
-    function formVariantHide(){
-    	$('#modal-variant').modal('hide');
+    function formItemsHide(){
+    	$('#modal-item').modal('hide');
     	resetFormVariant();
     }
     
-    function formVariantShow(){
-    	$('#modal-variant').modal('show');
+    function formItemsShow(){
+    	$('#modal-item').modal('show');
     	resetFormVariant();
     }
     
     function resetFormVariant(){
-    	$("#variant-name").val("");
-    	$("#variant-price").val("");
-    	$("#variant-sku").val("");
+    	$("#item-name").val("");
+    	$("#item-price").val("");
+    	$("#item-sku").val("");
     	$("#inventory-begining").val("");
     	$("#inventory-alert-at").val("");
     }
     
-    $('#list-variant').delegate('.edit-variant','click', function() {
+    $('#list-item').delegate('.edit-item','click', function() {
     	var id = $(this).attr("data-id");
     	var data = listVariant[id];
-    	$("#variant-name").val(data.name);
-        $("#variant-price").val(data.price);
-        $("#variant-sku").val(data.sku);
+    	$("#item-name").val(data.name);
+        $("#item-price").val(data.price);
+        $("#item-sku").val(data.sku);
         $("#inventory-begining").val(data.inventory[0].begining);
         $("#inventory-alert-at").val(data.inventory[0].alertAtQty);
-    	$("#btn-add-variant").attr("state", "update");
-    	$("#btn-add-variant").attr("data-id", id);
-        $('#modal-variant').modal('show');
+    	$("#btn-add-item").attr("state", "update");
+    	$("#btn-add-item").attr("data-id", id);
+        $('#modal-item').modal('show');
     });
     
-    $('#list-variant').delegate('.delete-variant','click', function() {
+    $('#list-item').delegate('.delete-item','click', function() {
     	var id = $(this).attr("data-id");
-    	if(confirm("delete variant ?")){
+    	if(confirm("delete item ?")){
     		var tamp = listVariant[id];
     		if(tamp.id == null){
     			listVariant.splice(id, 1);
-	    		createTableVariant(listVariant);
+	    		createTableAdjust(listVariant);
     		}else{
 	    		$.ajax({
 	        		type : 'DELETE',
-	        		url :baseUrl+'items/delete-variant/'+tamp.id,
+	        		url :baseUrl+'adjust/delete-item/'+tamp.id,
 	        		success:function(data){
 	        			if(data.status == 'success' || data.status =='warning'){
 	        				listVariant.splice(id, 1);
-	        	    		createTableVariant(listVariant);
+	        	    		createTableAdjust(listVariant);
 	        			}
 	        		},
 	        		error:function(){
@@ -300,11 +292,11 @@ $(document).ready(function() {
     	}
     });
     
-    function createTableVariant(data){
+    function createTableAdjust(data){
     	var index = 0;
-    	$("#list-variant-body").empty();
+    	$("#list-item-body").empty();
     	$.each(data, function(key, val){
-    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>"+val.price+"</td><td>"+val.sku+"</td><td>"+val.inventory[0].begining+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> <button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button></td></tr>");
+    		$("#list-item-body").append("<tr><td>"+val.variantId.itemId.name+" - "+val.variantId.name+"</td><td>"+10+"</td><td>"+val.actualStock+"</td><td><button type='button' class='btn btn-danger delete-item' data-id="+index+">X</button></td></tr>");
     		index++;
     	});
     }

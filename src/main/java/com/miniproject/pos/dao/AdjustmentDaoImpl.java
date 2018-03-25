@@ -7,49 +7,46 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.miniproject.pos.model.Items;
+import com.miniproject.pos.model.Adjustment;
 
 @Repository
-public class ItemsDaoImpl implements ItemsDao {
+public class AdjustmentDaoImpl implements AdjustmentDao {
 
 	@Autowired
 	SessionFactory sf;
 	
-	public void save(Items items) {
+	public void save(Adjustment adjustment) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		session.save(items);
+		session.save(adjustment);
 		session.flush();
 	}
 
-	public void update(Items items) {
+	public void update(Adjustment adjustment) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		session.update(items);
+		session.update(adjustment);
 		session.flush();
 	}
 
-	public void delete(Items items) {
+	public void delete(Adjustment adjustment) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		session.delete(items);
+		session.delete(adjustment);
 		session.flush();
 	}
 
-	public Items getItemsById(String id) {
+	public Adjustment getAdjustmentById(String id) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		Items items = session.get(Items.class, id);
-		session.flush();
-		return items;
+		return session.get(Adjustment.class, id);
 	}
 
-	public List<Items> getAllItems() {
+	public List<Adjustment> getAllAdjustment() {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "from Items";
-		List<Items> list = session.createQuery(hql).list();
-		return list;
+		String hql = "from Adjustment";
+		return session.createCriteria(Adjustment.class).list();
 	}
 
 }
