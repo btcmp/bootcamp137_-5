@@ -20,4 +20,27 @@ public class DistrictService {
 		// TODO Auto-generated method stub
 		return districtDao.selectAll();
 	}
+	
+	public void save(District district) {
+		districtDao.save(district);
+	}
+	
+	public void delete(District district) {
+		districtDao.delete(district);
+	}
+	
+	public void update(District district) {
+		districtDao.update(district);
+	}
+	
+	public District getOne(String id) {
+		return districtDao.getOne(id);
+	}
+
+	public List<District> getDistrictByIdRegion(String id) {
+		// TODO Auto-generated method stub
+		return districtDao.getDistrictByIdRegion(id);
+	}
+	
 }
+

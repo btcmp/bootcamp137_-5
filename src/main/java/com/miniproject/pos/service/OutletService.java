@@ -35,5 +35,11 @@ public class OutletService {
 	public List<Outlet> selectAll(){
 		return outletDao.selectAll();
 	}
+
+	public void nonActiveOutlet(Outlet outlet) {
+		// TODO Auto-generated method stub
+		outlet.setActive(true);
+		outletDao.update(outlet);
+	}
 	
 }

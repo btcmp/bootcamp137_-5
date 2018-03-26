@@ -29,23 +29,26 @@
 					<table id="kategori-list" class="table table-stripped table-bordered table-hover">
 						<thead>
 							<tr>
-								<th style="width: 25%; text-align: center;">Name</th>
-								<th style="width: 25%; text-align: center;">Address</th>
-								<th style="width: 25%; text-align: center;">Phone</th>
-								<th style="width: 25%; text-align: center;">Email</th>
-								<th style="width: 5%; text-align: center;">#</th>
+								<th style="width: 18%; text-align: center;">Name</th>
+								<th style="width: 18%; text-align: center;">Address</th>
+								<th style="width: 18%; text-align: center;">Phone</th>
+								<th style="width: 18%; text-align: center;">Email</th>
+								<th style="width: 18%; text-align: center;">Active</th>
+								<th style="width: 10%; text-align: center;">#</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody style="text-align: center;">
 							<c:forEach items= "${outlets}" var="otls">
 							 	<tr>
 							 		<td>${otls.name}</td>
 							 		<td>${otls.address}</td>
 							 		<td>${otls.phone}</td>
 							 		<td>${otls.email}</td>
+							 		<td>${otls.active}</td>
 							 		<td>
 							 			<!-- class untuk selektor -->
 							 			 <a id="${otls.id}" class="editoutlet" href="#" >edit</a>
+							 			 <%-- <a id="${otls.id}" class="id-nonactive btn btn-danger" href="#" >X</a> --%>
 							 		</td>
 							 	</tr>
 							</c:forEach>
@@ -81,7 +84,7 @@
 					
 					<div class="row form-group">
 						<div class="col-sm-4">
-							<select id="save-pro" placeholder="PROVINSI">
+							<select class="form-control" id="save-pro">
 								<option value="">Provinsi</option>
 								<c:forEach var="prov" items="${provinsi}">
 									<option id="sprov" value="${prov.id}"> ${prov.name}</option>
@@ -89,16 +92,19 @@
 							</select>
 						</div>
 						<div class="col-sm-4">
-							<select id="save-reg">
-								<c:forEach var="reg" items="${regions}">
-									<option value="${reg.id}"> ${reg.name}</option>
-								</c:forEach>
+							<select class="form-control" name="save-reg" id="save-reg">
+								<option value=""> Region</option>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<select class="form-control" name="save-dis" id="save-dis">
+								<option value="">District</option>
 							</select>
 						</div>
 					</div>
 					
 					<div class="row form-group">
-						<div class="col-sm-4"><input type="text" class="form-control" id="save-code" placeholder="Postel Code" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="save-code" placeholder="Postal Code" /></div>
 						<div class="col-sm-4"><input type="text" class="form-control" id="save-phone" aria-describedby="emailHelp" placeholder="Phone" /></div>
 						<div class="col-sm-4"><input type="text" class="form-control" id="save-email" aria-describedby="emailHelp" placeholder="Email" /></div>
 					</div>
@@ -115,7 +121,7 @@
 
 <div class="modal fade" id="editout" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div style="width: 60%;" class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel">Category</h5>
@@ -132,28 +138,95 @@
 						<input type="text" class="form-control" id="edit-address-out" aria-describedby="emailHelp" placeholder="Address" />
 					</div>
 					
-					<div class="form-group">
-						<input type="text" class="form-control" id="edit-code-out" aria-describedby="emailHelp" placeholder="Postel Code" />
+					<div class="row form-group">
+						<div class="col-sm-4">
+							<select class="form-control" id="edit-prov-out">
+								<option value="">Provinsi</option>
+								<c:forEach var="prov" items="${provinsi}">
+									<option id="edit-prov--out" value="${prov.id}"> ${prov.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<select class="form-control" name="edit-reg-out" id="edit-reg-out">
+								<option value=""> Region</option>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<select class="form-control"id="edit-dis-out">
+								<option value="">District</option>
+							</select>
+						</div>
 					</div>
 					
-					<div class="form-group">
-						<input type="text" class="form-control" id="edit-phone-out" aria-describedby="emailHelp" placeholder="Phone" />
-					</div>
-					
-					<div class="form-group">
-						<input type="text" class="form-control" id="edit-email-out" aria-describedby="emailHelp" placeholder="Email" />
+					<div class="row form-group">
+						<div class="col-sm-4"><input type="text" class="form-control" id="edit-code-out" placeholder="Postel Code" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="edit-phone-out" aria-describedby="emailHelp" placeholder="Phone" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="edit-email-out" aria-describedby="emailHelp" placeholder="Email" /></div>
 					</div>
 					
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button style="float: left;" type="button" class="btn btn-danger">X</button>
-				<button style="width: 15%;" type="button" id="btn-cancle" class="btn btn-primary">CANCEL</button>
+				<a class="btn btn-primary" href="${pageContext.request.contextPath}/outlet/index">CANCEL</a>
+				<button style="float: left;" type="button" id="btn-nonactive" class="btn btn-danger">X</button>
 				<button style="width: 15%;" type="button" id="btn-update" class="btn btn-primary">UPDATE</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="nonactiveout" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Category</h5>
+			</div>
+			<div class="modal-body">
+				<form action="#">
+					<input type="hidden" name="nonactive-id" id="nonactive-id"/>
+					<h5>NONACTIVE THIS OUTLET ?</h5>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a class="btn btn-primary" href="${pageContext.request.contextPath}/outlet/index">CANCEL</a>
+				<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">CANCEL</button> -->
+				<button type="button" id="btn-nonactive" class="btn btn-primary">Yes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <div id="myModal" class="modal fade" role="dialog">

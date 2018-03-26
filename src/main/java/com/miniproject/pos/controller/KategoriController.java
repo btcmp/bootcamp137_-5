@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.miniproject.pos.model.Items;
 import com.miniproject.pos.model.Kategori;
 import com.miniproject.pos.service.KategoriService;
 
@@ -24,12 +25,14 @@ public class KategoriController {
 	KategoriService kategoriService;
 	
 	@RequestMapping("/index")
+	@ResponseBody
 	public String index(Model model) {
 		List<Kategori> kat = kategoriService.selectAll();
 		model.addAttribute("kats", kat);
 		return "kategori/index";
 	}
 	
+		
 	@RequestMapping(value="/save", method= RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void save(@RequestBody Kategori kategori) {

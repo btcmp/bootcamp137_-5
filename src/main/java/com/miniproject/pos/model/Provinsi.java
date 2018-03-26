@@ -129,6 +129,16 @@ public class Provinsi {
 		this.outlets = outlets;
 	}
 	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="provinsi")
+	private List<Supplier> suppliers;
+
+	public List<Supplier> getSuppliers() {
+		return suppliers;
+	}
+
+	public void setSuppliers(List<Supplier> suppliers) {
+		this.suppliers = suppliers;
+	}
 	
 	
 }

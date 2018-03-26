@@ -193,7 +193,7 @@ public class Outlet {
 	}
 
 	//relasi employee
-	@ManyToMany(mappedBy="listOutlet")
+	@ManyToMany(mappedBy="listOutlet") 
 	private List<Employee> listEmployee;
 
 	public List<Employee> getListEmployee() {

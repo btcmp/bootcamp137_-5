@@ -51,14 +51,6 @@ public class OutletController {
 		return "outlet/index";
 	}
 	
-	@RequestMapping(value="/getRegionByIdProvinsi/{id}", method=RequestMethod.GET)
-	@ResponseBody
-	public List<Region> getRegionByIdProvinsi (@PathVariable String idProv, Model model) {
-		List<Region> daftarRegion = regionService.getRRegionsByIdProvinsi(idProv);
-		
-		return daftarRegion;
-	}
-	
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void save(@RequestBody Outlet outlet) {
@@ -69,6 +61,12 @@ public class OutletController {
 	@ResponseStatus(HttpStatus.OK)
 	public void update(@RequestBody Outlet outlet) {
 		outletService.update(outlet);
+	}
+	
+	@RequestMapping(value="/nonactive", method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public void nonActiveOutlet(@RequestBody Outlet outlet) {
+		outletService.nonActiveOutlet(outlet);
 	}
 	
 	@RequestMapping(value="/get-id/{id}", method=RequestMethod.GET)

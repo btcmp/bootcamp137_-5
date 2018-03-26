@@ -1,6 +1,7 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -150,6 +152,41 @@ public class Supplier {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
+	//relasi
+	@ManyToOne
+	private Provinsi provinsi;
+	
+	@ManyToOne
+	private Region region;
+	
+	@ManyToOne
+	private District district;
+
+	public Provinsi getProvinsi() {
+		return provinsi;
+	}
+
+	public void setProvinsi(Provinsi provinsi) {
+		this.provinsi = provinsi;
+	}
+
+	public Region getRegion() {
+		return region;
+	}
+
+	public void setRegion(Region region) {
+		this.region = region;
+	}
+
+	public District getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(District district) {
+		this.district = district;
+	}
+	
 	
 	
 }

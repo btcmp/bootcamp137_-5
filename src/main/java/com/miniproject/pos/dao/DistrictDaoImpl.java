@@ -21,4 +21,42 @@ public class DistrictDaoImpl implements DistrictDao{
 		return session.createCriteria(District.class).list();
 	}
 
+	public void save(District district) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		session.save(district);
+		session.flush();
+	}
+
+	public void delete(District district) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		session.delete(district);
+		session.flush();
+	}
+
+	public void update(District district) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		session.update(district);
+		session.flush();
+	}
+
+	public District getOne(String id) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		return session.get(District.class, id);
+	}
+
+	public List<District> getDistrictByIdRegion(String id) {
+		// TODO Auto-generated method stub
+		String hql = "from District ds where ds.region.id like :idreg";
+		Session session = sessionFactory.getCurrentSession();
+		List<District> districts = session.createQuery(hql).setParameter("idreg", "%"+id+"%").list();
+		if(districts.isEmpty()) {
+			return null;
+		}
+		return districts;
+	}
+
 }

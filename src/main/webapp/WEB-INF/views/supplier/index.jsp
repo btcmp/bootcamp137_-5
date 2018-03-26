@@ -9,7 +9,7 @@
 			(String) request.getAttribute("title"));
 	request.setAttribute("bc", bc);
 	List<String> asset = new ArrayList();;
-	asset.add("kategori"); //js
+	asset.add("supplier"); //js
 	request.setAttribute("asset", asset);
 %>
 <%@ include file="/WEB-INF/views/template/menu.jsp"%>
@@ -18,30 +18,37 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<h3>Category</h3>
+					<h3>Suppliers</h3>
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
 				<div>
 					<input type="text" id="search" placeholder="Search" style="float: left;">
-					<a style="float: right; width: 15%; margin-bottom: 20px;" id="add" class="btn btn-info" href="#">Create</a>
+					<a style="float: right; width: 15%; margin-bottom: 20px;" id="new" class="btn btn-info" href="#">Create</a>
 				</div>
 					<table id="kategori-list" class="table table-stripped table-bordered table-hover">
 						<thead>
 							<tr>
-								<th style="width: 25%; text-align: center;">Category Name</th>
-								<th style="width: 25%; text-align: center;">Item Stock</th>
-								<th style="width: 5%; text-align: center;">#</th>
+								<th style="width: 18%; text-align: center;">Name</th>
+								<th style="width: 18%; text-align: center;">Address</th>
+								<th style="width: 18%; text-align: center;">Phone</th>
+								<th style="width: 18%; text-align: center;">Email</th>
+								<th style="width: 18%; text-align: center;">Active</th>
+								<th style="width: 10%; text-align: center;">#</th>
 							</tr>
 						</thead>
-						<tbody>
-							<c:forEach items= "${kats}" var="kats">
+						<tbody style="text-align: center;">
+							<c:forEach items= "${sups}" var="sups">
 							 	<tr>
-							 		<td>${kats.name}</td>
-							 		<td>${kats.itemStock}</td>
+							 		<td>${sups.name}</td>
+							 		<td>${sups.address}</td>
+							 		<td>${sups.phone}</td>
+							 		<td>${sups.email}</td>
+							 		<td>${sups.active}</td>
 							 		<td>
 							 			<!-- class untuk selektor -->
-							 			 <a id="${kats.id}" class="editkategori" href="#" >view</a>
+							 			 <a id="${sups.id}" class="editsupplier" href="#" >edit</a>
+							 			 <%-- <a id="${sups.id}" class="id-nonactive btn btn-danger" href="#" >X</a> --%>
 							 		</td>
 							 	</tr>
 							</c:forEach>
@@ -58,55 +65,168 @@
 	<!-- /.row -->
 </section>
 
-<div class="modal fade" id="savekat" tabindex="-1" role="dialog"
+<div class="modal fade" id="savesup" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Category</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Supplier Detail</h5>
 			</div>
 			<div class="modal-body">
 				<form action="#">
 					<div class="form-group">
-						<input type="text" class="form-control" id="save-name" aria-describedby="emailHelp" placeholder="Category Name" />
+						<input type="text" class="form-control" id="save-name-sup" aria-describedby="emailHelp" placeholder="Supplier Name" />
 					</div>
-
+					
+					<div class="form-group">
+						<input type="text" class="form-control" id="save-address-sup" aria-describedby="emailHelp" placeholder="Address" />
+					</div>
+					
+					<div class="row form-group">
+						<div class="col-sm-4">
+							<select class="form-control" id="save-pro-sup">
+								<option value="">Provinsi</option>
+								<c:forEach var="prov" items="${provs}">
+									<option id="save-prov" value="${prov.id}"> ${prov.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<select class="form-control" name="save-reg" id="save-reg-sup">
+								<option value=""> Region</option>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<select class="form-control" name="save-dis" id="save-dis-sup">
+								<option value="">District</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="row form-group">
+						<div class="col-sm-4"><input type="text" class="form-control" id="save-code-sup" placeholder="Postal Code" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="save-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="save-email-sup" aria-describedby="emailHelp" placeholder="Email" /></div>
+					</div>
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button style="float: left;" type="button" id="btn-cancel-save" class="btn btn-primary">CANCEL</button>
-				<button style="float: right;" type="button" id="btn-save" class="btn btn-primary">SAVE</button>
+				<a class="btn btn-primary" href="${pageContext.request.contextPath}/supplier/index">CANCEL</a>
+				<button style="float: right;" type="button" id="btn-save-sup" class="btn btn-primary">SAVE</button>
 			</div>
 		</div>
 	</div>
 </div>
 
 
-<div class="modal fade" id="editkat" tabindex="-1" role="dialog"
+<div class="modal fade" id="editsup" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div style="width: 60%;" class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Category</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Supplier</h5>
 			</div>
 			<div class="modal-body">
 				<form action="#">
-					<input type="hidden" name="edit-id" id="edit-id"/>
+					<input type="hidden" name="edit-id" id="edit-id-sup"/>
 					
 					<div class="form-group">
-						<input type="text" class="form-control" id="edit-name-kat" aria-describedby="emailHelp" placeholder="Category Name" />
+						<input type="text" class="form-control" id="edit-name-sup" aria-describedby="emailHelp" placeholder="Outlet Name" />
+					</div>
+					
+					<div class="form-group">
+						<input type="text" class="form-control" id="edit-address-sup" aria-describedby="emailHelp" placeholder="Address" />
+					</div>
+					
+					<div class="row form-group">
+						<div class="col-sm-4">
+							<select class="form-control" id="edit-prov-sup">
+								<option value="">Provinsi</option>
+								<c:forEach var="prov" items="${provs}">
+									<option id="edit-provsup" value="${prov.id}"> ${prov.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<select class="form-control" name="edit-reg-sup" id="edit-reg-sup">
+								<option value=""> Region</option>
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<select class="form-control"id="edit-dis-sup">
+								<option value="">District</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="row form-group">
+						<div class="col-sm-4"><input type="text" class="form-control" id="edit-code-sup" placeholder="Postel Code" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="edit-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="edit-email-sup" aria-describedby="emailHelp" placeholder="Email" /></div>
 					</div>
 					
 				</form>
 			</div>
 			<div class="modal-footer">
-				<button style="float: left;" type="button" class="btn btn-danger">X</button>
-				<button style="width: 15%;" type="button" id="btn-cancle" class="btn btn-primary">CANCEL</button>
-				<button style="width: 15%;" type="button" id="btn-update" class="btn btn-primary">SAVE</button>
+				<a class="btn btn-primary" href="${pageContext.request.contextPath}/supplier/index">CANCEL</a>
+				<button style="float: left;" type="button" id="btn-nonactive" class="btn btn-danger">X</button>
+				<button style="width: 15%;" type="button" id="btn-update-sup" class="btn btn-primary">UPDATE</button>
 			</div>
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="nonactivesup" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Supplier</h5>
+			</div>
+			<div class="modal-body">
+				<form action="#">
+					<input type="hidden" name="nonactive-id" id="nonactive-id"/>
+					<h5>NONACTIVE THIS SUPPLIER ?</h5>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<a class="btn btn-primary" href="${pageContext.request.contextPath}/supplier/index">CANCEL</a>
+				<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">CANCEL</button> -->
+				<button type="button" id="btn-nonactive" class="btn btn-primary">Yes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <div id="myModal" class="modal fade" role="dialog">

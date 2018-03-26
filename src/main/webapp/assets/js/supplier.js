@@ -1,39 +1,39 @@
 $(function() {
 
 //----------------------------------------------------------------------save---------------------------------------------------
-		$('#add').on('click', function() {
-			$('#saveout').modal();
+		$('#new').on('click', function() {
+			$('#savesup').modal();
 		})
-		$('#btn-save').on('click', function(evt) {
+		$('#btn-save-sup').on('click', function(evt) {
 			evt.preventDefault();
 			var out = {
-					name : $('#save-name').val(),
-					address : $('#save-address').val(),
+					name : $('#save-name-sup').val(),
+					address : $('#save-address-sup').val(),
 					provinsi :{
-						id : $('#save-pro').val()
+						id : $('#save-pro-sup').val()
 					},
 					region : {
-						id : $('#save-reg').val()
+						id : $('#save-reg-sup').val()
 					},
 					district : {
-						id : $('#save-dis').val()
+						id : $('#save-dis-sup').val()
 					},
-					postalCode : $('#save-code').val(),
-					phone : $('#save-phone').val(),
-					email : $('#save-email').val()
+					postalCode : $('#save-code-sup').val(),
+					phone : $('#save-phone-sup').val(),
+					email : $('#save-email-sup').val()
 			}
 			//console.log(out);
 		
 		
 			$.ajax({
-				url : baseUrl+"outlet/save",
+				url : baseUrl+"supplier/save",
 				type : 'POST',
 				contentType : 'application/json',
 				data : JSON.stringify(out),
 				success : function(data) {
 					//console.log(data);
 					alert('save success');
-					window.location = baseUrl+"outlet/index";
+					window.location = baseUrl+"supplier/index";
 				},
 				error : function() {
 					alert('saving failed!');
@@ -45,7 +45,7 @@ $(function() {
 		
 //---------------------------------------------------------------------------------------------------------list region---------------------------------------------
 		
-		$('#save-pro').on('change', function() {
+		$('#save-pro-sup').on('change', function() {
 			var id = $(this).val();
 			//console.log(id);
 			if (id!==""){
@@ -61,7 +61,7 @@ $(function() {
 								region.push(reg);
 							})
 							
-							$('#save-reg').html(region);
+							$('#save-reg-sup').html(region);
 					}, error : function(){
 						alert('get failed');
 					}
@@ -73,7 +73,7 @@ $(function() {
 							
 //-------------------------------------------------------------------------------------------list district-------------------------------------------------
 							
-		$('#save-reg').on('change', function() {
+		$('#save-reg-sup').on('change', function() {
 			var id = $(this).val();
 			//console.log(id);
 			if (id!=""){
@@ -89,7 +89,7 @@ $(function() {
 								district.push(dis);
 							})
 							
-							$('#save-dis').html(district);
+							$('#save-dis-sup').html(district);
 					}, error : function(){
 						alert('get failed');
 					}
@@ -100,16 +100,16 @@ $(function() {
 		
 //------------------------------------------------------------------------------edit----------------------------------------------------------------
 
-		$('.editoutlet').on('click', function(evt) {
+		$('.editsupplier').on('click', function(evt) {
 			evt.preventDefault();
 			var id = $(this).attr('id');
 			//console.log(id);
 			$.ajax({
-				url : baseUrl+"outlet/get-id/"+id,
+				url : baseUrl+"supplier/get-id/"+id,
 				type : 'GET',
-				success : function(out) {
-					setEditOutlet(out);
-					$('#editout').modal();
+				success : function(sup) {
+					setEditSupplier(sup);
+					$('#editsup').modal();
 				},
 				error : function() {
 					alert('failed getting data');
@@ -117,85 +117,87 @@ $(function() {
 				dataType : 'json'
 			});
 		});
-		function setEditOutlet(out) {
-			$('#edit-id').val(out.id);
-			$('#edit-name-out').val(out.name);
-			$('#edit-address-out').val(out.address);
-			/*$('#edit-prov-out').val(out.provinsi.id);
-			$('#edit-reg-out').val(out.region.id);
-			$('#edit-dis-out').val(out.district.id);*/
-			$('#edit-code-out').val(out.postalCode);
-			$('#edit-phone-out').val(out.phone);
-			$('#edit-email-out').val(out.email);
-		}
+		function setEditSupplier(sup) {
+			$('#edit-id-sup').val(sup.id);
+			$('#edit-name-sup').val(sup.name);
+			$('#edit-address-sup').val(sup.address);
+			/*$('#edit-prov-sup').val(sup.provinsi.id);
+			$('#edit-reg-sup').val(sup.region.id);
+			$('#edit-dis-sup').val(sup.district.id);*/
+			$('#edit-code-sup').val(sup.postalCode);
+			$('#edit-phone-sup').val(sup.phone);
+			$('#edit-email-sup').val(sup.email);
+		};
 		
-//------------------------------------------------------------------------------------------------------nonactive-------------------------------------------
-		
+//----------------------------------------------------------------------------------------------------nonactive-------------------
 		$('#btn-nonactive').on('click', function() {
-			var outlet = {
-					id : $('#edit-id').val(),
-					name : $('#edit-name-out').val(),
-					address : $('#edit-address-out').val(),
+			var supplier = {
+					id : $('#edit-id-sup').val(),
+					name : $('#edit-name-sup').val(),
+					address : $('#edit-address-sup').val(),
 					provinsi : {
-						id : $('#edit-prov-out').val()
+						id : $('#edit-prov-sup').val()
 					},
 					region : {
-						id : $('#edit-reg-out').val()
+						id : $('#edit-reg-sup').val()
 					},
 					district : {
-						id : $('#edit-dis-out').val()
+						id : $('#edit-dis-sup').val()
 					},
-					postalCode : $('#edit-code-out').val(),
-					phone : $('#edit-phone-out').val(),
-					email : $('#edit-email-out').val(),
+					postalCode : $('#edit-code-sup').val(),
+					phone : $('#edit-phone-sup').val(),
+					email : $('#edit-email-sup').val(),
 					active : 0
+					
 			}
-			
+			//console.log(supplier);
 			$.ajax({
-				url : baseUrl+"outlet/update",
+				url : baseUrl+"supplier/update",
 				type : 'PUT',
-				data : JSON.stringify(outlet),
+				data : JSON.stringify(supplier),
 				contentType : 'application/json',
 				success : function(data) {
-					alert('Outlet non-active');
-					window.location = baseUrl+"outlet/index";
+					alert('Supplier nonactive')
+					window.location = baseUrl+"supplier/index";
 				},
 				error : function() {
 					alert('update failed!!');
 				}
 			});
+			
 		});
 		
-//------------------------------------------------------------------------------------------------update----------------------------------------------
+//-------------------------------------------------------------------------------------------------------------update----------
 		
-		$('#btn-update').on('click', function() {
-			var outlet = {
-					id : $('#edit-id').val(),
-					name : $('#edit-name-out').val(),
-					address : $('#edit-address-out').val(),
+		$('#btn-update-sup').on('click', function() {
+			var supplier = {
+					id : $('#edit-id-sup').val(),
+					name : $('#edit-name-sup').val(),
+					address : $('#edit-address-sup').val(),
 					provinsi : {
-						id : $('#edit-prov-out').val()
+						id : $('#edit-prov-sup').val()
 					},
 					region : {
-						id : $('#edit-reg-out').val()
+						id : $('#edit-reg-sup').val()
 					},
 					district : {
-						id : $('#edit-dis-out').val()
+						id : $('#edit-dis-sup').val()
 					},
-					postalCode : $('#edit-code-out').val(),
-					phone : $('#edit-phone-out').val(),
-					email : $('#edit-email-out').val(),
+					postalCode : $('#edit-code-sup').val(),
+					phone : $('#edit-phone-sup').val(),
+					email : $('#edit-email-sup').val(),
 					active : 1
 			}
+			//console.log(supplier);
 			
 			$.ajax({
-				url : baseUrl+"outlet/update",
+				url : baseUrl+"supplier/update",
 				type : 'PUT',
-				data : JSON.stringify(outlet),
+				data : JSON.stringify(supplier),
 				contentType : 'application/json',
 				success : function(data) {
 					alert('update success!!')
-					window.location = baseUrl+"outlet/index";
+					window.location = baseUrl+"supplier/index";
 				},
 				error : function() {
 					alert('update failed!!');
@@ -206,7 +208,7 @@ $(function() {
 		
 //---------------------------------------------------------------edit list region---------------------------------------------
 		
-		$('#edit-prov-out').on('change', function() {
+		$('#edit-prov-sup').on('change', function() {
 			var id = $(this).val();
 			//console.log(id);
 			if (id != ""){
@@ -222,7 +224,7 @@ $(function() {
 								region.push(reg);
 							})
 							
-							$('#edit-reg-out').html(region);
+							$('#edit-reg-sup').html(region);
 					}, error : function(){
 						alert('get failed');
 					}
@@ -232,7 +234,7 @@ $(function() {
 		
 //----------------------------------------------------------------------edit list district----------------------------------
 		
-		$('#edit-reg-out').on('change', function() {
+		$('#edit-reg-sup').on('change', function() {
 			var id = $(this).val();
 			//console.log(id);
 			if (id !="" ){
@@ -248,11 +250,12 @@ $(function() {
 								district.push(dis);
 							})
 							
-							$('#edit-dis-out').html(district);
+							$('#edit-dis-sup').html(district);
 					}, error : function(){
 						alert('get failed');
 					}
 				});
 			}
 		});
+				
 });

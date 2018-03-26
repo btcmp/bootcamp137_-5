@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -50,6 +51,19 @@ public class Kategori {
 	
 	@Column(nullable=false)
 	private boolean active;
+
+	//property tidak dimasukan ke database, tidak dibuatkan sebagai field(tabel bantuan)
+	@Transient 
+	private int itemStock;
+	
+	
+	public int getItemStock() {
+		return itemStock;
+	}
+
+	public void setItemStock(int itemStock) {
+		this.itemStock = itemStock;
+	}
 
 	public String getId() {
 		return id;

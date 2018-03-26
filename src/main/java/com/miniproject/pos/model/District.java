@@ -130,6 +130,17 @@ public class District {
 		this.outlets = outlets;
 	}
 	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="district")
+	private List<Supplier> suppliers;
+
+
+	public List<Supplier> getSuppliers() {
+		return suppliers;
+	}
+
+	public void setSuppliers(List<Supplier> suppliers) {
+		this.suppliers = suppliers;
+	}
 	
 	
 	
