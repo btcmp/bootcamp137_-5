@@ -56,7 +56,17 @@ public class Kategori {
 	@Transient 
 	private int itemStock;
 	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="categoryId")
+	private List<Items> items;
 	
+	public List<Items> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Items> items) {
+		this.items = items;
+	}
+
 	public int getItemStock() {
 		return itemStock;
 	}

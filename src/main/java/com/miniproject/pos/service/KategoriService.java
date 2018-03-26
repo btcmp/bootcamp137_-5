@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.miniproject.pos.dao.ItemsDao;
 import com.miniproject.pos.dao.KategoriDao;
+import com.miniproject.pos.model.Items;
 import com.miniproject.pos.model.Kategori;
 
 @Service
@@ -15,6 +17,9 @@ public class KategoriService {
 
 	@Autowired
 	KategoriDao kategoriDao;
+	
+	@Autowired
+	ItemsDao itemsDao;
 	
 	public void save(Kategori kategori) {
 		kategoriDao.save(kategori);
@@ -33,6 +38,14 @@ public class KategoriService {
 	}
 	
 	public List<Kategori> selectAll(){
-		return kategoriDao.selectAll();
+		List<Kategori> kategoris = kategoriDao.selectAll();
+		for(Kategori kategori : kategoris) {
+			List<Items> items = itemsDao.getItemByKategori(kategori);
+			
+			kategori.setItemStock(items.size());
+			System.out.println(kategori.getName()+" item= "+ kategori.getItemStock());
+		}
+		
+		return kategoris;
 	}
 }

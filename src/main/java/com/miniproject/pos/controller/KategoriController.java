@@ -25,7 +25,6 @@ public class KategoriController {
 	KategoriService kategoriService;
 	
 	@RequestMapping("/index")
-	@ResponseBody
 	public String index(Model model) {
 		List<Kategori> kat = kategoriService.selectAll();
 		model.addAttribute("kats", kat);
