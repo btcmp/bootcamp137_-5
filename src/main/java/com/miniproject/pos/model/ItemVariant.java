@@ -1,6 +1,8 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,13 +11,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.miniproject.pos.utils.Formatter;
+
 
 @Entity
 @Table(name="pos_item_variant")
@@ -38,16 +45,20 @@ public class ItemVariant {
 	@Column(nullable=false)
 	private double price;
 	
-	/*@Column(name="created_by", nullable=true)
-	private long createdBy;*/
+	@ManyToOne
+	@JoinColumn(name="created_by", nullable=true)
+	private User createdBy;
 	
+	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
 	
-	/*@Column(name="modified_by", nullable=true)
-	private long modifiedBy;*/
+	@ManyToOne
+	@JoinColumn(name="modified_by", nullable=true)
+	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;
@@ -56,11 +67,15 @@ public class ItemVariant {
 	private boolean active;
 
 	@ManyToOne
-	@JoinColumn(name="item_id")
+    @JoinColumn(name = "item_id")
 	private Items itemId;
 
-	@OneToOne(mappedBy = "variantId", fetch = FetchType.LAZY, optional = false)
-	private ItemInventory inventory;
+	@OneToMany(mappedBy = "variantId", fetch = FetchType.LAZY)
+	private List<ItemInventory> inventory;
+	
+	public ItemVariant() {
+		this.active = true;
+	}
 	
 	//setter n getter
 	public String getId() {
@@ -75,11 +90,13 @@ public class ItemVariant {
 		this.itemId = itemId;
 	}
 
-	public ItemInventory getInventory() {
+
+
+	public List<ItemInventory> getInventory() {
 		return inventory;
 	}
 
-	public void setInventory(ItemInventory inventory) {
+	public void setInventory(List<ItemInventory> inventory) {
 		this.inventory = inventory;
 	}
 
@@ -103,6 +120,10 @@ public class ItemVariant {
 		this.sku = sku;
 	}
 
+	public String getPriceFormatted() {
+		return Formatter.currency(price);
+	}
+	
 	public double getPrice() {
 		return price;
 	}
@@ -112,13 +133,13 @@ public class ItemVariant {
 	}
 	
 
-	/*public long getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
-	}*/
+	}
 
 	public Date getCreatedOn() {
 		return createdOn;
@@ -128,13 +149,13 @@ public class ItemVariant {
 		this.createdOn = createdOn;
 	}
 
-	/*public long getModifiedBy() {
+	public User getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(long modifiedBy) {
+	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
-	}*/
+	}
 
 	public Date getModifiedOn() {
 		return modifiedOn;
@@ -150,16 +171,5 @@ public class ItemVariant {
 
 	public void setActive(boolean active) {
 		this.active = active;
-	}
-
-	public Items getItems() {
-		return itemId;
-	}
-
-	public void setItems(Items items) {
-		this.itemId = items;
-	}
-	
-	
-	
+	}	
 }

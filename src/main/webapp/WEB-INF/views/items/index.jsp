@@ -19,16 +19,16 @@
 		<div class="col-xs-12">
 			<div class="box">
 				<div class="box-header">
-					<h3>Daftar Items</h3>
+					<h3>List Items</h3>
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
 					<p>
-						<button class="btn btn-primary" id="tambah-data">Add
+						<button class="btn btn-primary" id="add-data">Add
 							Items</button>
 					</p>
 					<table id="items-list"
-						class="table table-stripped table-bordered table-hover">
+						class="table table-striped table-bordered table-hover">
 						<thead>
 							<tr>
 								<th>Name</th>
@@ -96,12 +96,12 @@
 							</div>
 							<div class="col-md-6">
 								<button type="button" class="btn btn-primary pull-right"
-									id="tambah-variant">Add Variant</button>
+									id="add-variant">Add Variant</button>
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<table class="table table-bordered table-stripped"
+						<table class="table table-bordered table-striped"
 							id="list-variant">
 							<thead>
 								<tr>
@@ -119,9 +119,9 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-md-4"><button class="btn btn-primary" id="tambah-data">Back</button></div>
-							<div class="col-md-4 text-center"><button class="btn btn-primary" id="tambah-data">Cancel</button></div>
-							<div class="col-md-4"><button class="btn btn-primary pull-right" id="tambah-data">Save</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
+							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-items-save">Save</button></div>
 						</div>
 					</div>
 				</form>
@@ -155,9 +155,10 @@
 									id="variant-id">
 							</div>
 							<div class="col-md-4">
-								<input name="variant-price" type="text"
-									placeholder="Unit Price" data-parsley-required="true"
-									class="form-control" id="variant-price">
+								<input name="variant-price-mask" type="text"
+									placeholder="Unit Price" value="0" data-parsley-required="true"
+									class="form-control" id="variant-price-mask">
+								<input name="variant-price" type="hidden" data-parsley-required="true" id="variant-price">
 							</div>
 							<div class="col-md-4">
 								<input name="variant-sku" type="text" placeholder="SKU"
@@ -184,9 +185,9 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-md-4"><button type="button" class="btn btn-primary" id="tambah-data">Back</button></div>
-							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="tambah-data">Cancel</button></div>
-							<div class="col-md-4"><button type="button" class="btn btn-primary pull-right" id="btn-add-variant">Add</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
+							<div class="col-md-4"><button type="button" state="create" class="btn btn-primary pull-right" id="btn-add-variant">Add</button></div>
 						</div>
 					</div>
 				</form>

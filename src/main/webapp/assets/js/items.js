@@ -1,88 +1,115 @@
 $(document).ready(function() {
-    $('#items-list').DataTable( {
+    var table = $('#items-list').DataTable( {
         "ajax": baseUrl+"items/get-all-data",
-        "columns": [
-            { "data": "id" },
-            { "data": "id" },
-            { "data": "id" },
-            { "data": "id" },
-            { "data": "id" },
-            { "data": "id" }
+        "columnDefs": [ 
+        {
+            "targets": 0,
+            "data": null,
+            "render": function(data){
+            	return data.variantId.itemId.name+" - "+data.variantId.name;
+            }
+        },
+        {
+            "targets": 1,
+            "data": null,
+            "render": function(data){
+            	return data.variantId.itemId.categoryId.name;
+            }
+        },
+        {
+            "targets": 2,
+            "data": null,
+            "render": function(data){
+            	return data.variantId.priceFormatted;
+            }
+        },
+        {
+            "targets": 3,
+            "data": null,
+            "render": function(data){
+            	return data.endingQty;
+            }
+        },
+        {
+            "targets": 4,
+            "data": null,
+            "render": function(data){
+            	return "alert";
+            }
+        },
+        {
+            "targets": 5,
+            "data":null,
+            "render": function(data){
+            	return "<button class='btn btn-success update-items' data-id='"+data.variantId.itemId.id+"'>Edit</button>";
+            }
+        }
         ]
     } );
     
-    $('#harga').inputmask('numeric', {
+    $('#variant-price-mask').inputmask('numeric', {
         radixPoint: '.',
         groupSeparator: ',',
         digits: 0,
         autoGroup: true,
         prefix: 'Rp', //No Space, this will truncate the first character
-        rightAlign: false,
-        oncleared: function () { self.Value(''); }
+        rightAlign: false
     });
 
-    $('#harga').trigger('change');
+    $('#variant-price-mask').trigger('change');
 
-    $('#harga').on('change', function () {
+    $('#variant-price-mask').on('change', function () {
         var value = $(this).val().split('.');
         var numDecimal = Number(value[0].replace(/[^0-9]+/g,''));
-        $('#harga-mask').val(numDecimal);
-        $('#harga-mask').trigger('change');
+        $('#variant-price').val(numDecimal);
+        $('#variant-price').trigger('change');
     });
-        
-    function clearForm(){
-    	$('#id').val('');
-       	$('#nama-barang').val('');
-       	$('#kode-barang').val('');
-    	$('#harga').val('');
-    	$('#harga-mask').val('');
-    	$('#stock').val('');
-    }
         
     var ok;
     var state;
+    var listVariant = [];
+    var tempUpdate;
     $('#form-items').parsley().on('field:validated', function() {
         ok = $('.parsley-error').length === 0;
         $('.callout-warning').toggleClass('hidden', ok);
-    })
-    .on('form:submit', function() {
+    });
+    $(document).on('submit','#form-items', function(e) {
+    	e.preventDefault();
     	if(ok){
-    		var barang;
+    		var items;
     		var link;
     		var method;
     		if(state == 'simpan'){
-    			barang = {
-    				'namaBarang'	: $('#nama-barang').val(),
-    				'kodeBarang'	: $('#kode-barang').val(),
-    				'harga' : $('#harga-mask').val(),
-    				'stock' : $('#stock').val()
+    			items = {
+    				'name'	: $('#items-name').val(),
+    				'categoryId'	: {
+    					'id' : $('#items-category-id').val(),
+    				},
+    				'variants' : listVariant
     			};
-    			link = baseUrl+'barang/save'
+    			link = baseUrl+'items/save'
     			method = 'POST';
     		}else{
-    			barang = {
-    					'id' : $('#id').val(),
-    					'namaBarang'	: $('#nama-barang').val(),
-    					'kodeBarang'	: $('#kode-barang').val(),
-    					'harga' : $('#harga-mask').val(),
-    					'stock' : $('#stock').val()
-    				};
-    			link = baseUrl+'barang/update';
+    			tempUpdate.name = $('#items-name').val();
+    			tempUpdate.categoryId.id = $('#items-category-id').val();
+    			tempUpdate.variants = listVariant;
+    			items = tempUpdate;
+    			link = baseUrl+'items/update';
     			method = 'PUT';
     		}
     		
     		$.ajax({
     			type : method,
     			url :link,
-    			data :JSON.stringify(barang),
+    			data :JSON.stringify(items),
     			contentType: 'application/json',
     			success:function(data){
     				if(data.status == 'success'){
-    					createTable(data);
+    					table.ajax.reload( null, false );
     					$('#myModal').modal('hide');
     					clearForm();
     					displayNotif(data.keterangan, data.status);
-    					$('#form-barang').parsley().reset();
+    					$('#form-items').parsley().reset();
     				}else{
     					$.each(data.error, function(key, value) {
     						$('#'+value[0]).parsley().removeError(value[0]+'-error', {updateClass: true});
@@ -100,35 +127,35 @@ $(document).ready(function() {
         return false;
     });
 
-    function ambilDataById(id, env){
+    function clearForm(){
+    	$('#items-id').val('');
+       	$('#items-name').val('');
+       	$('#items-category-id').val('');
+    	listVariant = [];
+    }
+    
+    function ambilDataById(id){
     	$.ajax({
     			type : 'GET',
-    			url :baseUrl+'barang/get-one/'+id,
-    			success:function(data){
-    				if(data.status == 'success'){
-    					var value = data.data;
-    					if(env == 'update'){
-    						$('#id').val(value.id);
-    					   	$('#nama-barang').val(value.namaBarang);
-    					   	$('#kode-barang').val(value.kodeBarang);
-    					   	$('#stock').val(value.stock);
-    					   	$('#harga').val(value.harga);
-    						$('#harga').trigger('change');
-    					}else{
-    						$('#barang-detail-id').html(value.id);
-    						$('#barang-detail-kode').html(value.kodeBarang);
-    					   	$('#barang-detail-nama').html(value.namaBarang);
-    						$('#barang-detail-harga').html(value.formatedHarga);
-    						$('#barang-detail-stock').html(value.stock);
-    					}
-    				}else{
-    					$('#barang-detail-id').html('');
-    					$('#barang-detail-kode').html('');
-    				   	$('#barang-detail-nama').html('');
-    					$('#barang-detail-harga').html('');
-    					$('#barang-detail-stock').html('');
-    					createTable(data);
-    					displayNotif(data.keterangan, data.status);
+    			url :baseUrl+'items/get-one/'+id,
+    			success:function(response){
+    				if(response.status == 'success'){
+    					var tampung;
+    					listVariant = [];
+        				$.each(response.data, function(key, val){
+        					var inventory =  Object.assign({}, val);
+        					var variant = Object.assign({}, val.variantId);
+        					inventory.variantId = null;
+        					variant.inventory = [inventory];
+        					variant.itemId = null;
+        					delete variant.priceFormatted;
+        					listVariant.push(variant);
+        					tempUpdate = val.variantId.itemId;
+        				});
+        				$('#items-name').val(tempUpdate.name);
+    					$('#items-id').val(tempUpdate.id);
+        				$('#items-category-id').val(tempUpdate.categoryId.id);
+        				createTableVariant(listVariant);
     				}
     			},
     			error:function(){
@@ -137,29 +164,6 @@ $(document).ready(function() {
     		});
     }
         
-    $('#data-barang').delegate('.hapus-data', 'click', function() {
-    	var id = $(this).attr('data-id');
-    	$('#hapus-data').attr('data-id', id);
-    	$('#modal-danger').modal('show');
-    });
-
-    $('#data-barang').delegate('.update-data','click', function() {
-    	state = 'update';
-    	var id = $(this).attr('data-id');
-    	ambilDataById(id, 'update');
-    	clearForm();
-    	$('.callout-warning').toggleClass('hidden', true);
-    	$('#form-barang').parsley().reset();
-    	$('#form-barang-action').attr('value', 'Update');
-    	$('#myModal-title').html('Ubah data barang');
-    	$('#myModal').modal('show');
-    });
-
-    $('#data-barang').delegate('.lihat-data', 'click',function() {
-    	var id = $(this).attr('data-id');
-    	ambilDataById(id, 'lihat');
-    	$('#modal-detail').modal('show');
-    });
 
     $('#hapus-data').on('click', function() {
     	var id = $(this).attr('data-id');
@@ -179,34 +183,57 @@ $(document).ready(function() {
     	});
     });
 
-    $('#tambah-data').on('click', function() {
+    $('#add-data').on('click', function() {
     	state = 'simpan';
     	$('#form-items').parsley().reset();
     	clearForm();
+    	createTableVariant(listVariant);
     	$('.callout-warning').toggleClass('hidden', true);
     	$('#form-barang-action').attr('value', 'Simpan');
-    	$('#myModal-title').html('Tambah data barang baru');
+    	$('#myModal-title').html('Add data barang baru');
     	$('#myModal').modal('show');
     });
     
-    $('#tambah-variant').on('click', function() {
+    $('#add-variant').on('click', function() {
+    	$("#btn-add-variant").attr("state", "create");
     	formVariantShow();
     });
     
-    var listVariant = [];
+    
     $('#btn-add-variant').on('click', function() {
-    	var variant = {
-    			"name" : $("#variant-name").val(),
-    			"price" : $("#variant-price").val(),
-    			"sku" : $("#variant-sku").val(),
-    			"inventory" : {
-    				"begining": $("#inventory-begining").val(),
-    				"alertAtQty": $("#inventory-alert-at").val()
-    			},
+    	var state = $(this).attr("state");
+    	if(state == "create"){
+    		var variant = {
+        			"name" : $("#variant-name").val(),
+        			"price" : $("#variant-price").val(),
+        			"sku" : $("#variant-sku").val(),
+        			"inventory" : [{
+        				"begining": $("#inventory-begining").val(),
+        				"alertAtQty": $("#inventory-alert-at").val()
+        			}],
+        	};
+    		listVariant.push(variant);
+    	}else{
+    		var index = $(this).attr("data-id");
+    		var variant = listVariant[index];
+    		variant.name = $("#variant-name").val();
+    		variant.price = $("#variant-price").val();
+    		variant.sku = $("#variant-sku").val();
+    		variant.inventory.begining = $("#inventory-begining").val();
+    		variant.inventory.alertAtQty = $("#inventory-alert-at").val();
+    		listVariant[index] = variant;
     	}
-    	listVariant.push(variant);
     	createTableVariant(listVariant);
     	formVariantHide();
+    });
+    
+    $('#items-list').delegate('.update-items','click', function() {
+    	var id = $(this).attr("data-id");
+    	state = 'update';
+    	ambilDataById(id);
+    	$('#form-items').parsley().reset();
+    	clearForm();
+        $('#myModal').modal('show');
     });
     
     function formVariantHide(){
@@ -222,39 +249,55 @@ $(document).ready(function() {
     function resetFormVariant(){
     	$("#variant-name").val("");
     	$("#variant-price").val("");
+    	$("#variant-price-mask").val("0");
     	$("#variant-sku").val("");
     	$("#inventory-begining").val("");
     	$("#inventory-alert-at").val("");
     }
     
     $('#list-variant').delegate('.edit-variant','click', function() {
-    	var state = $(this).attr("state");
     	var id = $(this).attr("data-id");
-    	if(state == "new"){
-    		var data = listVariant[id];
-    		$("#variant-name").val(data.name);
-        	$("#variant-price").val(data.price);
-        	$("#variant-sku").val(data.sku);
-        	$("#inventory-begining").val(data.inventory.begining);
-        	$("#inventory-alert-at").val(data.inventory.alertAtQty);
+    	var data = listVariant[id];
+    	$("#variant-name").val(data.name);
+        $("#variant-price").val(data.price);
+        $("#variant-sku").val(data.sku);
+        $("#inventory-begining").val(data.inventory[0].begining);
+        $("#inventory-alert-at").val(data.inventory[0].alertAtQty);
+    	$("#btn-add-variant").attr("state", "update");
+    	$("#btn-add-variant").attr("data-id", id);
+        $('#modal-variant').modal('show');
+    });
+    
+    $('#list-variant').delegate('.delete-variant','click', function() {
+    	var id = $(this).attr("data-id");
+    	if(confirm("delete variant ?")){
+    		var tamp = listVariant[id];
+    		if(tamp.id == null){
+    			listVariant.splice(id, 1);
+	    		createTableVariant(listVariant);
+    		}else{
+	    		$.ajax({
+	        		type : 'DELETE',
+	        		url :baseUrl+'items/delete-variant/'+tamp.id,
+	        		success:function(data){
+	        			if(data.status == 'success' || data.status =='warning'){
+	        				listVariant.splice(id, 1);
+	        	    		createTableVariant(listVariant);
+	        			}
+	        		},
+	        		error:function(){
+	        			alert('gagal menghapus data');
+	        		}
+	        	});
+    		}
     	}
-    	$('#modal-variant').modal('show');
     });
     
     function createTableVariant(data){
-    	var id = "";
-    	var state = "";
     	var index = 0;
     	$("#list-variant-body").empty();
     	$.each(data, function(key, val){
-    		if(val.id == null){
-    			id = index;
-    			state = "new";
-    		}else{
-    			id = val.id;
-    			state = "update";
-    		}
-    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>"+val.price+"</td><td>"+val.sku+"</td><td>"+val.inventory.begining+"</td><td><button type='button' class='btn btn-success edit-variant' state="+state+" data-id="+id+">edit</button></td></tr>");
+    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>Rp "+(parseInt(val.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td><td>"+val.sku+"</td><td>"+val.inventory[0].begining+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> <button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button></td></tr>");
     		index++;
     	});
     }
