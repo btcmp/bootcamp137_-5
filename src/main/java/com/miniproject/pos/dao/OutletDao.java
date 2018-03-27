@@ -15,4 +15,6 @@ public interface OutletDao {
 	public Outlet getOne(String id);
 	
 	public List<Outlet> selectAll();
+
+	public List<Outlet> getOutletNameBySearch(String search);
 }

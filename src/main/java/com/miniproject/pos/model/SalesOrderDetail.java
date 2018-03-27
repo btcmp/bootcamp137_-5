@@ -1,44 +1,43 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="pos_mst_category")
-public class Kategori {
+@Table(name="POS_T_SO_DETAIL")
+public class SalesOrderDetail {
 
-	//property
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
-	@Size(max=50)
 	@Column(nullable=false)
-	private String name;
+	private int qty;
+	
+	@Column(name="unit_cost", nullable=true)
+	private float unitCost;
+	
+	@Column(name="sub_total", nullable=true)
+	private float subTotal;
 	
 	@ManyToOne
-	@JoinColumn(name="Created_By", nullable=true)
+	@JoinColumn(name="created_by", nullable=true)
 	private User createdBy;
 	
-	@Column(name="Created_On", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="created_on", nullable=true)
 	private Date createdOn;
 	
 	@ManyToOne
@@ -46,34 +45,8 @@ public class Kategori {
 	private User modifiedBy;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="modified_on", nullable=true)
+	@Column(name="modified_on")
 	private Date modifiedOn;
-	
-	@Column(nullable=false)
-	private boolean active;
-
-	//property tidak dimasukan ke database, tidak dibuatkan sebagai field(tabel bantuan)
-	@Transient 
-	private int itemStock;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="categoryId")
-	private List<Items> items;
-	
-	public List<Items> getItems() {
-		return items;
-	}
-
-	public void setItems(List<Items> items) {
-		this.items = items;
-	}
-
-	public int getItemStock() {
-		return itemStock;
-	}
-
-	public void setItemStock(int itemStock) {
-		this.itemStock = itemStock;
-	}
 
 	public String getId() {
 		return id;
@@ -83,12 +56,28 @@ public class Kategori {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public int getQty() {
+		return qty;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setQty(int qty) {
+		this.qty = qty;
+	}
+
+	public float getUnitCost() {
+		return unitCost;
+	}
+
+	public void setUnitCost(float unitCost) {
+		this.unitCost = unitCost;
+	}
+
+	public float getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(float subTotal) {
+		this.subTotal = subTotal;
 	}
 
 	public User getCreatedBy() {
@@ -122,15 +111,28 @@ public class Kategori {
 	public void setModifiedOn(Date modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
+	
+	//relasi
+	@ManyToOne
+	private SalesOrder salesOrder;
+	
+	@ManyToOne
+	private ItemVariant itemVariant;
 
-	public boolean isActive() {
-		return active;
+	public SalesOrder getSalesOrder() {
+		return salesOrder;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setSalesOrder(SalesOrder salesOrder) {
+		this.salesOrder = salesOrder;
 	}
-	
-	
+
+	public ItemVariant getItemVariant() {
+		return itemVariant;
+	}
+
+	public void setItemVariant(ItemVariant itemVariant) {
+		this.itemVariant = itemVariant;
+	}
 	
 }

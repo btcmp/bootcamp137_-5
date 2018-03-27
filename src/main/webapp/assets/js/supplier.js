@@ -1,4 +1,5 @@
 $(function() {
+	
 
 //----------------------------------------------------------------------save---------------------------------------------------
 		$('#new').on('click', function() {
@@ -20,7 +21,8 @@ $(function() {
 					},
 					postalCode : $('#save-code-sup').val(),
 					phone : $('#save-phone-sup').val(),
-					email : $('#save-email-sup').val()
+					email : $('#save-email-sup').val(),
+					active : 1
 			}
 			//console.log(out);
 		
@@ -256,6 +258,14 @@ $(function() {
 					}
 				});
 			}
+		});
+		
+//-------------------------------------------------------------------------------------------------------Search----------------------------------------------
+		
+		$('#btn-carri').on('click', function() {
+			var  kata =  $('#carri').val();
+			console.log(kata);
+			//window.location = baseUrl+"outlet/index/src?search="+word;
 		});
 				
 });

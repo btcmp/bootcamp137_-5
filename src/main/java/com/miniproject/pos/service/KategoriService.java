@@ -41,7 +41,9 @@ public class KategoriService {
 		List<Kategori> kategoris = kategoriDao.selectAll();
 		for(Kategori kategori : kategoris) {
 			List<Items> items = itemsDao.getItemByKategori(kategori);
-			
+			if(items == null) {
+				kategori.setItemStock(0);
+			}else
 			kategori.setItemStock(items.size());
 			System.out.println(kategori.getName()+" item= "+ kategori.getItemStock());
 		}

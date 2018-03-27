@@ -14,31 +14,27 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="pos_mst_category")
-public class Kategori {
+@Table(name="POS_T_SO")
+public class SalesOrder {
 
-	//property
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
-	@Size(max=50)
-	@Column(nullable=false)
-	private String name;
+	@Column(name="grand_total", nullable=false)
+	private float grandTotal;
 	
 	@ManyToOne
-	@JoinColumn(name="Created_By", nullable=true)
+	@JoinColumn(name="created_by", nullable=true)
 	private User createdBy;
 	
-	@Column(name="Created_On", nullable=true)
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="created_on", nullable=true)
 	private Date createdOn;
 	
 	@ManyToOne
@@ -46,34 +42,11 @@ public class Kategori {
 	private User modifiedBy;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="modified_on", nullable=true)
+	@JoinColumn(name="modified_on", nullable=true)
 	private Date modifiedOn;
 	
-	@Column(nullable=false)
-	private boolean active;
-
-	//property tidak dimasukan ke database, tidak dibuatkan sebagai field(tabel bantuan)
-	@Transient 
-	private int itemStock;
-	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="categoryId")
-	private List<Items> items;
-	
-	public List<Items> getItems() {
-		return items;
-	}
-
-	public void setItems(List<Items> items) {
-		this.items = items;
-	}
-
-	public int getItemStock() {
-		return itemStock;
-	}
-
-	public void setItemStock(int itemStock) {
-		this.itemStock = itemStock;
-	}
+	@ManyToOne
+	private Customer customer;
 
 	public String getId() {
 		return id;
@@ -83,12 +56,12 @@ public class Kategori {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public float getGrandTotal() {
+		return grandTotal;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setGrandTotal(float grandTotal) {
+		this.grandTotal = grandTotal;
 	}
 
 	public User getCreatedBy() {
@@ -123,12 +96,24 @@ public class Kategori {
 		this.modifiedOn = modifiedOn;
 	}
 
-	public boolean isActive() {
-		return active;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setActive(boolean active) {
-		this.active = active;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+	
+	//relasi
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="salesOrder")
+	private List<SalesOrderDetail> salesOrderDetails;
+
+	public List<SalesOrderDetail> getSalesOrderDetails() {
+		return salesOrderDetails;
+	}
+
+	public void setSalesOrderDetails(List<SalesOrderDetail> salesOrderDetails) {
+		this.salesOrderDetails = salesOrderDetails;
 	}
 	
 	

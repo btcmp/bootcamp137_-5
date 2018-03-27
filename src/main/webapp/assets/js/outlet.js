@@ -1,5 +1,15 @@
 $(function() {
 
+
+//-------------------------------------------------------------------------------------------------------Search----------------------------------------------
+		
+		$('#btn-cari').on('click', function() {
+			var  word =  $('#cari').val();
+			//console.log(word);
+			window.location = baseUrl+"outlet/index/src?search="+word;
+		});
+	
+
 //----------------------------------------------------------------------save---------------------------------------------------
 		$('#add').on('click', function() {
 			$('#saveout').modal();
@@ -20,7 +30,8 @@ $(function() {
 					},
 					postalCode : $('#save-code').val(),
 					phone : $('#save-phone').val(),
-					email : $('#save-email').val()
+					email : $('#save-email').val(),
+					active : 1
 			}
 			//console.log(out);
 		
@@ -255,4 +266,5 @@ $(function() {
 				});
 			}
 		});
+		
 });
