@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.miniproject.pos.model.Employee;
+import com.miniproject.pos.model.Outlet;
 import com.miniproject.pos.model.User;
 import com.miniproject.pos.service.EmployeeService;
 import com.miniproject.pos.service.OutletService;
@@ -48,12 +49,15 @@ public class EmployeeController {
 	@ResponseBody
 	public Employee getEmployee(@PathVariable String id) {
 		Employee selectedEmployee = employeeService.get(id);
+		if(selectedEmployee.getUser() != null) {
+			selectedEmployee.getUser().setEmployee(null);
+		}
 		return selectedEmployee;
 	}
 	
 	@RequestMapping(value="/save-emp", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	public void saveEmpUsr(@RequestBody Employee e) {
+	public void saveEmployee(@RequestBody Employee e) {
 		employeeService.save(e);
 	}
 	
@@ -67,6 +71,12 @@ public class EmployeeController {
 	@ResponseStatus(HttpStatus.OK)
 	public void deactivate(@RequestBody Employee e) {
 		employeeService.deactivate(e);
+	}
+	
+	@RequestMapping(value="/edit-emp", method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public void editEmployee(@RequestBody Employee e) {
+		employeeService.update(e);
 	}
 	
 }
