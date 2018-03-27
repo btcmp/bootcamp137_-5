@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.miniproject.pos.model.Employee;
 import com.miniproject.pos.model.User;
 
 @Repository
@@ -37,7 +38,7 @@ public class UserDAOImpl implements UserDAO{
 	public void update(User u) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		session.update(u);
+		session.saveOrUpdate(u);
 		session.flush();
 	}
 
@@ -46,6 +47,22 @@ public class UserDAOImpl implements UserDAO{
 		Session session = sessionFactory.getCurrentSession();
 		session.delete(u);
 		session.flush();
+	}
+
+	@Override
+	public User getUserByEmployee(Employee e) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "from User u where u.employee.id like :empid";
+		List<User> listUser = session.createQuery(hql).setParameter("empid", e.getId()).list();
+		User u = listUser.get(0);
+		if(listUser.isEmpty()) {
+			return null;
+		} else {
+			return u;
+		}
+		
+		
 	}
 	
 }

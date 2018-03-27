@@ -51,9 +51,9 @@ public class EmployeeService {
 	}
 	
 	public void update(Employee e) {
-		Employee prevEmp = get(e.getId());
+		/*Employee prevEmp = get(e.getId());
 		
-		if(prevEmp.isHaveAccount() && !prevEmp.getUser().isActive()) {
+		if(prevEmp.isHaveAccount()) {
 			if(e.getUser()==null) {
 				e.setHaveAccount(true);
 				e.setUser(prevEmp.getUser());
@@ -61,7 +61,8 @@ public class EmployeeService {
 			} else {
 				e.getUser().setEmployee(e);
 				e.getUser().setActive(true);
-				userDAO.delete(prevEmp.getUser());
+				userDAO.update(e.getUser());
+				e.setUser(null);
 			}
 		} else {
 			if(e.getUser()==null) {
@@ -74,7 +75,25 @@ public class EmployeeService {
 		}
 		
 		e.setListOutlet(getListAssignedOutlet(e.getListOutlet()));
+		employeeDAO.update(e);*/
+		
+		User u;
+		e.setListOutlet(getListAssignedOutlet(e.getListOutlet()));
+		if(e.getUser() != null) {
+			u = userDAO.getUserByEmployee(e);
+			if(!u.equals(null)) {
+				e.getUser().setId(u.getId());
+			}
+			e.getUser().setEmployee(e);
+		} else {
+			u = userDAO.getUserByEmployee(e);
+			if(!u.equals(null)) {
+				u.setActive(false);
+				e.setUser(u);
+			}
+		}
 		employeeDAO.update(e);
+		
 	}
 	
 	public void delete(Employee e) {
@@ -101,7 +120,6 @@ public class EmployeeService {
 	
 	public List<Outlet> getListAssignedOutlet(List<Outlet> listOutlet){
 		List<Outlet> newListOutlet = new ArrayList<>();
-		
 		for (int i = 0; i < listOutlet.size(); i++) {
 			newListOutlet.add(outletDAO.getOne(listOutlet.get(i).getId()));
 		}

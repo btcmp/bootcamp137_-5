@@ -231,7 +231,7 @@ $(document).ready(function() {
        		active : true,
        		user : user
         }
-    	console.log($('#edit-user-id').val());
+    	console.log(employee);
     	$.ajax({
     		url : baseUrl+'employee/edit-emp',
    			type : 'PUT',

@@ -37,7 +37,7 @@ public class RoleDAOImpl implements RoleDAO {
 	public void update(Role r) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		session.update(r);
+		session.saveOrUpdate(r);
 		session.flush();
 	}
 
