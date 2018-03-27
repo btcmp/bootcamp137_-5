@@ -122,10 +122,6 @@ public class Employee {
 		return haveAccount;
 	}
 	
-	public void setHaveAcount(boolean haveAccount) {
-		this.haveAccount = haveAccount;
-	}
-	
 //	public User getCreatedBy() {
 //		return createdBy;
 //	}

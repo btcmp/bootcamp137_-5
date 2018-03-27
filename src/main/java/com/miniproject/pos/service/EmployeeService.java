@@ -33,7 +33,7 @@ public class EmployeeService {
 		e.setId(id);
 		e.setFirstName("-");
 		e.setLastName("-");
-		e.setHaveAcount(true);
+		e.setHaveAccount(true);
 		e.setActive(true);
 		return employeeDAO.getEmployee(e);
 	}
@@ -53,19 +53,26 @@ public class EmployeeService {
 	public void update(Employee e) {
 		Employee prevEmp = get(e.getId());
 		
-		if(e.getUser() == null) {
-			if(prevEmp.isHaveAccount()) {
+		if(prevEmp.isHaveAccount() && !prevEmp.getUser().isActive()) {
+			if(e.getUser()==null) {
 				e.setHaveAccount(true);
 				e.setUser(prevEmp.getUser());
-				e.getUser().setEmployee(e);
 				e.getUser().setActive(false);
+			} else {
+				e.getUser().setEmployee(e);
+				e.getUser().setActive(true);
+				userDAO.delete(prevEmp.getUser());
 			}
 		} else {
-			if(!prevEmp.isHaveAccount()) {
+			if(e.getUser()==null) {
+				
+			} else {
+				e.getUser().setEmployee(e);
 				e.getUser().setId(null);
+				e.getUser().setActive(true);
 			}
-			e.getUser().setEmployee(e);
 		}
+		
 		e.setListOutlet(getListAssignedOutlet(e.getListOutlet()));
 		employeeDAO.update(e);
 	}
@@ -98,7 +105,6 @@ public class EmployeeService {
 		for (int i = 0; i < listOutlet.size(); i++) {
 			newListOutlet.add(outletDAO.getOne(listOutlet.get(i).getId()));
 		}
-		
 		return newListOutlet;
 	}
 	
