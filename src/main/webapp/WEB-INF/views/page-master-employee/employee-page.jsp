@@ -82,9 +82,13 @@
 								<tr>
 									<td>${employee.firstName} ${employee.lastName}</td>
 									<td>${employee.email}</td>
-									<td><input type="checkbox" <c:if test="${employee.haveAccount == true}">checked</c:if> disabled></td>
-									<td></td>
-									<td>${employee.user.role.name}</td>
+									<td><input type="checkbox" <c:if test="${employee.haveAccount==true && employee.user.active==true}">checked</c:if> disabled></td>
+									<td>
+										<c:forEach items="${employee.listOutlet}" var ="outlet">
+											<c:out value="${outlet.name}, "></c:out>
+										</c:forEach>
+									</td>
+									<td><c:if test="${employee.haveAccount==true && employee.user.active==true}">${employee.user.role.name}</c:if></td>
 									<td>
 										<button type="button" class="edit btn btn-secondary" id="${employee.id}">Edit</button>
 										<button type="button" class="deactivate btn btn-secondary" id="${employee.id}">Deactivate</button>
@@ -147,6 +151,99 @@
 				<div class="modal-footer">
 					<button type="button" id="btn-cancel-deactivate" class="btn btn-primary" data-dismiss="modal">Cancel</button>
 					<button type="button" id="btn-exec-deactivate" class="btn btn-primary">Deactivate</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- modal edit employee -->
+	<div class="modal fade" id="modal-edit" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 class="modal-title">Edit Employee</h2>
+				</div>
+				<div class="modal-body">
+				<form class="form-room">
+					<div>
+						<input type="hidden" class="form-control cancelable" id="edit-id">
+						<div class="row form-group">
+							<div class="col-sm-4">
+								<input type="text" class="form-control cancelable" id="edit-fname" placeholder="first name">
+							</div>
+							<div class="col-sm-4">
+								<input type="text" class="form-control cancelable" id="edit-lname" placeholder="last name">
+							</div>
+							<div class="col-sm-4">
+								<input type="text" class="form-control cancelable" id="edit-email" placeholder="email">
+							</div>
+						</div>
+						<div class="row form-group">
+							<div class="col-sm-4">
+								<label for="edit-title">Title</label> <select id="edit-title">
+									<option value="Mr. ">Mr.</option>
+									<option value="Mrs. ">Mrs.</option>
+								</select>
+							</div>
+							<div class="col-sm-4">
+								<button type="button" class="btn btn-primary" id="btn-assign-outlet-edit">Assign Outlet</button>
+							</div>
+							<div class="col-sm-2 checkbox">
+								<input type="checkbox" id="edit-hasAccount">Create Account
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="row form-group" id="user-form-edit">
+						<div class="col-sm-2">
+							<label for="edit-role">Role</label>
+							<select id="edit-role">
+								<c:forEach items="${listRole}" var="role">
+									<option value="${role.id}">${role.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<input type="hidden" class="form-control cancelable" id="edit-user-id">
+						<div class="col-sm-4 ">
+							<input type="text" class="form-control cancelable" id="edit-username" placeholder="username">
+						</div>
+						<div class="col-sm-4 ">
+							<input type="text" class="form-control cancelable" id="edit-password" placeholder="password">
+						</div>
+					</div>
+				</form>
+			</div>
+				<div class="modal-footer">
+					<button type="button" id="btn-cancel-edit" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+					<button type="button" id="btn-exec-edit" class="btn btn-primary">Edit</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- modal assign outlet for employee -->
+	<div class="modal fade" id="modal-edit-outlet" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 class="modal-title">Edit Assigned Outlet to Employee</h2>
+				</div>
+				<div class="modal-body">
+					<form class="form-room">
+						<table class="table" id="outlet-table">
+							<tbody id="list-edit-outlet">
+								<c:forEach items="${listOutlet}" var="outlet">
+								<tr>
+									<td>${outlet.name}</td>
+									<td><input type="checkbox" class="selected-outlet" id="${outlet.id}"></td>
+								</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="btn-edit-outlet" class="btn btn-primary">Select</button>
 				</div>
 			</div>
 		</div>

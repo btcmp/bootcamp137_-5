@@ -37,6 +37,7 @@ public class EmployeeDAOImpl implements EmployeeDAO{
 	public void update(Employee e) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
+		session.clear();
 		session.update(e);
 		session.flush();
 	}

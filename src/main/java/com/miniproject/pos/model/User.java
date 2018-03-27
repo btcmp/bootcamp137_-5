@@ -55,7 +55,7 @@ public class User {
 	@Column
 	private boolean active;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	private Employee employee;
 	
 	@ManyToOne
