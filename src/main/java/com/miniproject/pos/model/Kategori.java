@@ -19,6 +19,9 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name="pos_mst_category")
 public class Kategori {
@@ -56,7 +59,7 @@ public class Kategori {
 	@Transient 
 	private int itemStock;
 	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="categoryId")
+	/*@OneToMany(fetch=FetchType.LAZY, mappedBy="categoryId")
 	private List<Items> items;
 	
 	public List<Items> getItems() {
@@ -65,7 +68,7 @@ public class Kategori {
 
 	public void setItems(List<Items> items) {
 		this.items = items;
-	}
+	}*/
 
 	public int getItemStock() {
 		return itemStock;

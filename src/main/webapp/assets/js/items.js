@@ -91,7 +91,11 @@ $(document).ready(function() {
     			method = 'POST';
     		}else{
     			tempUpdate.name = $('#items-name').val();
-    			tempUpdate.categoryId.id = $('#items-category-id').val();
+    			if(tempUpdate.categoryId == null){
+    				tempUpdate.categoryId = {"id":$('#items-category-id').val()};
+    			}else{
+    				tempUpdate.categoryId.id = $('#items-category-id').val();
+    			}
     			tempUpdate.variants = listVariant;
     			items = tempUpdate;
     			link = baseUrl+'items/update';

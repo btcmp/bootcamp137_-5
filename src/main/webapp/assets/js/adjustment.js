@@ -36,7 +36,7 @@ $(document).ready(function() {
     var options = {
     		url: baseUrl+"items/get-all-variant",
     		getValue: function(response) {
-    			return response.itemId.name+" - "+response.name;
+    			return response.variantId.itemId.name+" - "+response.variantId.name;
     		},
     		list: {
     			match: {
@@ -45,17 +45,17 @@ $(document).ready(function() {
     			onClickEvent: function() {
     				var value = $("#item-name-variant").getSelectedItemData();
     				var check = $.grep(detailAdjust, function(obj){
-    						return obj.variantId.id === value.id;
+    						return obj.variantId.id === value.variantId.id;
     				});
     				if(check[0] == null){
-    					delete value.priceFormatted;
+    					delete value.variantId.priceFormatted;
     					var adjust = {
-    							"variantId":value,
+    							"variantId":value.variantId,
     							"actualStock":0,
-    							"inStock":10
+    							"inStock":value.endingQty
     					}
     					detailAdjust.push(adjust);
-    					$("#form-list-item").append("<tr id='"+value.id+"'><td>"+value.itemId.name+" - "+value.name+"</td><td>10</td><td><input type='number' class='form-control adjust-qty' data-id='"+value.id+"' value='0' min='0' requeired/></td><td><button type='button' class='btn btn-danger delete-item-form' data-id='"+value.id+"'>X</button></td></tr>");
+    					$("#form-list-item").append("<tr id='"+value.variantId.id+"'><td>"+value.variantId.itemId.name+" - "+value.variantId.name+"</td><td>"+value.endingQty+"</td><td><input type='number' class='form-control adjust-qty' data-id='"+value.variantId.id+"' value='0' min='0' requeired/></td><td><button type='button' class='btn btn-danger delete-item-form' data-id='"+value.variantId.id+"'>X</button></td></tr>");
     					$("#item-name-variant").val('');
     				}
     			}
@@ -65,6 +65,24 @@ $(document).ready(function() {
 
     	$("#item-name-variant").easyAutocomplete(options);
         
+    	$(document).on('change','#status-more', function(e) {
+    		var status = $(this).val();
+    		var id = $(this).attr("data-id");
+    		if(status != ""){
+    			$.ajax({
+        			type : "POST",
+        			url :baseUrl+'adjustment/status/'+id+"/"+status,
+        			success:function(data){
+        				if(data.status == 'success'){
+        					
+        				}
+        			},
+        			error:function(){
+        				alert('Terjadi kesalahan saat menghubugni server');
+        			}
+        		});
+    		}
+    	});
     $(document).on('submit','#form-adjust', function(e) {
     	e.preventDefault();
     		var adjust = {
@@ -104,41 +122,6 @@ $(document).ready(function() {
        	$('#adjust-name').val('');
        	$('#adjust-category-id').val('');
     	listVariant = [];
-    }
-    
-    function ambilDataById(id){
-    	$.ajax({
-    			type : 'GET',
-    			url :baseUrl+'adjust/get-one/'+id,
-    			success:function(response){
-    				if(response.status == 'success'){
-    					var tampung;
-    					listVariant = [];
-        				$.each(response.data, function(key, val){
-        					var item = {
-        							"id" : val.itemId.id,
-        			    			"name" : val.itemId.name,
-        			    			"price" : val.itemId.price,
-        			    			"sku" : val.itemId.sku,
-        			    			"inventory" : [{
-        			    				"id" : val.id,
-        			    				"begining": val.begining,
-        			    				"alertAtQty": val.alertAtQty
-        			    			}]
-        			    	}
-        					listVariant.push(item);
-        					tampung = val.itemId.itemId;
-        				});
-        				$('#adjust-name').val(tampung.name);
-    					$('#adjust-id').val(tampung.id);
-        				$('#adjust-category-id').val(tampung.categoryId.id);
-        				createTableAdjust(listVariant);
-    				}
-    			},
-    			error:function(){
-    				alert('data gagal disimpan');
-    			}
-    		});
     }
         
 
@@ -208,8 +191,21 @@ $(document).ready(function() {
     	$.ajax({
 	        		type : 'GET',
 	        		url :baseUrl+'adjustment/get-adjustment-detail/'+id,
-	        		success:function(data){
-	        			if(data.status == 'success' || data.status =='warning'){
+	        		success:function(response){
+	        			if(response.status == 'success' || response.status =='warning'){
+	        				var data = response.data;
+	        				$("#adjust-status-label").html("");
+	        				$("#adjust-status-label").html(data.status);
+	        				$("#adjust-notes-label").val(data.notes);
+	        				$("#status-more").attr("data-id", id);
+	        				$("#status-history").html("");
+	        				$("#label-list-item").empty();
+	        				$.each(data.adjustmentHistory, function(key, val){
+	        					$("#status-history").append("On "+val.createdOnFormatted+" - "+val.status+"</br>");
+	        				});
+	        				$.each(data.adjustmentDetail, function(key, val){
+	        					$("#label-list-item").append("<tr><td>"+val.variantId.itemId.name+" - "+val.variantId.name+"</td><td>"+val.inStock+"</td><td>"+val.actualStock+"</td></tr>");
+	        				});
 	        				$('#modal-detail').modal('show');
 	        			}
 	        		},

@@ -40,7 +40,7 @@ public class AdjustmentController {
 	public ResponseMessage getAdjustmentDetail(@PathVariable String id) {
 		ResponseMessage rm = new ResponseMessage();
 		rm.setStatus("success");
-		rm.setData(as.getAdjustmentDetailByAdjustmentId(id));
+		rm.setData(as.getAdjustmentById(id));
 		return rm;
 	}
 	
@@ -58,6 +58,18 @@ public class AdjustmentController {
 	public ResponseMessage save(@RequestBody Adjustment adjustment) {
 		ResponseMessage rm = new ResponseMessage();
 		as.save(adjustment);
+		rm.setStatus("success");
+		rm.setKeterangan("Data Berhasil Disimpan");
+		return rm;
+	}
+	
+	@RequestMapping(value="/status/{id}/{status}", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseMessage save(@PathVariable("id") String id, @PathVariable("status") String status) {
+		ResponseMessage rm = new ResponseMessage();
+		Adjustment adj = as.getAdjustment(id);
+		adj.setStatus(status);
+		as.update(adj);
 		rm.setStatus("success");
 		rm.setKeterangan("Data Berhasil Disimpan");
 		return rm;

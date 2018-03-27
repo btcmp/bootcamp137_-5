@@ -7,45 +7,45 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.miniproject.pos.model.Supplier;
+import com.miniproject.pos.model.Customer;
 
 @Repository
-public class SupplierDaoImpl implements SupplierDao{
+public class CustomerDaoImpl implements CustomerDao{
 
 	@Autowired
 	SessionFactory sessionFactory;
 	
-	public void save(Supplier supplier) {
+	public void save(Customer customer) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		session.save(supplier);
+		session.save(customer);
 		session.flush();
 	}
 
-	public void delete(Supplier supplier) {
+	public void delete(Customer customer) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		session.delete(supplier);
+		session.delete(customer);
 		session.flush();
 	}
 
-	public void update(Supplier supplier) {
+	public void update(Customer customer) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		session.update(supplier);
+		session.update(customer);
 		session.flush();
 	}
 
-	public Supplier getOne(String id) {
+	public Customer getOne(String id) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		return session.get(Supplier.class, id);
+		return session.get(Customer.class, id);
 	}
 
-	public List<Supplier> selectAlll() {
+	public List<Customer> selectAll() {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		return session.createCriteria(Supplier.class).list();
+		return session.createCriteria(Customer.class).list();
 	}
 
 }

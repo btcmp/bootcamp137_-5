@@ -13,48 +13,47 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.miniproject.pos.model.Items;
-import com.miniproject.pos.model.Kategori;
-import com.miniproject.pos.service.KategoriService;
+import com.miniproject.pos.model.Customer;
+import com.miniproject.pos.service.CustomerService;
 
 @Controller
-@RequestMapping("/kategori")
-public class KategoriController {
+@RequestMapping("/customer")
+public class CustomerController {
 
 	@Autowired
-	KategoriService kategoriService;
+	CustomerService customerService;
 	
-	@RequestMapping("/index")
+	@RequestMapping(value="/index")
 	public String index(Model model) {
-		List<Kategori> kat = kategoriService.selectAll();
-		model.addAttribute("kats", kat);
-		return "kategori/index";
+		List<Customer> customers = customerService.selectAll();
+		model.addAttribute("custs", customers);
+		return "customer/index";
 	}
 	
-		
-	@RequestMapping(value="/save", method= RequestMethod.POST)
+	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	public void save(@RequestBody Kategori kategori) {
-		kategoriService.save(kategori);
+	public void save(@RequestBody Customer customer) {
+		customerService.save(customer);
 	}
 	
 	@RequestMapping(value="/update", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
-	public void update(@RequestBody Kategori kategori) {
-		kategoriService.update(kategori);
+	public void update(@RequestBody Customer customer) {
+		customerService.update(customer);
 	}
 	
-	@RequestMapping(value="/get-id/{id}", method= RequestMethod.GET)
+	@RequestMapping(value="/get-id/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Kategori getOne(@PathVariable String id) {
-		return kategoriService.getOne(id);
+	public Customer getOne(@PathVariable String id) {
+		return customerService.getOne(id);
 	}
 	
-	@RequestMapping(value="/delete/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="/delete/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public void delete(@PathVariable String id) {
-		Kategori kat = new Kategori();
-		kat.setId(id);
-		kategoriService.delete(kat);
+		Customer cus = new Customer();
+		cus.setId(id);
+		customerService.delete(cus);
 	}
+	
 }

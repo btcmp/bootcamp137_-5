@@ -142,6 +142,18 @@ public class District {
 		this.suppliers = suppliers;
 	}
 	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="district")
+	private List<Customer> customers;
+
+
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
+	}
+	
 	
 	
 	

@@ -16,6 +16,9 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.miniproject.pos.utils.Formatter;
+
 @Entity
 @Table(name="pos_t_adjustment_history")
 public class AdjustmentHistory {
@@ -25,6 +28,7 @@ public class AdjustmentHistory {
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="adjustment_id")
 	private Adjustment adjustmentId;
@@ -73,6 +77,10 @@ public class AdjustmentHistory {
 		this.createdBy = createdBy;
 	}
 
+	public String getCreatedOnFormatted() {
+		return Formatter.date(createdOn, "dd/MM/yyyy HH:mm");
+	}
+	
 	public Date getCreatedOn() {
 		return createdOn;
 	}

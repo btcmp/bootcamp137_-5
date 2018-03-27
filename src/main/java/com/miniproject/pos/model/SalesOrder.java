@@ -1,13 +1,16 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,27 +18,16 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="pos_t_transfer_stock_detail")
-public class TransferStockDetail {
+@Table(name="POS_T_SO")
+public class SalesOrder {
 
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
-	@ManyToOne
-	@JoinColumn(name="transfer_id")
-	private TransferStock transferId;
-	
-	@Column(name="in_stock", nullable=true)
-	private int inStock;
-	
-	@ManyToOne
-	@JoinColumn(name="variant_id")
-	private ItemVariant variantId;
-	
-	@Column(name="transfer_qty")
-	private int transferQty;
+	@Column(name="grand_total", nullable=false)
+	private float grandTotal;
 	
 	@ManyToOne
 	@JoinColumn(name="created_by", nullable=true)
@@ -50,8 +42,11 @@ public class TransferStockDetail {
 	private User modifiedBy;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="modified_on", nullable=true)
+	@JoinColumn(name="modified_on", nullable=true)
 	private Date modifiedOn;
+	
+	@ManyToOne
+	private Customer customer;
 
 	public String getId() {
 		return id;
@@ -61,36 +56,12 @@ public class TransferStockDetail {
 		this.id = id;
 	}
 
-	public TransferStock getTransferId() {
-		return transferId;
+	public float getGrandTotal() {
+		return grandTotal;
 	}
 
-	public void setTransferId(TransferStock transferId) {
-		this.transferId = transferId;
-	}
-
-	public int getInStock() {
-		return inStock;
-	}
-
-	public void setInStock(int inStock) {
-		this.inStock = inStock;
-	}
-
-	public ItemVariant getVariantId() {
-		return variantId;
-	}
-
-	public void setVariantId(ItemVariant variantId) {
-		this.variantId = variantId;
-	}
-
-	public int getTransferQty() {
-		return transferQty;
-	}
-
-	public void setTransferQty(int transferQty) {
-		this.transferQty = transferQty;
+	public void setGrandTotal(float grandTotal) {
+		this.grandTotal = grandTotal;
 	}
 
 	public User getCreatedBy() {
@@ -124,4 +95,27 @@ public class TransferStockDetail {
 	public void setModifiedOn(Date modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+	
+	//relasi
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="salesOrder")
+	private List<SalesOrderDetail> salesOrderDetails;
+
+	public List<SalesOrderDetail> getSalesOrderDetails() {
+		return salesOrderDetails;
+	}
+
+	public void setSalesOrderDetails(List<SalesOrderDetail> salesOrderDetails) {
+		this.salesOrderDetails = salesOrderDetails;
+	}
+	
+	
+	
 }

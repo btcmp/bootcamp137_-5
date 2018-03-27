@@ -15,27 +15,22 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name="pos_t_transfer_stock_detail")
-public class TransferStockDetail {
+@Table(name="POS_T_SO_DETAIL")
+public class SalesOrderDetail {
 
 	@Id
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
-	@ManyToOne
-	@JoinColumn(name="transfer_id")
-	private TransferStock transferId;
+	@Column(nullable=false)
+	private int qty;
 	
-	@Column(name="in_stock", nullable=true)
-	private int inStock;
+	@Column(name="unit_cost", nullable=true)
+	private float unitCost;
 	
-	@ManyToOne
-	@JoinColumn(name="variant_id")
-	private ItemVariant variantId;
-	
-	@Column(name="transfer_qty")
-	private int transferQty;
+	@Column(name="sub_total", nullable=true)
+	private float subTotal;
 	
 	@ManyToOne
 	@JoinColumn(name="created_by", nullable=true)
@@ -50,7 +45,7 @@ public class TransferStockDetail {
 	private User modifiedBy;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="modified_on", nullable=true)
+	@Column(name="modified_on")
 	private Date modifiedOn;
 
 	public String getId() {
@@ -61,36 +56,28 @@ public class TransferStockDetail {
 		this.id = id;
 	}
 
-	public TransferStock getTransferId() {
-		return transferId;
+	public int getQty() {
+		return qty;
 	}
 
-	public void setTransferId(TransferStock transferId) {
-		this.transferId = transferId;
+	public void setQty(int qty) {
+		this.qty = qty;
 	}
 
-	public int getInStock() {
-		return inStock;
+	public float getUnitCost() {
+		return unitCost;
 	}
 
-	public void setInStock(int inStock) {
-		this.inStock = inStock;
+	public void setUnitCost(float unitCost) {
+		this.unitCost = unitCost;
 	}
 
-	public ItemVariant getVariantId() {
-		return variantId;
+	public float getSubTotal() {
+		return subTotal;
 	}
 
-	public void setVariantId(ItemVariant variantId) {
-		this.variantId = variantId;
-	}
-
-	public int getTransferQty() {
-		return transferQty;
-	}
-
-	public void setTransferQty(int transferQty) {
-		this.transferQty = transferQty;
+	public void setSubTotal(float subTotal) {
+		this.subTotal = subTotal;
 	}
 
 	public User getCreatedBy() {
@@ -124,4 +111,28 @@ public class TransferStockDetail {
 	public void setModifiedOn(Date modifiedOn) {
 		this.modifiedOn = modifiedOn;
 	}
+	
+	//relasi
+	@ManyToOne
+	private SalesOrder salesOrder;
+	
+	@ManyToOne
+	private ItemVariant itemVariant;
+
+	public SalesOrder getSalesOrder() {
+		return salesOrder;
+	}
+
+	public void setSalesOrder(SalesOrder salesOrder) {
+		this.salesOrder = salesOrder;
+	}
+
+	public ItemVariant getItemVariant() {
+		return itemVariant;
+	}
+
+	public void setItemVariant(ItemVariant itemVariant) {
+		this.itemVariant = itemVariant;
+	}
+	
 }
