@@ -50,4 +50,20 @@ public class KategoriService {
 		
 		return kategoris;
 	}
+
+	public List<Kategori> getKategoriBySearchName(String search) {
+		// TODO Auto-generated method stub
+		List<Kategori> kategoris = kategoriDao.getKategoriBySearchName(search);
+		if(kategoris.isEmpty()) {
+			return null;
+		}else {
+		for (Kategori kategori : kategoris) {
+			List<Items> items = itemsDao.getItemByKategori(kategori);
+			if(items == null) {
+				kategori.setItemStock(0);
+			}else
+			kategori.setItemStock(items.size());
+		}
+		return kategoris;}
+	}
 }

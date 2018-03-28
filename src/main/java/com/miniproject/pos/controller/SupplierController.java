@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -41,6 +42,19 @@ public class SupplierController {
 	@RequestMapping(value="/index")
 	public String index(Model model) {
 		List<Supplier> sups = supplierService.selectAll();
+		List<Provinsi> prov = provinsiService.selectAll();
+		List<Region> reg = regionService.selectAll();
+		List<District> dis = districtService.selectAll();
+		model.addAttribute("sups", sups);
+		model.addAttribute("provs", prov);
+		model.addAttribute("regs", reg);
+		model.addAttribute("diss", dis);
+		return "supplier/index";
+	}
+	
+	@RequestMapping(value="/index/src", method = RequestMethod.GET)
+	public String indexSearchByName(@RequestParam (value="search", defaultValue="")String search, Model model) {
+		List<Supplier> sups = supplierService.getSupplierBySearchName(search);
 		List<Provinsi> prov = provinsiService.selectAll();
 		List<Region> reg = regionService.selectAll();
 		List<District> dis = districtService.selectAll();

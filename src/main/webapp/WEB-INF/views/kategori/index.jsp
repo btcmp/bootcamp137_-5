@@ -21,7 +21,8 @@
 				<!-- /.box-header -->
 				<div class="box-body">
 				<div>
-					<input type="text" id="search" placeholder="Search" style="float: left;">
+					<input type="text" id="cari" placeholder="Search" style="float: left;">
+					<a style="margin-left: 10px;" id="btn-cari" class="btn btn-primary" href="#">Search</a>
 					<a style="float: right; width: 15%; margin-bottom: 20px;" id="add" class="btn btn-info" href="#">Create</a>
 				</div>
 					<table id="kategori-list" class="table table-stripped table-bordered table-hover">

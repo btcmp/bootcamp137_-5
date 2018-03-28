@@ -41,5 +41,10 @@ public class SupplierService {
 		supplierDao.update(supplier);
 		
 	}
+
+	public List<Supplier> getSupplierBySearchName(String search) {
+		// TODO Auto-generated method stub
+		return supplierDao.getSupplierBySearchName(search);
+	}
 	
 }

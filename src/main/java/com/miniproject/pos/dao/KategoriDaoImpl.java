@@ -48,4 +48,15 @@ public class KategoriDaoImpl implements KategoriDao{
 		return session.createCriteria(Kategori.class).list();
 	}
 
+	public List<Kategori> getKategoriBySearchName(String search) {
+		// TODO Auto-generated method stub
+		String hql = "from Kategori kt where lower(kt.name) like lower(:nb)";
+		Session session = sessionFactory.getCurrentSession();
+		List<Kategori> kats = session.createQuery(hql).setParameter("nb", "%"+search+"%").list();
+		if(kats.isEmpty()) {
+			return null;
+		}
+		return kats;
+	}
+
 }
