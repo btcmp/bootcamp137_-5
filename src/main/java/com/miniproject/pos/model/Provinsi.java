@@ -149,7 +149,5 @@ public class Provinsi {
 
 	public void setCustomers(List<Customer> customers) {
 		this.customers = customers;
-	}
-	
-	
+	}	
 }

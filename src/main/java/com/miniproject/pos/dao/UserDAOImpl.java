@@ -49,7 +49,6 @@ public class UserDAOImpl implements UserDAO{
 		session.flush();
 	}
 
-	@Override
 	public User getUserByEmployee(Employee e) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();

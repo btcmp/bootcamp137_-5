@@ -66,6 +66,7 @@ public class Adjustment {
 	@OneToMany(mappedBy="adjustmentId")
 	private List<AdjustmentDetail> adjustmentDetail;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy="adjustmentId")
 	private List<AdjustmentHistory> adjustmentHistory;
 	

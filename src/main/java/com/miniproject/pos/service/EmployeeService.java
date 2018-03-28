@@ -119,7 +119,7 @@ public class EmployeeService {
 	}
 	
 	public List<Outlet> getListAssignedOutlet(List<Outlet> listOutlet){
-		List<Outlet> newListOutlet = new ArrayList<>();
+		List<Outlet> newListOutlet = new ArrayList<Outlet>();
 		for (int i = 0; i < listOutlet.size(); i++) {
 			newListOutlet.add(outletDAO.getOne(listOutlet.get(i).getId()));
 		}

@@ -50,7 +50,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" id="myModal-title">Create New Items</h4>
+				<h4 class="modal-title" id="myModal-title">Create New Adjustment</h4>
 			</div>
 			<div class="modal-body">
 				<div class="callout callout-warning hidden">
@@ -110,7 +110,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" id="modal-item-title">Create New Variant</h4>
+				<h4 class="modal-title" id="modal-item-title">Add Items</h4>
 			</div>
 			<div class="modal-body">
 				<form id="form-variant" action="#" method="post"
@@ -152,15 +152,19 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<select data-id="" class="close" id="status-more">
+					<option value="">More</option>
+					<option value="Approved">Approved</option>
+					<option value="Reject">Reject</option>
+				</select>
 				<h4 class="modal-title">Adjustment Detail</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<span>Created By : </span>
+					<span>Created By : <label id="adjust-created-by-label"></label></span>
 				</div>
 				<div class="form-group">
-					<span>Adjustment Status : </span>
+					<span>Adjustment Status : <label id="adjust-status-label"></label></span>
 				</div>
 				<div class="form-group">
 						<span>Notes:</span> <textarea name="adjust-notes"

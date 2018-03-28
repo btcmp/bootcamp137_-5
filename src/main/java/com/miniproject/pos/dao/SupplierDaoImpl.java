@@ -44,8 +44,21 @@ public class SupplierDaoImpl implements SupplierDao{
 
 	public List<Supplier> selectAlll() {
 		// TODO Auto-generated method stub
+		String hql  = "from Supplier sup where sup.active = 1";
 		Session session = sessionFactory.getCurrentSession();
-		return session.createCriteria(Supplier.class).list();
+		List<Supplier> sps = session.createQuery(hql).list();
+		return sps;
+	}
+
+	public List<Supplier> getSupplierBySearchName(String search) {
+		// TODO Auto-generated method stub
+		String hql  = "from Supplier sp where lower(sp.name) like  lower(:nb) and sp.active = 1";
+		Session session = sessionFactory.getCurrentSession();
+		List<Supplier> sups = session.createQuery(hql).setParameter("nb", "%"+search+"%").list();
+		if (sups.isEmpty()) {
+			return null;
+		}
+		return sups;
 	}
 
 }

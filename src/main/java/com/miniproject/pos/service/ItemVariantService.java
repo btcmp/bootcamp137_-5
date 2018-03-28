@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.miniproject.pos.dao.ItemInventoryDao;
 import com.miniproject.pos.dao.ItemVariantDao;
 import com.miniproject.pos.model.ItemVariant;
 
@@ -15,6 +16,9 @@ public class ItemVariantService {
 
 	@Autowired
 	ItemVariantDao itemVariantDao;
+	
+	@Autowired
+	ItemInventoryDao itemInventoryDao;
 	
 	public void save(ItemVariant itemVariant) {
 		itemVariantDao.save(itemVariant);
@@ -33,6 +37,7 @@ public class ItemVariantService {
 	}
 	
 	public List<ItemVariant> getAllItemVariant(){
-		return itemVariantDao.getAllItemVariant();
+		List<ItemVariant> list = itemVariantDao.getAllItemVariant();
+		return list;
 	}
 }

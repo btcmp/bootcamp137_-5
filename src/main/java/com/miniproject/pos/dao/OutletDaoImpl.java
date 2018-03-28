@@ -52,7 +52,7 @@ public class OutletDaoImpl implements OutletDao{
 
 	public List<Outlet> getOutletNameBySearch(String search) {
 		// TODO Auto-generated method stub
-		String hql = "from Outlet ou where lower(ou.name) like lower(:nb)";
+		String hql = "from Outlet ou where lower(ou.name) like lower(:nb) and ou.active=1";
 		Session session = sessionFactory.getCurrentSession();
 		List<Outlet> outlets = session.createQuery(hql).setParameter("nb", "%"+search+"%").list();
 		if(outlets.isEmpty()) {

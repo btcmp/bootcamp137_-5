@@ -34,6 +34,5 @@ public class SalesOrderService {
 	
 	public List<SalesOrder> selectAll(){
 		return salesOrderDao.selectAll();
-	}
-	
+	}	
 }

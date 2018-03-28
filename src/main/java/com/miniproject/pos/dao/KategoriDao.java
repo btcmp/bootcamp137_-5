@@ -15,4 +15,6 @@ public interface KategoriDao {
 	public Kategori getOne(String id);
 	
 	public List<Kategori> selectAll();
+
+	public List<Kategori> getKategoriBySearchName(String search);
 }

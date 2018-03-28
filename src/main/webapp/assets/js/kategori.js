@@ -1,4 +1,11 @@
 $(function() {
+	
+		$('#btn-cari').on('click', function() {
+			//alert("aaaaa");
+			var kata = $('#cari').val();
+			//console.log(kata);
+			window.location = baseUrl+"kategori/index/src?search="+kata;
+		})
 
 //----------------------------------------------------------------------save---------------------------------------------------
 		$('#add').on('click', function() {

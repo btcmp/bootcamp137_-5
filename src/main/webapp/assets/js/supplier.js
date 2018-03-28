@@ -260,12 +260,12 @@ $(function() {
 			}
 		});
 		
-//-------------------------------------------------------------------------------------------------------Search----------------------------------------------
+//-----------------------------------------------------------------------------Search---------------------------------------
 		
-		$('#btn-carri').on('click', function() {
-			var  kata =  $('#carri').val();
-			console.log(kata);
-			//window.location = baseUrl+"outlet/index/src?search="+word;
+		$("#btn-carri").on('click', function() {
+			var kata  = $("#carri").val();
+			//console.log(kata);
+			window.location =  baseUrl+"supplier/index/src?search="+ kata;
 		});
 				
 });

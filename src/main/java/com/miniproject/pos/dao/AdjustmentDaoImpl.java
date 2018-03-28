@@ -39,15 +39,21 @@ public class AdjustmentDaoImpl implements AdjustmentDao {
 	public Adjustment getAdjustmentById(String id) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "select a from Adjustment as a left join fetch a.adjustmentDetail where a.id=:id";
+		String hql = "select a from Adjustment as a left join a.adjustmentDetail left join a.adjustmentHistory where a.id=:id";
 		List<Adjustment> list = session.createQuery(hql).setParameter("id", id).list();
 		return list.get(0);
+	}
+	
+	public Adjustment getAdjustment(String id) {
+		// TODO Auto-generated method stub
+		Session session = sf.getCurrentSession();
+		return session.get(Adjustment.class, id);
 	}
 
 	public List<Adjustment> getAllAdjustment() {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "from Adjustment";
+		String hql = "select a from Adjustment as a";
 		return session.createCriteria(Adjustment.class).list();
 	}
 
