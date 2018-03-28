@@ -152,9 +152,5 @@ public class District {
 
 	public void setCustomers(List<Customer> customers) {
 		this.customers = customers;
-	}
-	
-	
-	
-	
+	}	
 }

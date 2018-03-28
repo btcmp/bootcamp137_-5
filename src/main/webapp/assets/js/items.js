@@ -91,7 +91,11 @@ $(document).ready(function() {
     			method = 'POST';
     		}else{
     			tempUpdate.name = $('#items-name').val();
-    			tempUpdate.categoryId.id = $('#items-category-id').val();
+    			if(tempUpdate.categoryId == null){
+    				tempUpdate.categoryId = {"id":$('#items-category-id').val()};
+    			}else{
+    				tempUpdate.categoryId.id = $('#items-category-id').val();
+    			}
     			tempUpdate.variants = listVariant;
     			items = tempUpdate;
     			link = baseUrl+'items/update';
@@ -190,7 +194,7 @@ $(document).ready(function() {
     	createTableVariant(listVariant);
     	$('.callout-warning').toggleClass('hidden', true);
     	$('#form-barang-action').attr('value', 'Simpan');
-    	$('#myModal-title').html('Add data barang baru');
+    	$('#myModal-title').html('Add New Items');
     	$('#myModal').modal('show');
     });
     
@@ -229,6 +233,7 @@ $(document).ready(function() {
     
     $('#items-list').delegate('.update-items','click', function() {
     	var id = $(this).attr("data-id");
+    	$('#myModal-title').html('Update Items');
     	state = 'update';
     	ambilDataById(id);
     	$('#form-items').parsley().reset();

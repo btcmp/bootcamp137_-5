@@ -18,6 +18,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity

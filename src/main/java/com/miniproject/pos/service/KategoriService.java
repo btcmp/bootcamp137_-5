@@ -50,7 +50,7 @@ public class KategoriService {
 		
 		return kategoris;
 	}
-
+	
 	public List<Kategori> getKategoriBySearchName(String search) {
 		// TODO Auto-generated method stub
 		List<Kategori> kategoris = kategoriDao.getKategoriBySearchName(search);

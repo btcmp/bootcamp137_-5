@@ -45,6 +45,10 @@ public class AdjustmentService {
 	}
 	
 	public void update(Adjustment adjustment) {
+		AdjustmentHistory ah = new AdjustmentHistory();
+		ah.setAdjustmentId(adjustment);
+		ah.setStatus(adjustment.getStatus());
+		ahd.save(ah);
 		ad.update(adjustment);
 	}
 	
@@ -54,6 +58,12 @@ public class AdjustmentService {
 	
 	public Adjustment getAdjustmentById(String id){
 		Adjustment aj = ad.getAdjustmentById(id);
+		aj.setAdjustmentDetail(add.getAdjustmentDetailByAdjustmentId(id));
+		aj.setAdjustmentHistory(ahd.getAdjustmentHistoryByAdjustmentId(id));
 		return aj;
+	}
+	
+	public Adjustment getAdjustment(String id){
+		return ad.getAdjustment(id);
 	}
 }

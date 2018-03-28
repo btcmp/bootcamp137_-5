@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.miniproject.pos.model.ItemInventory;
 import com.miniproject.pos.model.ItemVariant;
 import com.miniproject.pos.model.Items;
 import com.miniproject.pos.service.ItemInventoryService;
@@ -38,7 +39,7 @@ public class ItemsController {
 	@RequestMapping("/index")
 	public String index(Model model) {
 
-		model.addAttribute("category", ks.selectAll());
+		model.addAttribute("category", ks.getAll());
 		model.addAttribute("title", "Data Items");
 		return "items/index";
 	}
@@ -63,8 +64,8 @@ public class ItemsController {
 	
 	@RequestMapping("/get-all-variant")
 	@ResponseBody
-	public List<ItemVariant> getVariant() {
-		return itemVariantService.getAllItemVariant();
+	public List<ItemInventory> getVariant() {
+		return itemInventoryService.getInventoryAll();
 	}
 	
 	@RequestMapping(value="/delete-variant/{id}", method=RequestMethod.DELETE)

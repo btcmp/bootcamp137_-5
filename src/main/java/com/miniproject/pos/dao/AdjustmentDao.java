@@ -15,4 +15,6 @@ public interface AdjustmentDao {
 	public Adjustment getAdjustmentById(String id);
 	
 	public List<Adjustment> getAllAdjustment();
+	
+	public Adjustment getAdjustment(String id);
 }

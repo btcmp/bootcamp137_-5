@@ -1,7 +1,9 @@
+
 package com.miniproject.pos.dao;
 
 import java.util.List;
 
+import com.miniproject.pos.model.Employee;
 import com.miniproject.pos.model.User;
 
 public interface UserDAO {
@@ -11,5 +13,6 @@ public interface UserDAO {
 	void save(User u);
 	void update(User u);
 	void delete(User u);
+	User getUserByEmployee(Employee e);
 	
 }

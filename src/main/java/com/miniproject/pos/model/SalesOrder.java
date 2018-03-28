@@ -114,8 +114,5 @@ public class SalesOrder {
 
 	public void setSalesOrderDetails(List<SalesOrderDetail> salesOrderDetails) {
 		this.salesOrderDetails = salesOrderDetails;
-	}
-	
-	
-	
+	}	
 }

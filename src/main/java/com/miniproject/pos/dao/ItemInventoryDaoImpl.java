@@ -57,5 +57,13 @@ public class ItemInventoryDaoImpl implements ItemInventoryDao {
 		List<ItemInventory> list = session.createQuery(hql).setParameter("id", id).list();
 		return list;
 	}
+	
+	public List<ItemInventory> getInventoryAll() {
+		// TODO Auto-generated method stub
+		Session session = sf.getCurrentSession();
+		String hql = "select ii from ItemInventory as ii inner join ii.variantId as variant inner join variant.itemId as item where item.active=1 and variant.active=1";
+		List<ItemInventory> list = session.createQuery(hql).list();
+		return list;
+	}
 
 }

@@ -65,3 +65,4 @@ public class KategoriController {
 		kategoriService.delete(kat);
 	}
 }
+
