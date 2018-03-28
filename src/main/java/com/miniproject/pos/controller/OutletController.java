@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -48,6 +49,21 @@ public class OutletController {
 		model.addAttribute("provinsi", provinsi);
 		model.addAttribute("regions", region);
 		model.addAttribute("districts", district);
+		return "outlet/index";
+	}
+	
+	@RequestMapping(value="/index/src", method = RequestMethod.GET)
+	public String indexBySearch(@RequestParam(value="search", defaultValue="") String search, Model model) {
+		
+		List<Outlet> outlet = outletService.getOutletNameBySearch(search);
+		List<Provinsi> provinsi = provinsiService.selectAll();
+		List<Region> region = regionService.selectAll();
+		List<District> district = districtService.selectAll();
+		model.addAttribute("provinsi", provinsi);
+		model.addAttribute("regions", region);
+		model.addAttribute("districts", district);
+		model.addAttribute("outlets", outlet);
+		System.out.println("search: "+search);
 		return "outlet/index";
 	}
 	

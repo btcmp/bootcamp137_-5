@@ -61,11 +61,40 @@ $(function() {
 			$('#edit-id').val(kat.id);
 			$('#edit-name-kat').val(kat.name);
 		}
+	
+		
+	//-----------------------------------------------------------------------------------------------------nonactive-----------------------------------
+		
+		$('#btn-nonactive').on('click', function() {
+			var kat = {
+					id : $('#edit-id').val(),
+					name : $('#edit-name-kat').val(),
+					active : 0
+			}
+			
+			$.ajax({
+				url : baseUrl+"kategori/update",
+				type : 'PUT',
+				data : JSON.stringify(kat),
+				contentType : 'application/json',
+				success : function(data) {
+					alert('kategori nonactive')
+					window.location = baseUrl+"kategori/index";
+				},
+				error : function() {
+					alert('update failed!!');
+				}
+			});
+			
+		});
+		
+//------------------------------------------------------------------------------------------------------edit------------------------------------------------
+		
 		$('#btn-update').on('click', function() {
 			var kat = {
 					id : $('#edit-id').val(),
 					name : $('#edit-name-kat').val(),
-					
+					active : 1
 			}
 			
 			$.ajax({
@@ -83,29 +112,5 @@ $(function() {
 			});
 			
 		});
-		
-//------------------------------------------------------------------delete--------------------------------------------------------
 
-		$('.delete').on('click', function() {
-			var id = $(this).attr('id');
-			$('#delete-id').val(id);
-			$('#deletepgw').modal();
-		})
-		$('#btn-delete').on('click', function() {
-			var id = $('#delete-id').val();
-			
-			$.ajax({
-				url : '${pageContext.request.contextPath}/pegawai/delete/'+id,
-				type : 'GET',
-				success : function() {
-					alert('delete success')
-					window.location = '${pageContext.request.contextPath}/pegawai';
-				},
-				error : function() {
-					alert('delete failed')
-				}
-				
-			})
-		})
-		
 });

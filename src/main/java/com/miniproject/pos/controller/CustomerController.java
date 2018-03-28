@@ -14,7 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.miniproject.pos.model.Customer;
+import com.miniproject.pos.model.District;
+import com.miniproject.pos.model.Provinsi;
+import com.miniproject.pos.model.Region;
 import com.miniproject.pos.service.CustomerService;
+import com.miniproject.pos.service.DistrictService;
+import com.miniproject.pos.service.ProvinsiService;
+import com.miniproject.pos.service.RegionService;
 
 @Controller
 @RequestMapping("/customer")
@@ -23,14 +29,29 @@ public class CustomerController {
 	@Autowired
 	CustomerService customerService;
 	
+	@Autowired
+	ProvinsiService  provinsiService;
+	
+	@Autowired
+	RegionService regionService;
+	
+	@Autowired
+	DistrictService districtService;
+	
 	@RequestMapping(value="/index")
 	public String index(Model model) {
 		List<Customer> customers = customerService.selectAll();
+		List<Provinsi> prov = provinsiService.selectAll();
+		List<Region> rg  = regionService.selectAll();
+		List<District> ds = districtService.selectAll();
+		model.addAttribute("provs", prov);
 		model.addAttribute("custs", customers);
+		model.addAttribute("rgs", rg);
+		model.addAttribute("dss", ds);
 		return "customer/index";
 	}
 	
-	@RequestMapping(value="save", method=RequestMethod.POST)
+	@RequestMapping(value="/save", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void save(@RequestBody Customer customer) {
 		customerService.save(customer);

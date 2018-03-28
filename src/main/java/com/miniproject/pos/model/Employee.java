@@ -66,7 +66,7 @@ public class Employee {
 	@Column
 	private boolean active;
 	
-	@OneToOne(cascade = CascadeType.ALL, mappedBy="employee", fetch =FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy="employee", fetch =FetchType.LAZY)
 	private User user;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -120,10 +120,6 @@ public class Employee {
 	
 	public boolean isHaveAccount() {
 		return haveAccount;
-	}
-	
-	public void setHaveAcount(boolean haveAccount) {
-		this.haveAccount = haveAccount;
 	}
 	
 //	public User getCreatedBy() {

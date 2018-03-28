@@ -13,7 +13,7 @@ $(document).ready(function() {
 			$('#user-form').show(500);
 		} else {
 			$('#user-form').hide(500);
-		}	
+		}
     });
     
     $('#edit-hasAccount').on('click',function(){
@@ -21,7 +21,7 @@ $(document).ready(function() {
 			$('#user-form-edit').show(500);
 		} else {
 			$('#user-form-edit').hide(500);
-		}	
+		}
     });
     
     $('#btn-assign-outlet').on('click', function(){
@@ -80,7 +80,7 @@ $(document).ready(function() {
    			data : JSON.stringify(employee),
     		success : function(data){
    				alert('save emp success');
-   				console.log(employee);
+   				window.location = baseUrl+'employee';
    			},
     		error : function(){
    				alert('save emp failed');
@@ -116,6 +116,7 @@ $(document).ready(function() {
     		data : e,
     		success : function(data){
 				alert('deactivate success');
+				window.location = baseUrl+'employee';
 			},
 			error : function(){
 				alert('deactivate failed');
@@ -148,9 +149,8 @@ $(document).ready(function() {
     	$('#edit-lname').val(selectedEmployee.lastName);
     	$('#edit-email').val(selectedEmployee.email);
     	$('#edit-title').val(selectedEmployee.title);
-    	$('#edit-fname').val(selectedEmployee.firstName);
     	
-    	if(selectedEmployee.haveAccount==true){
+    	if(selectedEmployee.haveAccount==true && selectedEmployee.user != null){
     		$('#edit-role').val(selectedEmployee.user.role.id);
     		$('#edit-user-id').val(selectedEmployee.user.id);
         	$('#edit-username').val(selectedEmployee.user.username);
@@ -161,7 +161,6 @@ $(document).ready(function() {
     	}
     	
     	$.each(selectedEmployee.listOutlet, function(index, outlet){
-    		console.log(outlet.name);
     		$.each($('#list-edit-outlet > tr > td > input[type="checkbox"]'), function(){
     			if($(this).attr('id') == outlet.id){
     				$(this).prop('checked', true);
@@ -212,7 +211,6 @@ $(document).ready(function() {
     	
     	if(account==true){
     		user = {
-    			id : $('#edit-user-id'),
     			username : $('#edit-username').val(),
     			password : $('#edit-password').val(),
     			role : {
@@ -233,7 +231,7 @@ $(document).ready(function() {
        		active : true,
        		user : user
         }
-    	console.log($('#edit-user-id').val());
+    	console.log(employee);
     	$.ajax({
     		url : baseUrl+'employee/edit-emp',
    			type : 'PUT',
@@ -241,7 +239,7 @@ $(document).ready(function() {
    			data : JSON.stringify(employee),
     		success : function(data){
    				alert('edit emp success');
-   				console.log(employee);
+   				window.location = baseUrl+'employee';
    			},
     		error : function(){
    				alert('edit emp failed');

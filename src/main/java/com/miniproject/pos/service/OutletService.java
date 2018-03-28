@@ -41,5 +41,10 @@ public class OutletService {
 		outlet.setActive(true);
 		outletDao.update(outlet);
 	}
+
+	public List<Outlet> getOutletNameBySearch(String search) {
+		// TODO Auto-generated method stub
+		return outletDao.getOutletNameBySearch(search);
+	}
 	
 }
