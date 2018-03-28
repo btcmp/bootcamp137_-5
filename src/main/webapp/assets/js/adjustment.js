@@ -150,7 +150,6 @@ $(document).ready(function() {
     	createTableAdjust(listVariant);
     	$('.callout-warning').toggleClass('hidden', true);
     	$('#form-barang-action').attr('value', 'Simpan');
-    	$('#myModal-title').html('Add data barang baru');
     	$('#myModal').modal('show');
     });
     

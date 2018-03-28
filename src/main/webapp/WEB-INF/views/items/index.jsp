@@ -9,7 +9,6 @@
 			(String) request.getAttribute("title"));
 	request.setAttribute("bc", bc);
 	List<String> asset = new ArrayList();
-	;
 	asset.add("items");
 	request.setAttribute("asset", asset);
 %>

@@ -50,7 +50,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" id="myModal-title">Create New Items</h4>
+				<h4 class="modal-title" id="myModal-title">Create New Adjustment</h4>
 			</div>
 			<div class="modal-body">
 				<div class="callout callout-warning hidden">
@@ -110,7 +110,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4 class="modal-title" id="modal-item-title">Create New Variant</h4>
+				<h4 class="modal-title" id="modal-item-title">Add Items</h4>
 			</div>
 			<div class="modal-body">
 				<form id="form-variant" action="#" method="post"
