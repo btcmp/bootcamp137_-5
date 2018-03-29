@@ -182,6 +182,4 @@ public class ItemInventory {
 	public void setModifiedBy(User modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
-	
-	
 }

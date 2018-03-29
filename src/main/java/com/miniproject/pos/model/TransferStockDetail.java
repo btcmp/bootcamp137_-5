@@ -12,7 +12,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="pos_t_transfer_stock_detail")
@@ -23,6 +27,7 @@ public class TransferStockDetail {
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="transfer_id")
 	private TransferStock transferId;
@@ -41,6 +46,7 @@ public class TransferStockDetail {
 	@JoinColumn(name="created_by", nullable=true)
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
@@ -49,6 +55,7 @@ public class TransferStockDetail {
 	@JoinColumn(name="modified_by", nullable=true)
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;

@@ -13,7 +13,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.miniproject.pos.utils.Formatter;
 
 @Entity
 @Table(name="pos_t_transfer_stock_history")
@@ -24,6 +28,7 @@ public class TransferStockHistory {
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="transfer_id")
 	private TransferStock transferId;
@@ -35,6 +40,7 @@ public class TransferStockHistory {
 	@JoinColumn(name="created_by", nullable=true)
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
@@ -71,6 +77,10 @@ public class TransferStockHistory {
 		this.createdBy = createdBy;
 	}
 
+	public String getCreatedOnFormatted() {
+		return Formatter.date(createdOn, "dd/MM/yyyy HH:mm");
+	}
+	
 	public Date getCreatedOn() {
 		return createdOn;
 	}

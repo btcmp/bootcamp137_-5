@@ -1,6 +1,7 @@
 package com.miniproject.pos.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,12 +9,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.miniproject.pos.utils.Formatter;
 
 @Entity
 @Table(name="pos_t_transfer_stock")
@@ -43,6 +50,7 @@ public class TransferStock {
 	@JoinColumn(name="created_by", nullable=true)
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
@@ -51,9 +59,38 @@ public class TransferStock {
 	@JoinColumn(name="modified_by", nullable=true)
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;
+
+	@JsonManagedReference
+	@OneToMany(mappedBy="transferId")
+	private List<TransferStockDetail> transferStockDetail;
+	
+	@JsonManagedReference
+	@OneToMany(mappedBy="transferId")
+	private List<TransferStockHistory> transferStockHistory;
+	
+	public TransferStock() {
+		this.status = "Submitted";
+	}
+	
+	public List<TransferStockDetail> getTransferStockDetail() {
+		return transferStockDetail;
+	}
+
+	public void setTransferStockDetail(List<TransferStockDetail> transferStockDetail) {
+		this.transferStockDetail = transferStockDetail;
+	}
+
+	public List<TransferStockHistory> getTransferStockHistory() {
+		return transferStockHistory;
+	}
+
+	public void setTransferStockHistory(List<TransferStockHistory> transferStockHistory) {
+		this.transferStockHistory = transferStockHistory;
+	}
 
 	public String getId() {
 		return id;
@@ -101,6 +138,10 @@ public class TransferStock {
 
 	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
+	}
+	
+	public String getCreatedOnFormatted() {
+		return Formatter.date(createdOn, "dd/MM/yyyy");
 	}
 
 	public Date getCreatedOn() {

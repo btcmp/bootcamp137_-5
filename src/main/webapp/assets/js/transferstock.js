@@ -1,8 +1,6 @@
 $(document).ready(function() {
-    var table = $('#adjust-list').DataTable({
-    	"paging":false,
-    	"searching":false,
-        "ajax": baseUrl+"adjustment/get-all-data",
+    var table = $('#transfer-list').DataTable({
+        "ajax": baseUrl+"transfer-stock/get-all-data",
         "columnDefs": [ 
         {
             "targets": 0,
@@ -15,26 +13,34 @@ $(document).ready(function() {
             "targets": 1,
             "data": null,
             "render": function(data){
-            	return data.notes;
+            	return data.fromOutlet;
             }
         },
         {
             "targets": 2,
             "data": null,
             "render": function(data){
-            	return data.status;
+            	return data.toOutlet.name;
             }
         },
         {
             "targets": 3,
+            "data": null,
+            "render": function(data){
+            	return data.status;
+            }
+        },
+        {
+            "targets": 4,
             "data":null,
             "render": function(data){
-            	return "<button class='btn btn-success view-adjust' data-id='"+data.id+"'>View</button>";
+            	return "<button class='btn btn-success view-transfer' data-id='"+data.id+"'>View</button>";
             }
         }
         ]
     });
-    var detailAdjust = [];
+    
+    var detailTransfer = [];
     var options = {
     		url: baseUrl+"items/get-all-variant",
     		getValue: function(response) {
@@ -46,18 +52,18 @@ $(document).ready(function() {
     			},
     			onClickEvent: function() {
     				var value = $("#item-name-variant").getSelectedItemData();
-    				var check = $.grep(detailAdjust, function(obj){
+    				var check = $.grep(detailTransfer, function(obj){
     						return obj.variantId.id === value.variantId.id;
     				});
     				if(check[0] == null){
     					delete value.variantId.priceFormatted;
     					var adjust = {
     							"variantId":value.variantId,
-    							"actualStock":0,
+    							"transferQty":0,
     							"inStock":value.endingQty
     					}
-    					detailAdjust.push(adjust);
-    					$("#form-list-item").append("<tr id='"+value.variantId.id+"'><td>"+value.variantId.itemId.name+" - "+value.variantId.name+"</td><td>"+value.endingQty+"</td><td><input type='number' class='form-control adjust-qty' data-id='"+value.variantId.id+"' value='0' min='0' requeired/></td><td><button type='button' class='btn btn-danger delete-item-form' data-id='"+value.variantId.id+"'>X</button></td></tr>");
+    					detailTransfer.push(adjust);
+    					$("#form-list-item").append("<tr id='"+value.variantId.id+"'><td>"+value.variantId.itemId.name+" - "+value.variantId.name+"</td><td>"+value.endingQty+"</td><td><input type='number' class='form-control transfer-qty' data-id='"+value.variantId.id+"' value='0' min='0' requeired/></td><td><button type='button' class='btn btn-danger delete-item-form' data-id='"+value.variantId.id+"'>X</button></td></tr>");
     					$("#item-name-variant").val('');
     				}
     			}
@@ -67,39 +73,13 @@ $(document).ready(function() {
 
     	$("#item-name-variant").easyAutocomplete(options);
         
-    	function getDate(){
-    		var d = new Date();
-
-    		var month = d.getMonth()+1;
-    		var day = d.getDate();
-
-    		return (day<10 ? '0' : '')  + day + '/' +
-    		    (month<10 ? '0' : '') + month + '/' + d.getFullYear();
-    	}
-    	
-    	$('#search-by-date').daterangepicker(
-    			{
-    			    locale: {
-    			      format: 'DD/MM/YYYY'
-    			    },
-    			    startDate: getDate(),
-    			    endDate: getDate()
-    			}, 
-    			function(start, end, label) {
-    				table.ajax.url(baseUrl+"adjustment/get-all-data/"+start.format('DD-MM-YYYY')+"/"+end.format('DD-MM-YYYY')).load();
-    			});
-    	
-    	$("#reset-filter").on("click", function(){
-    		table.ajax.url(baseUrl+"adjustment/get-all-data").load();
-    	});
-    	
     	$(document).on('change','#status-more', function(e) {
     		var status = $(this).val();
     		var id = $(this).attr("data-id");
     		if(status != ""){
     			$.ajax({
         			type : "POST",
-        			url :baseUrl+'adjustment/status/'+id+"/"+status,
+        			url :baseUrl+'transfer-stock/status/'+id+"/"+status,
         			success:function(data){
         				if(data.status == 'success'){
         					displayNotif(data.keterangan, data.status);
@@ -113,16 +93,20 @@ $(document).ready(function() {
         		});
     		}
     	});
-    $(document).on('submit','#form-adjust', function(e) {
+    	
+    $(document).on('submit','#form-transfer', function(e) {
     	e.preventDefault();
     		var adjust = {
-    				'notes'	: $('#adjust-notes').val(),
-    				'adjustmentDetail' : detailAdjust
+    				'notes'	: $('#transfer-notes').val(),
+    				'toOutlet'	: {
+    					"id" : $('#transfer-outlet-id').val()
+    				},
+    				'transferStockDetail' : detailTransfer
     			};
     		
     		$.ajax({
     			type : "POST",
-    			url :baseUrl+'adjustment/save',
+    			url :baseUrl+'transfer-stock/save',
     			data :JSON.stringify(adjust),
     			contentType: 'application/json',
     			success:function(data){
@@ -131,7 +115,7 @@ $(document).ready(function() {
     					$('#myModal').modal('hide');
     					clearForm();
     					displayNotif(data.keterangan, data.status);
-    					$('#form-adjust').parsley().reset();
+    					$('#form-transfer').parsley().reset();
     				}else{
     					$.each(data.error, function(key, value) {
     						$('#'+value[0]).parsley().removeError(value[0]+'-error', {updateClass: true});
@@ -148,9 +132,9 @@ $(document).ready(function() {
     });
 
     function clearForm(){
-    	$('#adjust-id').val('');
-       	$('#adjust-name').val('');
-       	$('#adjust-category-id').val('');
+    	$('#transfer-id').val('');
+       	$('#transfer-name').val('');
+       	$('#transfer-category-id').val('');
     	listVariant = [];
     }
         
@@ -175,11 +159,10 @@ $(document).ready(function() {
 
     $('#add-data').on('click', function() {
     	state = 'simpan';
-    	$('#form-adjust').parsley().reset();
+    	$('#form-transfer').parsley().reset();
     	clearForm();
-    	createTableAdjust(listVariant);
+    	createTableTransfer(listVariant);
     	$('.callout-warning').toggleClass('hidden', true);
-    	$('#form-barang-action').attr('value', 'Simpan');
     	$('#myModal').modal('show');
     });
     
@@ -189,15 +172,15 @@ $(document).ready(function() {
     
     
     $('#btn-add-item').on('click', function() {
-    	$.each($('.adjust-qty'), function(key, val){
+    	$.each($('.transfer-qty'), function(key, val){
     		var id = val.getAttribute("data-id");
-    		$.map(detailAdjust, function(obj, index) {
+    		$.map(detailTransfer, function(obj, index) {
     		    if(obj.variantId.id == id) {
-    		        obj.actualStock = val.value;
+    		        obj.transferQty = val.value;
     		    }
     		});
     	});
-    	createTableAdjust(detailAdjust);
+    	createTableTransfer(detailTransfer);
     	formItemsHide();
     });
     
@@ -215,25 +198,29 @@ $(document).ready(function() {
     	$("#form-list-item").empty();
     }
     
-    $('#adjust-list').delegate('.view-adjust','click', function() {
+    $('#transfer-list').delegate('.view-transfer','click', function() {
     	var id = $(this).attr("data-id");
     	$.ajax({
 	        		type : 'GET',
-	        		url :baseUrl+'adjustment/get-adjustment-detail/'+id,
+	        		url :baseUrl+'transfer-stock/get-transfer-detail/'+id,
 	        		success:function(response){
 	        			if(response.status == 'success' || response.status =='warning'){
 	        				var data = response.data;
-	        				$("#adjust-status-label").html("");
-	        				$("#adjust-status-label").html(data.status);
-	        				$("#adjust-notes-label").val(data.notes);
+	        				$("#transfer-status-label").html("");
+	        				$("#transfer-from-outlet-label").html("");
+	        				$("#transfer-to-outlet-label").html("");
+	        				$("#transfer-status-label").html(data.status);
+	        				$("#transfer-from-outlet-label").html(data.fromOutlet);
+	        				$("#transfer-to-outlet-label").html(data.toOutlet.name);
+	        				$("#transfer-notes-label").val(data.notes);
 	        				$("#status-more").attr("data-id", id);
 	        				$("#status-history").html("");
 	        				$("#label-list-item").empty();
-	        				$.each(data.adjustmentHistory, function(key, val){
+	        				$.each(data.transferStockHistory, function(key, val){
 	        					$("#status-history").append("On "+val.createdOnFormatted+" - "+val.status+"</br>");
 	        				});
-	        				$.each(data.adjustmentDetail, function(key, val){
-	        					$("#label-list-item").append("<tr><td>"+val.variantId.itemId.name+" - "+val.variantId.name+"</td><td>"+val.inStock+"</td><td>"+val.actualStock+"</td></tr>");
+	        				$.each(data.transferStockDetail, function(key, val){
+	        					$("#label-list-item").append("<tr><td>"+val.variantId.itemId.name+" - "+val.variantId.name+"</td><td>"+val.inStock+"</td><td>"+val.transferQty+"</td></tr>");
 	        				});
 	        				$('#modal-detail').modal('show');
 	        			}
@@ -250,7 +237,7 @@ $(document).ready(function() {
     		var tamp = listVariant[id];
     		if(tamp.id == null){
     			listVariant.splice(id, 1);
-	    		createTableAdjust(listVariant);
+	    		createTableTransfer(listVariant);
     		}else{
 	    		$.ajax({
 	        		type : 'DELETE',
@@ -258,7 +245,7 @@ $(document).ready(function() {
 	        		success:function(data){
 	        			if(data.status == 'success' || data.status =='warning'){
 	        				listVariant.splice(id, 1);
-	        	    		createTableAdjust(listVariant);
+	        	    		createTableTransfer(listVariant);
 	        			}
 	        		},
 	        		error:function(){
@@ -269,11 +256,11 @@ $(document).ready(function() {
     	}
     });
     
-    function createTableAdjust(data){
+    function createTableTransfer(data){
     	var index = 0;
     	$("#list-item-body").empty();
     	$.each(data, function(key, val){
-    		$("#list-item-body").append("<tr><td>"+val.variantId.itemId.name+" - "+val.variantId.name+"</td><td>"+val.inStock+"</td><td>"+val.actualStock+"</td><td><button type='button' class='btn btn-danger delete-item' data-id="+index+">X</button></td></tr>");
+    		$("#list-item-body").append("<tr><td>"+val.variantId.itemId.name+" - "+val.variantId.name+"</td><td>"+val.inStock+"</td><td>"+val.transferQty+"</td><td><button type='button' class='btn btn-danger delete-item' data-id="+index+">X</button></td></tr>");
     		index++;
     	});
     }

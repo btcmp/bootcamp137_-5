@@ -34,8 +34,10 @@
         String currentUrl = request.getAttribute("javax.servlet.forward.request_uri").toString();
         String[][] menu = {
         		{"kategori/index","fa fa-dashboard", "Kategori"},
+        		{"outlet/index","fa fa-dashboard", "Outlet"},
         		{"items/index","fa fa-dashboard", "Items"},
         		{"adjustment/index","fa fa-dashboard", "Adjustment"},
+        		{"transfer-stock/index","fa fa-dashboard", "Transfer Stock"},
         		};	
         Menu mn = new Menu((String) pageContext.getAttribute("baseUrl"),currentUrl, menu);
         out.print(mn.renderMenu());

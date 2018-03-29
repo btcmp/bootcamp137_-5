@@ -53,6 +53,15 @@ public class ItemsController {
 		return rm;
 	}
 	
+	@RequestMapping("/get-all-data/{id}")
+	@ResponseBody
+	public ResponseMessage getAllData(@PathVariable String id) {
+		ResponseMessage rm = new ResponseMessage();
+		rm.setStatus("success");
+		rm.setData(itemInventoryService.getInventory(id));
+		return rm;
+	}
+	
 	@RequestMapping("/get-one/{id}")
 	@ResponseBody
 	public ResponseMessage getOne(@PathVariable String id) {

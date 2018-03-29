@@ -19,4 +19,10 @@ public interface ItemInventoryDao {
 	public List<ItemInventory> getInventoryByIdItems(String id);
 	
 	public List<ItemInventory> getInventoryAll();
+	
+	public List<ItemInventory> getInventory(String id);
+	
+	public ItemInventory getInventoryByVariantId(String idVariant) ;
+	
+	public void updateStock(ItemInventory ii);
 }

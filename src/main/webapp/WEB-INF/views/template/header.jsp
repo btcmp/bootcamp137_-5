@@ -23,6 +23,7 @@
 
 <link rel="stylesheet" href="${baseUrl }assets/node_modules/easy-autocomplete/dist/easy-autocomplete.min.css">
 <link rel="stylesheet" href="${baseUrl }assets/node_modules/easy-autocomplete/dist/easy-autocomplete.themes.min.css">
+<link rel="stylesheet" href="${baseUrl }assets/node_modules/daterangepicker/daterangepicker.css">
 <style type="text/css">
 input.parsley-success,
 select.parsley-success,

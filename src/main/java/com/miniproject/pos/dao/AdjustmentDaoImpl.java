@@ -1,5 +1,6 @@
 package com.miniproject.pos.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -55,6 +56,13 @@ public class AdjustmentDaoImpl implements AdjustmentDao {
 		Session session = sf.getCurrentSession();
 		String hql = "select a from Adjustment as a";
 		return session.createCriteria(Adjustment.class).list();
+	}
+	
+	public List<Adjustment> getAllAdjustmentByDate(Date startDate, Date endDate) {
+		// TODO Auto-generated method stub
+		Session session = sf.getCurrentSession();
+		String hql = "select a from Adjustment as a where a.createdOn between :startDate and :endDate";
+		return session.createQuery(hql).setParameter("endDate", endDate).setParameter("startDate", startDate).list();
 	}
 
 }
