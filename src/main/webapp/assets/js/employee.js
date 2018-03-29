@@ -150,14 +150,17 @@ $(document).ready(function() {
     	$('#edit-email').val(selectedEmployee.email);
     	$('#edit-title').val(selectedEmployee.title);
     	
-    	if(selectedEmployee.haveAccount==true && selectedEmployee.user != null){
+    	if(selectedEmployee.haveAccount==true){
+        	$('#edit-hasAccount').prop('checked',true);
+    	} else {
+    		$('#edit-hasAccount').prop('checked',false);
+    	}
+    	
+    	if(selectedEmployee.user != null){
     		$('#edit-role').val(selectedEmployee.user.role.id);
     		$('#edit-user-id').val(selectedEmployee.user.id);
         	$('#edit-username').val(selectedEmployee.user.username);
         	$('#edit-password').val(selectedEmployee.user.password);
-    		$('#edit-hasAccount').prop('checked',true);
-    	} else {
-    		$('#edit-hasAccount').prop('checked',false);
     	}
     	
     	$.each(selectedEmployee.listOutlet, function(index, outlet){

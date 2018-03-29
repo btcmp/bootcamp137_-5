@@ -47,17 +47,17 @@ public class Employee {
 	@Column(nullable = false)
 	private boolean haveAccount;
 	
-//	@ManyToOne
-//	@Column(name = "created_by", nullable = true)
-//	private User createdBy;
+	@ManyToOne
+	@JoinColumn(name = "created_by")
+	private User createdBy;
 	
 	@Column(name = "created_on")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
 	
-//	@ManyToOne
-//	@Column(name = "modified_by", nullable = true)
-//	private User modifiedBy;
+	@ManyToOne
+	@JoinColumn(name = "modified_by")
+	private User modifiedBy;
 	
 	@Column(name = "modified_on")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -122,13 +122,13 @@ public class Employee {
 		return haveAccount;
 	}
 	
-//	public User getCreatedBy() {
-//		return createdBy;
-//	}
-//	
-//	public void setCreatedBy(User createdBy) {
-//		this.createdBy = createdBy;
-//	}
+	public User getCreatedBy() {
+		return createdBy;
+	}
+	
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
 	
 	public Date getCreatedOn() {
 		return createdOn;
@@ -138,13 +138,13 @@ public class Employee {
 		this.createdOn = createdOn;
 	}
 	
-//	public User getModifiedBy() {
-//		return modifiedBy;
-//	}
-//	
-//	public void setModifiedBy(User modifiedBy) {
-//		this.modifiedBy = modifiedBy;
-//	}
+	public User getModifiedBy() {
+		return modifiedBy;
+	}
+	
+	public void setModifiedBy(User modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
 	
 	public Date getModifiedOn() {
 		return modifiedOn;
