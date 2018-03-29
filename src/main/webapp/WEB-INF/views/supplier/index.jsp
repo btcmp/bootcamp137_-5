@@ -25,7 +25,7 @@
 					<a style="margin-left: 10px;" id="btn-carri" class="btn btn-primary">Search</a>
 					<a style="float: right; width: 15%; margin-bottom: 20px;" id="new" class="btn btn-info" href="#">Create</a>
 				</div>
-					<table id="kategori-list" class="table table-stripped table-bordered table-hover">
+					<table id="supplier-list" class="table table-stripped table-bordered table-hover">
 						<thead>
 							<tr>
 								<th style="width: 18%; text-align: center;">Name</th>
@@ -142,7 +142,7 @@
 							<select class="form-control" id="edit-prov-sup">
 								<option value="">Provinsi</option>
 								<c:forEach var="prov" items="${provs}">
-									<option id="edit-provsup" value="${prov.id}"> ${prov.name}</option>
+									<option value="${prov.id}"> ${prov.name}</option>
 								</c:forEach>
 							</select>
 						</div>

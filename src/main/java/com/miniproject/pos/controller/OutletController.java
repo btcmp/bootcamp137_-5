@@ -63,7 +63,6 @@ public class OutletController {
 		model.addAttribute("regions", region);
 		model.addAttribute("districts", district);
 		model.addAttribute("outlets", outlet);
-		System.out.println("search: "+search);
 		return "outlet/index";
 	}
 	

@@ -18,4 +18,5 @@ public interface DistrictDao {
 
 	List<District> getDistrictByIdRegion(String id);
 
+
 }

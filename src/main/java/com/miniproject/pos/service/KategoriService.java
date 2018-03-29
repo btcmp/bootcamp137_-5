@@ -54,7 +54,7 @@ public class KategoriService {
 	public List<Kategori> getKategoriBySearchName(String search) {
 		// TODO Auto-generated method stub
 		List<Kategori> kategoris = kategoriDao.getKategoriBySearchName(search);
-		if(kategoris.isEmpty()) {
+		if(kategoris == null) {
 			return null;
 		}else {
 		for (Kategori kategori : kategoris) {

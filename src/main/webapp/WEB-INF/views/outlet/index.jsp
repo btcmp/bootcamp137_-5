@@ -25,7 +25,7 @@
 					<a style="float: left; margin-left: 10px;" id="btn-cari" class="btn btn-primary">Search</a>
 					<a style="float: right; width: 15%; margin-bottom: 20px;" id="add" class="btn btn-info" href="#">Create</a>
 				</div>
-					<table id="kategori-list" class="table table-stripped table-bordered table-hover">
+					<table id="outlet-list" class="table table-stripped table-bordered table-hover">
 						<thead>
 							<tr>
 								<th style="width: 18%; text-align: center;">Name</th>
@@ -123,7 +123,7 @@
 	<div style="width: 60%;" class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Category</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Outlet</h5>
 			</div>
 			<div class="modal-body">
 				<form action="#">
@@ -142,7 +142,7 @@
 							<select class="form-control" id="edit-prov-out">
 								<option value="">Provinsi</option>
 								<c:forEach var="prov" items="${provinsi}">
-									<option id="edit-prov--out" value="${prov.id}"> ${prov.name}</option>
+									<option value="${prov.id}"> ${prov.name}</option>
 								</c:forEach>
 							</select>
 						</div>

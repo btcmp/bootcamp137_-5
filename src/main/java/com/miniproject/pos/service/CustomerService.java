@@ -35,4 +35,9 @@ public class CustomerService {
 	public List<Customer> selectAll(){
 		return customerDao.selectAll();
 	}
+
+	public List<Customer> getCustomerBySearchName(String search) {
+		// TODO Auto-generated method stub
+		return customerDao.getCustomerBySearchName(search);
+	}
 }

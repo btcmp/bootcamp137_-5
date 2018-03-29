@@ -1,5 +1,9 @@
 $(function() {
+
 	
+		$('#supplier-list').DataTable({
+			searching : false
+		});
 
 //----------------------------------------------------------------------save---------------------------------------------------
 		$('#new').on('click', function() {
@@ -110,6 +114,7 @@ $(function() {
 				url : baseUrl+"supplier/get-id/"+id,
 				type : 'GET',
 				success : function(sup) {
+					//console.log(sup);
 					setEditSupplier(sup);
 					$('#editsup').modal();
 				},
@@ -120,16 +125,66 @@ $(function() {
 			});
 		});
 		function setEditSupplier(sup) {
+			var idprov = sup.provinsi.id;
+			getRegionByProvinsi(idprov,sup.region.id);
+			var idreg = sup.region.id;
+			getDistrictByRegion(idreg,sup.district.id);
 			$('#edit-id-sup').val(sup.id);
 			$('#edit-name-sup').val(sup.name);
 			$('#edit-address-sup').val(sup.address);
-			/*$('#edit-prov-sup').val(sup.provinsi.id);
-			$('#edit-reg-sup').val(sup.region.id);
-			$('#edit-dis-sup').val(sup.district.id);*/
+			$('#edit-prov-sup').val(sup.provinsi.id);
 			$('#edit-code-sup').val(sup.postalCode);
 			$('#edit-phone-sup').val(sup.phone);
 			$('#edit-email-sup').val(sup.email);
+			
+			//getDistrictByProv(idprov);
 		};
+		
+		function getRegionByProvinsi(idProv,regionid) {
+			$.ajax({
+				url : baseUrl+"/region/get-region?id="+idProv,
+				type : "GET",
+				success : function(regionss) {
+					var region = [];
+					var reg = '<option value=/"/">Region</option>';
+					region.push(reg);
+					$(regionss).each(function(index, data2) {
+						var reg = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
+						region.push(reg);
+					})
+					
+					$('#edit-reg-sup').html(region);
+					//console.log($('#edit-reg-sup').html());
+					$('#edit-reg-sup').val(regionid);
+				},
+				error : function() {
+					alert("failed");
+				}
+			})
+		}
+		
+		function getDistrictByRegion(idReg,disid) {
+			$.ajax({
+				url : baseUrl+"/kecamatan/get-kecamatan?idreg="+idReg,
+				type : "GET",
+				success : function(districtssss) {
+					var district = [];
+					var dis = '<option value=/"/">District</option>';
+					district.push(dis);
+					$(districtssss).each(function(index, data2) {
+						dis = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
+						district.push(dis);
+					})
+					
+					$('#edit-dis-sup').html(district);
+					$('#edit-dis-sup').val(disid);
+					
+				},
+				error : function() {
+					alert("failed");
+				}
+			})
+		}
 		
 //----------------------------------------------------------------------------------------------------nonactive-------------------
 		$('#btn-nonactive').on('click', function() {
@@ -206,58 +261,6 @@ $(function() {
 				}
 			});
 			
-		});
-		
-//---------------------------------------------------------------edit list region---------------------------------------------
-		
-		$('#edit-prov-sup').on('change', function() {
-			var id = $(this).val();
-			//console.log(id);
-			if (id != ""){
-				$.ajax({
-					url : baseUrl+"region/get-region?id="+id,
-					type : 'GET',
-					success : function(regionss) {
-						var region = [];
-							var reg = '<option value=/"/">Region</option>';
-							region.push(reg);
-							$(regionss).each(function(index, data2) {
-								var reg = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-								region.push(reg);
-							})
-							
-							$('#edit-reg-sup').html(region);
-					}, error : function(){
-						alert('get failed');
-					}
-				});
-			}
-		});
-		
-//----------------------------------------------------------------------edit list district----------------------------------
-		
-		$('#edit-reg-sup').on('change', function() {
-			var id = $(this).val();
-			//console.log(id);
-			if (id !="" ){
-				$.ajax({
-					url : baseUrl+"kecamatan/get-kecamatan?id="+id,
-					type : 'GET',
-					success : function(districtsss) {
-						var district = [];
-							var dis = '<option value=/"/">District</option>';
-							district.push(dis);
-							$(districtsss).each(function(index, data2) {
-								dis = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-								district.push(dis);
-							})
-							
-							$('#edit-dis-sup').html(district);
-					}, error : function(){
-						alert('get failed');
-					}
-				});
-			}
 		});
 		
 //-----------------------------------------------------------------------------Search---------------------------------------

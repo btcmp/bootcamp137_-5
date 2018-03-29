@@ -21,7 +21,11 @@
 				<!-- /.box-header -->
 				<div class="box-body">
 				<div>
-					<input type="text" id="search" class="form-control" placeholder="Search" style="margin-bottom: 20px">
+					<input type="text" id="nama-item" class="form-control" placeholder="Search">
+					<a id="cari-item" class="btn btn-primary" href="#" style="margin-bottom: 20px">Search</a>
+					<table id="table-item" class="table table-stripped table-bordered table-hover">
+					
+					</table>
 				</div>
 					<a href="#" id="customer" class="form-control btn btn-primary">Choose Customer</a>
 					<table id="saleorder" class="table table-stripped table-bordered table-hover">
@@ -34,14 +38,14 @@
 							</tr>
 						</thead>
 						<tbody style="text-align: center;">
-							<c:forEach items= "${sods}" var="sods">
+							<c:forEach items= "${sos}" var="sos">
 							 	<tr>
-							 		<td>${sods.itemVariant.name }</td>
-							 		<td>${sods.qty}</td>
-							 		<td>${sods.subTotal}</td>
+							 		<td>${sos.salesOrderDetails.itemVariant.name }</td>
+							 		<td>${sos.salesOrderDetails.qty}</td>
+							 		<td>${sods.salesOrderDetails.subTotal}</td>
 							 		<td>
 							 			<!-- class untuk selektor -->
-							 			 <a id="${sods.id}" class="btn-cancel btn btn-danger" href="#" >X</a>
+							 			 <a id="${sos.id}" class="btn-cancel btn btn-danger" href="#" >X</a>
 							 		</td>
 							 	</tr>
 							</c:forEach>
@@ -71,17 +75,35 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Input Outlet</h5>
+				<h5 class="modal-title" id="exampleModalLabel">Input Customer</h5>
 			</div>
 			<div class="modal-body">
 				<form action="#">
 					<div class="form-group">
-						<input type="text" class="form-control" id="search-cust" aria-describedby="emailHelp" placeholder="Search Customer" />
+						<input type="text" class="form-control" id="name-cust" aria-describedby="emailHelp" placeholder="Search Customer" />
+						<a id="cari-customer" class="btn btn-primary" href="#">Search</a>
 						<a id="add-new" href="#" class="btn btn-primary">Add Customer</a>
 					</div>
+					<div>
+						<table  id="table-customer" class="table table-stripped table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Email</th>
+									<th>phone</th>
+									<th>#</th>
+								</tr>
+							</thead>
+							<tbody>
+								
+							</tbody>
+						</table>
+					</div>
+				</form>
 			<div class="modal-footer">
 				<button style="float: left;" type="button" id="btn-cancel-save" class="btn btn-primary">CANCEL</button>
 				<button style="float: right;" type="button" id="btn-save" class="btn btn-primary">SAVE</button>
+			</div>
 			</div>
 		</div>
 	</div>
@@ -129,7 +151,7 @@
 			</div>
 			<div class="modal-footer">
 				<button style="float: left;" type="button" id="btn-cancel-save" class="btn btn-primary">CANCEL</button>
-				<button style="float: right;" type="button" id="btn-save" class="btn btn-primary">SAVE</button>
+				<button style="float: right;" type="button" id="btn-simpan" class="btn btn-primary">SAVE</button>
 			</div>
 		</div>
 	</div>

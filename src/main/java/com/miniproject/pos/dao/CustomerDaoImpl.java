@@ -48,4 +48,15 @@ public class CustomerDaoImpl implements CustomerDao{
 		return session.createCriteria(Customer.class).list();
 	}
 
+	public List<Customer> getCustomerBySearchName(String search) {
+		// TODO Auto-generated method stub
+		String hql = "from Customer cs where lower(cs.name) like lower(:nb)";
+		Session session = sessionFactory.getCurrentSession();
+		List<Customer> cuss = session.createQuery(hql).setParameter("nb", "%"+search+"%").list();
+		if(cuss.isEmpty()) {
+			return null;
+		}
+		return cuss;
+	}
+
 }

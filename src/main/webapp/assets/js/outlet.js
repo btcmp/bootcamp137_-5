@@ -1,5 +1,8 @@
 $(function() {
-
+	
+	$('#outlet-list').DataTable({
+		searching : false
+	});
 
 //-------------------------------------------------------------------------------------------------------Search----------------------------------------------
 		
@@ -129,15 +132,63 @@ $(function() {
 			});
 		});
 		function setEditOutlet(out) {
+			var idProv = out.provinsi.id;
+			getRegionByProvinsi(idProv,out.region.id);
+			var idReg = out.region.id;
+			getDistrictByRegion(idReg,out.district.id);
 			$('#edit-id').val(out.id);
 			$('#edit-name-out').val(out.name);
 			$('#edit-address-out').val(out.address);
-			/*$('#edit-prov-out').val(out.provinsi.id);
-			$('#edit-reg-out').val(out.region.id);
-			$('#edit-dis-out').val(out.district.id);*/
+			$('#edit-prov-out').val(out.provinsi.id);
 			$('#edit-code-out').val(out.postalCode);
 			$('#edit-phone-out').val(out.phone);
 			$('#edit-email-out').val(out.email);
+		};
+		
+		function getRegionByProvinsi(idProv,regid) {
+			$.ajax({
+				url : baseUrl+"/region/get-region?id",idProv,
+				type : "GET",
+				success : function(regionss) {
+					var region = [];
+					var reg = '<option value=/"/">Region</option>';
+					region.push(reg);
+					$(regionss).each(function(index, data2) {
+						var reg = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
+						region.push(reg);
+					})
+					
+					$('#edit-reg-out').html(region);
+					$('#edit-reg-out').val(regid);
+				},
+				error : function() {
+					alert("failed");
+				}
+			});
+		};
+		
+		
+		function getDistrictByRegion(idReg,disid) {
+			$.ajax({
+				url : baseUrl+"/kecamatan/get-kecamatan?id="+idReg,
+				type : "GET",
+				success : function(kecamatan) {
+					var district = [];
+					var dist = '<option value=/"/">District</option>';
+					district.push(dist);
+					$(kecamatan).each(function(index, data) {
+						dist = "<option value=\""+data.id+"\">"+data.name+"</option>";
+						district.push(dist);
+					})
+					$('#edit-dis-out').html(district);
+					$('#edit-dis-out').val(disid);
+					
+					
+				},
+				error : function() {
+					
+				}
+			})
 		}
 		
 //------------------------------------------------------------------------------------------------------nonactive-------------------------------------------
@@ -213,58 +264,6 @@ $(function() {
 				}
 			});
 			
-		});
-		
-//---------------------------------------------------------------edit list region---------------------------------------------
-		
-		$('#edit-prov-out').on('change', function() {
-			var id = $(this).val();
-			//console.log(id);
-			if (id != ""){
-				$.ajax({
-					url : baseUrl+"region/get-region?id="+id,
-					type : 'GET',
-					success : function(regionss) {
-						var region = [];
-							var reg = '<option value=/"/">Region</option>';
-							region.push(reg);
-							$(regionss).each(function(index, data2) {
-								var reg = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-								region.push(reg);
-							})
-							
-							$('#edit-reg-out').html(region);
-					}, error : function(){
-						alert('get failed');
-					}
-				});
-			}
-		});
-		
-//----------------------------------------------------------------------edit list district----------------------------------
-		
-		$('#edit-reg-out').on('change', function() {
-			var id = $(this).val();
-			//console.log(id);
-			if (id !="" ){
-				$.ajax({
-					url : baseUrl+"kecamatan/get-kecamatan?id="+id,
-					type : 'GET',
-					success : function(districtsss) {
-						var district = [];
-							var dis = '<option value=/"/">District</option>';
-							district.push(dis);
-							$(districtsss).each(function(index, data2) {
-								dis = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-								district.push(dis);
-							})
-							
-							$('#edit-dis-out').html(district);
-					}, error : function(){
-						alert('get failed');
-					}
-				});
-			}
 		});
 		
 });

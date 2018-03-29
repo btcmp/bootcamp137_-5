@@ -1,5 +1,99 @@
+var customer = {};
 $(function() {
+
+//-------------------------------------------------------------------------------search item---------------------------------------------
 	
+	var options = {
+			url : baseUrl+"items/get-all-variant",
+			getValue : function(response) {
+				return  response.variantId.itemId.name+" - "+response.variantId.name;
+			},
+			list :{
+				match :{
+					enabled : true
+				},
+				onClickEvent : function() {
+					var value = $('#nama-item').getSelectedItemData();
+					$('#table-item').append(
+							"<tr><td>"+value.variantId.itemId.name+" - "+value.variantId.name+"</td><td>"+value.variantId.price+"</td></tr>"
+					);
+					$('#nama-item').val('');
+				}
+			}
+			
+			
+	};
+	$('#nama-item').easyAutocomplete(options);
+	
+//-------------------------------------------------------------------------------search cust----------------------------------------
+	
+	$('#cari-customer').on('click', function() {
+		//alert("aa");
+		var kata = $('#name-cust').val();
+		//console.log(kata);
+		$.ajax({
+			url : baseUrl+"salesorder/index/src-customer?search="+kata,
+			type : 'GET',
+			success : function(cust) {
+				createTableCustomer(cust);
+			},
+			error : function(nf) {
+				alert("customer not found!");
+				notFound(nf);
+			},
+			dataType : 'json',
+		});
+	});
+	
+	function createTableCustomer(cust) {
+		var newTable = $('#table-customer');
+		var renderData = "";
+		$.each(cust, function(index, custom) {
+			//console.log(index, custom);
+			renderData += "<tr>";
+			renderData += "<td>";
+			renderData += custom.name;
+			renderData += "</td>";
+			renderData += "<td>";
+			renderData += custom.email;
+			renderData += "</td>";
+			renderData += "<td>";
+			renderData += custom.phone;
+			renderData += "</td>";
+			renderData += "<td>";
+			renderData += "<a href='#' class='pilih-customer btn btn-primary'>pilih</a>"
+			renderData += "</tr>";
+		});
+		var tbody = newTable.find("tbody");
+		tbody.empty();
+		tbody.append(renderData);
+		//console.log(tbody);
+	};
+	
+	function notFound(nf) {
+		var newTablenf = $('#table-customer');
+		var tbody = newTablenf.find("tbody");
+		tbody.empty();
+	}
+		$(document).on('click', '.pilih-customer', function() {
+			//alert("aa");
+			var element = $(this).parent().parent();
+			//console.log(element);
+			var td = element.find("td").eq(0).text();
+			//console.log(td);
+			$('#customer').text(td);
+			customer = {
+					name : element.find("td").eq(0).text(),
+					email : element.find("td").eq(1).text(),
+					phone : element.find("td").eq(2).text()
+			}
+			//console.log(customer);
+			
+		});
+	
+	
+	
+//------------------------------------------------------------------------------choose------------------------------------------------	
 	$('#customer').on('click', function() {
 		$('#choose-cust').modal();
 	})
@@ -8,13 +102,13 @@ $(function() {
 		$('#add-new').on('click', function() {
 			$('#new-cust').modal();
 		})
-		$('#btn-save').on('click', function(evt) {
+		$('#btn-simpan').on('click', function(evt) {
 			evt.preventDefault();
 			var customer = {
 					name : $('#save-name-cust').val(),
 					email : $('#save-email-cust').val(),
 					phone : $('#save-phone-cust').val(),
-					dob : $('#save-name-cust').val(),
+					dob : $('#save-dob-cust').val(),
 					address : $('#save-address-cust').val(),
 					provinsi : {
 						id : $('#save-pro-cust').val()
@@ -24,9 +118,10 @@ $(function() {
 					},
 					district : {
 						id : $('#save-dis-cust').val()
-					}
+					},
+					active : 1
 			}
-			//console.log(out);
+			console.log(customer);
 		
 		
 			$.ajax({
@@ -102,418 +197,10 @@ $(function() {
 		});
 				
 		
-//------------------------------------------------------------------------------edit----------------------------------------------------------------
+//------------------------------------------------------------------------------pilih cust----------------------------------------------------------------
 
-		$('.editoutlet').on('click', function(evt) {
-			evt.preventDefault();
-			var id = $(this).attr('id');
-			//console.log(id);
-			$.ajax({
-				url : baseUrl+"outlet/get-id/"+id,
-				type : 'GET',
-				success : function(out) {
-					setEditOutlet(out);
-					$('#editout').modal();
-				},
-				error : function() {
-					alert('failed getting data');
-				},
-				dataType : 'json'
-			});
-		});
-		function setEditOutlet(out) {
-			$('#edit-id').val(out.id);
-			$('#edit-name-out').val(out.name);
-			$('#edit-address-out').val(out.address);
-			/*$('#edit-prov-out').val(out.provinsi.id);
-			$('#edit-reg-out').val(out.region.id);
-			$('#edit-dis-out').val(out.district.id);*/
-			$('#edit-code-out').val(out.postalCode);
-			$('#edit-phone-out').val(out.phone);
-			$('#edit-email-out').val(out.email);
-		}
-		
-//------------------------------------------------------------------------------------------------------nonactive-------------------------------------------
-		
-		$('#btn-nonactive').on('click', function() {
-			var outlet = {
-					id : $('#edit-id').val(),
-					name : $('#edit-name-out').val(),
-					address : $('#edit-address-out').val(),
-					provinsi : {
-						id : $('#edit-prov-out').val()
-					},
-					region : {
-						id : $('#edit-reg-out').val()
-					},
-					district : {
-						id : $('#edit-dis-out').val()
-					},
-					postalCode : $('#edit-code-out').val(),
-					phone : $('#edit-phone-out').val(),
-					email : $('#edit-email-out').val(),
-					active : 0
-			}
-			
-			$.ajax({
-				url : baseUrl+"outlet/update",
-				type : 'PUT',
-				data : JSON.stringify(outlet),
-				contentType : 'application/json',
-				success : function(data) {
-					alert('Outlet non-active');
-					window.location = baseUrl+"outlet/index";
-				},
-				error : function() {
-					alert('update failed!!');
-				}
-			});
-		});
-		
-//------------------------------------------------------------------------------------------------update----------------------------------------------
-		
-		$('#btn-update').on('click', function() {
-			var outlet = {
-					id : $('#edit-id').val(),
-					name : $('#edit-name-out').val(),
-					address : $('#edit-address-out').val(),
-					provinsi : {
-						id : $('#edit-prov-out').val()
-					},
-					region : {
-						id : $('#edit-reg-out').val()
-					},
-					district : {
-						id : $('#edit-dis-out').val()
-					},
-					postalCode : $('#edit-code-out').val(),
-					phone : $('#edit-phone-out').val(),
-					email : $('#edit-email-out').val(),
-					active : 1
-			}
-			
-			$.ajax({
-				url : baseUrl+"outlet/update",
-				type : 'PUT',
-				data : JSON.stringify(outlet),
-				contentType : 'application/json',
-				success : function(data) {
-					alert('update success!!')
-					window.location = baseUrl+"outlet/index";
-				},
-				error : function() {
-					alert('update failed!!');
-				}
-			});
-			
-		});
-		
-//---------------------------------------------------------------edit list region---------------------------------------------
-		
-		$('#edit-prov-out').on('change', function() {
-			var id = $(this).val();
-			//console.log(id);
-			if (id != ""){
-				$.ajax({
-					url : baseUrl+"region/get-region?id="+id,
-					type : 'GET',
-					success : function(regionss) {
-						var region = [];
-							var reg = '<option value=/"/">Region</option>';
-							region.push(reg);
-							$(regionss).each(function(index, data2) {
-								var reg = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-								region.push(reg);
-							})
-							
-							$('#edit-reg-out').html(region);
-					}, error : function(){
-						alert('get failed');
-					}
-				});
-			}
-		});
-		
-//----------------------------------------------------------------------edit list district----------------------------------
-		
-		$('#edit-reg-out').on('change', function() {
-			var id = $(this).val();
-			//console.log(id);
-			if (id !="" ){
-				$.ajax({
-					url : baseUrl+"kecamatan/get-kecamatan?id="+id,
-					type : 'GET',
-					success : function(districtsss) {
-						var district = [];
-							var dis = '<option value=/"/">District</option>';
-							district.push(dis);
-							$(districtsss).each(function(index, data2) {
-								dis = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-								district.push(dis);
-							})
-							
-							$('#edit-dis-out').html(district);
-					}, error : function(){
-						alert('get failed');
-					}
-				});
-			}
-		});
-});$(function() {
+		/*$('.pilih-customer').on('click', function() {
+			//alert("terpilih");
+		});*/
 
-	//----------------------------------------------------------------------save---------------------------------------------------
-			$('#add').on('click', function() {
-				$('#saveout').modal();
-			})
-			$('#btn-save').on('click', function(evt) {
-				evt.preventDefault();
-				var out = {
-						name : $('#save-name').val(),
-						address : $('#save-address').val(),
-						provinsi :{
-							id : $('#save-pro').val()
-						},
-						region : {
-							id : $('#save-reg').val()
-						},
-						district : {
-							id : $('#save-dis').val()
-						},
-						postalCode : $('#save-code').val(),
-						phone : $('#save-phone').val(),
-						email : $('#save-email').val()
-				}
-				//console.log(out);
-			
-			
-				$.ajax({
-					url : baseUrl+"outlet/save",
-					type : 'POST',
-					contentType : 'application/json',
-					data : JSON.stringify(out),
-					success : function(data) {
-						//console.log(data);
-						alert('save success');
-						window.location = baseUrl+"outlet/index";
-					},
-					error : function() {
-						alert('saving failed!');
-					}                              
-				});
-				
-			});
-			
-			
-	//---------------------------------------------------------------------------------------------------------list region---------------------------------------------
-			
-			$('#save-pro').on('change', function() {
-				var id = $(this).val();
-				//console.log(id);
-				if (id!==""){
-					$.ajax({
-						url : baseUrl+"region/get-region?id="+id,
-						type : 'GET',
-						success : function(regionss) {
-							var region = [];
-								var reg = '<option value=/"/">Region</option>';
-								region.push(reg);
-								$(regionss).each(function(index, data2) {
-									reg = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-									region.push(reg);
-								})
-								
-								$('#save-reg').html(region);
-						}, error : function(){
-							alert('get failed');
-						}
-					});
-				}
-			});		
-			
-			
-								
-	//-------------------------------------------------------------------------------------------list district-------------------------------------------------
-								
-			$('#save-reg').on('change', function() {
-				var id = $(this).val();
-				//console.log(id);
-				if (id!=""){
-					$.ajax({
-						url : baseUrl+"kecamatan/get-kecamatan?id="+id,
-						type : 'GET',
-						success : function(districtsss) {
-							var district = [];
-								var dis = '<option value=/"/">District</option>';
-								district.push(dis);
-								$(districtsss).each(function(index, data2) {
-									dis = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-									district.push(dis);
-								})
-								
-								$('#save-dis').html(district);
-						}, error : function(){
-							alert('get failed');
-						}
-					});
-				}
-			});
-					
-			
-	//------------------------------------------------------------------------------edit----------------------------------------------------------------
-
-			$('.editoutlet').on('click', function(evt) {
-				evt.preventDefault();
-				var id = $(this).attr('id');
-				//console.log(id);
-				$.ajax({
-					url : baseUrl+"outlet/get-id/"+id,
-					type : 'GET',
-					success : function(out) {
-						setEditOutlet(out);
-						$('#editout').modal();
-					},
-					error : function() {
-						alert('failed getting data');
-					},
-					dataType : 'json'
-				});
-			});
-			function setEditOutlet(out) {
-				$('#edit-id').val(out.id);
-				$('#edit-name-out').val(out.name);
-				$('#edit-address-out').val(out.address);
-				/*$('#edit-prov-out').val(out.provinsi.id);
-				$('#edit-reg-out').val(out.region.id);
-				$('#edit-dis-out').val(out.district.id);*/
-				$('#edit-code-out').val(out.postalCode);
-				$('#edit-phone-out').val(out.phone);
-				$('#edit-email-out').val(out.email);
-			}
-			
-	//------------------------------------------------------------------------------------------------------nonactive-------------------------------------------
-			
-			$('#btn-nonactive').on('click', function() {
-				var outlet = {
-						id : $('#edit-id').val(),
-						name : $('#edit-name-out').val(),
-						address : $('#edit-address-out').val(),
-						provinsi : {
-							id : $('#edit-prov-out').val()
-						},
-						region : {
-							id : $('#edit-reg-out').val()
-						},
-						district : {
-							id : $('#edit-dis-out').val()
-						},
-						postalCode : $('#edit-code-out').val(),
-						phone : $('#edit-phone-out').val(),
-						email : $('#edit-email-out').val(),
-						active : 0
-				}
-				
-				$.ajax({
-					url : baseUrl+"outlet/update",
-					type : 'PUT',
-					data : JSON.stringify(outlet),
-					contentType : 'application/json',
-					success : function(data) {
-						alert('Outlet non-active');
-						window.location = baseUrl+"outlet/index";
-					},
-					error : function() {
-						alert('update failed!!');
-					}
-				});
-			});
-			
-	//------------------------------------------------------------------------------------------------update----------------------------------------------
-			
-			$('#btn-update').on('click', function() {
-				var outlet = {
-						id : $('#edit-id').val(),
-						name : $('#edit-name-out').val(),
-						address : $('#edit-address-out').val(),
-						provinsi : {
-							id : $('#edit-prov-out').val()
-						},
-						region : {
-							id : $('#edit-reg-out').val()
-						},
-						district : {
-							id : $('#edit-dis-out').val()
-						},
-						postalCode : $('#edit-code-out').val(),
-						phone : $('#edit-phone-out').val(),
-						email : $('#edit-email-out').val(),
-						active : 1
-				}
-				
-				$.ajax({
-					url : baseUrl+"outlet/update",
-					type : 'PUT',
-					data : JSON.stringify(outlet),
-					contentType : 'application/json',
-					success : function(data) {
-						alert('update success!!')
-						window.location = baseUrl+"outlet/index";
-					},
-					error : function() {
-						alert('update failed!!');
-					}
-				});
-				
-			});
-			
-	//---------------------------------------------------------------edit list region---------------------------------------------
-			
-			$('#edit-prov-out').on('change', function() {
-				var id = $(this).val();
-				//console.log(id);
-				if (id != ""){
-					$.ajax({
-						url : baseUrl+"region/get-region?id="+id,
-						type : 'GET',
-						success : function(regionss) {
-							var region = [];
-								var reg = '<option value=/"/">Region</option>';
-								region.push(reg);
-								$(regionss).each(function(index, data2) {
-									var reg = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-									region.push(reg);
-								})
-								
-								$('#edit-reg-out').html(region);
-						}, error : function(){
-							alert('get failed');
-						}
-					});
-				}
-			});
-			
-	//----------------------------------------------------------------------edit list district----------------------------------
-			
-			$('#edit-reg-out').on('change', function() {
-				var id = $(this).val();
-				//console.log(id);
-				if (id !="" ){
-					$.ajax({
-						url : baseUrl+"kecamatan/get-kecamatan?id="+id,
-						type : 'GET',
-						success : function(districtsss) {
-							var district = [];
-								var dis = '<option value=/"/">District</option>';
-								district.push(dis);
-								$(districtsss).each(function(index, data2) {
-									dis = "<option value=\""+data2.id+"\">"+data2.name+"</option>";
-									district.push(dis);
-								})
-								
-								$('#edit-dis-out').html(district);
-						}, error : function(){
-							alert('get failed');
-						}
-					});
-				}
-			});
-	});
+});

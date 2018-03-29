@@ -24,7 +24,7 @@ public class RegionController {
 	@ResponseBody
 	public List<Region> getRegionByIdProvinsi(@RequestParam(value="id", defaultValue="") String id, Model model){
 		List<Region> regions = regionService.getRegionsByIdProvinsi(id);
-		System.out.println("id: "+id);
 		return regions;
 	}
+	
 }

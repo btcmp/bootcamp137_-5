@@ -25,8 +25,8 @@ public class DistrictController {
 	@ResponseBody
 	public List<District> getDistrictByIdRegion(@RequestParam(value="id", defaultValue="") String id, Model model){
 		List<District> districts = districtService.getDistrictByIdRegion(id);
-		System.out.println("idreg: "+id);
 		return districts;
 	}
+	
 	
 }

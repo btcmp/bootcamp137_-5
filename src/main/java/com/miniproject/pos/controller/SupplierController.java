@@ -79,7 +79,13 @@ public class SupplierController {
 	
 	@RequestMapping(value="/get-id/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public Supplier getOne(@PathVariable String id) {
+	public Supplier getOne(@PathVariable String id, Model model) {
+		List<Provinsi> prov = provinsiService.selectAll();
+		List<Region> reg = regionService.selectAll();
+		List<District> dis = districtService.selectAll();
+		model.addAttribute("provs", prov);
+		model.addAttribute("regs", reg);
+		model.addAttribute("diss", dis);
 		return supplierService.getOne(id);
 	}
 	

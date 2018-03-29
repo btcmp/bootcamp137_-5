@@ -16,4 +16,6 @@ public interface CustomerDao {
 	public Customer getOne(String id);
 	
 	public List<Customer> selectAll();
+
+	public List<Customer> getCustomerBySearchName(String search);
 }

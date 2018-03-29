@@ -1,5 +1,9 @@
 $(function() {
 	
+		$('#kategori-list').DataTable({
+			searching : false
+		});
+	
 		$('#btn-cari').on('click', function() {
 			//alert("aaaaa");
 			var kata = $('#cari').val();
@@ -14,7 +18,8 @@ $(function() {
 		$('#btn-save').on('click', function(evt) {
 			evt.preventDefault();
 			var kat = {
-					name : $('#save-name').val()
+					name : $('#save-name').val(),
+					active : 1
 			}
 			//console.log(kat);
 		

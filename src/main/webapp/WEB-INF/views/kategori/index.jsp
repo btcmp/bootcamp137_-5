@@ -30,6 +30,7 @@
 							<tr>
 								<th style="width: 25%; text-align: center;">Category Name</th>
 								<th style="width: 25%; text-align: center;">Item Stock</th>
+								<th style="width: 25%; text-align: center;">Active</th>
 								<th style="width: 5%; text-align: center;">#</th>
 							</tr>
 						</thead>
@@ -38,6 +39,7 @@
 							 	<tr>
 							 		<td>${kats.name}</td>
 							 		<td>${kats.itemStock} item</td>
+							 		<td>${kats.active}</td>
 							 		<td>
 							 			<!-- class untuk selektor -->
 							 			 <a id="${kats.id}" class="editkategori" href="#" >view</a>

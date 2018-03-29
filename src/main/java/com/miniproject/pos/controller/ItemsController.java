@@ -39,7 +39,7 @@ public class ItemsController {
 	@RequestMapping("/index")
 	public String index(Model model) {
 
-		model.addAttribute("category", ks.getAll());
+		model.addAttribute("category", ks.selectAll());
 		model.addAttribute("title", "Data Items");
 		return "items/index";
 	}
