@@ -42,6 +42,20 @@ public class ItemInventoryDaoImpl implements ItemInventoryDao {
 		return session.get(ItemInventory.class, id);
 	}
 
+	public void updateStock(ItemInventory ii) {
+		// TODO Auto-generated method stub
+		
+		this.update(ii);
+	}
+	
+	public ItemInventory getInventoryByVariantId(String idVariant) {
+		// TODO Auto-generated method stub
+		Session session = sf.getCurrentSession();
+		String hql = "select ii from ItemInventory  as ii where ii.variantId.id=:id";
+		ItemInventory ii = (ItemInventory) session.createQuery(hql).setParameter("id", idVariant).list().get(0);
+		return ii;
+	}
+	
 	public List<ItemInventory> getAllInventory() {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
@@ -63,6 +77,14 @@ public class ItemInventoryDaoImpl implements ItemInventoryDao {
 		Session session = sf.getCurrentSession();
 		String hql = "select ii from ItemInventory as ii inner join ii.variantId as variant inner join variant.itemId as item where item.active=1 and variant.active=1";
 		List<ItemInventory> list = session.createQuery(hql).list();
+		return list;
+	}
+	
+	public List<ItemInventory> getInventory(String id) {
+		// TODO Auto-generated method stub
+		Session session = sf.getCurrentSession();
+		String hql = "select ii from ItemInventory as ii inner join ii.variantId as variant inner join variant.itemId as item where item.active=1 and variant.active=1 and ii.id=:id";
+		List<ItemInventory> list = session.createQuery(hql).setParameter("id", id).list();
 		return list;
 	}
 

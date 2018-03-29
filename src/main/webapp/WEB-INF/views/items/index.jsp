@@ -22,10 +22,13 @@
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
-					<p>
-						<button class="btn btn-primary" id="add-data">Add
+					<div class="col-md-3">
+						<input id="item-name-variant"/>
+					</div>
+					<div class="col-md-9">
+						<button class="btn btn-primary pull-right" id="add-data">Add
 							Items</button>
-					</p>
+					</div>
 					<table id="items-list"
 						class="table table-striped table-bordered table-hover">
 						<thead>
@@ -118,9 +121,9 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
-							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
-							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-items-save">Save</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="btn-items-back">Back</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="btn-items-cancel" disabled>Cancel</button></div>
+							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-items-save" disabled>Save</button></div>
 						</div>
 					</div>
 				</form>
@@ -184,8 +187,8 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
-							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="btn-back-variant">Back</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="btn-cancel-variant" disabled>Cancel</button></div>
 							<div class="col-md-4"><button type="button" state="create" class="btn btn-primary pull-right" id="btn-add-variant">Add</button></div>
 						</div>
 					</div>

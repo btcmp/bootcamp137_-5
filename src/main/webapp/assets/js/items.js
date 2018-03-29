@@ -1,5 +1,7 @@
 $(document).ready(function() {
     var table = $('#items-list').DataTable( {
+    	"paging":false,
+    	"searching":false,
         "ajax": baseUrl+"items/get-all-data",
         "columnDefs": [ 
         {
@@ -34,7 +36,7 @@ $(document).ready(function() {
             "targets": 4,
             "data": null,
             "render": function(data){
-            	return "alert";
+            	return (data.endingQty > data.alertAtQty)?"Green":"Red";
             }
         },
         {
@@ -46,6 +48,31 @@ $(document).ready(function() {
         }
         ]
     } );
+    
+    var options = {
+    		url: baseUrl+"items/get-all-variant",
+    		getValue: function(response) {
+    			return response.variantId.itemId.name+" - "+response.variantId.name;
+    		},
+    		list: {
+    			match: {
+    				enabled: true
+    			},
+    			onClickEvent: function() {
+    				var value = $("#item-name-variant").getSelectedItemData();
+    				table.ajax.url(baseUrl+"items/get-all-data/"+value.id).load();
+    			}
+    		},
+    		adjustWidth: false
+    	};
+
+    	$("#item-name-variant").easyAutocomplete(options);
+    	
+    	$("#item-name-variant").on("change", function(){
+    		if($("#item-name-variant").val() == ""){
+    			table.ajax.url(baseUrl+"items/get-all-data").load();
+    		}
+    	});
     
     $('#variant-price-mask').inputmask('numeric', {
         radixPoint: '.',
@@ -203,6 +230,18 @@ $(document).ready(function() {
     	formVariantShow();
     });
     
+    $('#btn-back-variant').on('click', function() {
+    	formVariantHide();
+    });
+    
+    $('#btn-items-back').on('click', function() {
+    	clearForm();
+    	$('#myModal').modal('hide');
+    });
+    
+    function enableSave(){
+        $('#btn-items-save').prop('disabled', false);
+    }
     
     $('#btn-add-variant').on('click', function() {
     	var state = $(this).attr("state");
@@ -227,6 +266,7 @@ $(document).ready(function() {
     		variant.inventory.alertAtQty = $("#inventory-alert-at").val();
     		listVariant[index] = variant;
     	}
+    	enableSave();
     	createTableVariant(listVariant);
     	formVariantHide();
     });
@@ -265,6 +305,8 @@ $(document).ready(function() {
     	var data = listVariant[id];
     	$("#variant-name").val(data.name);
         $("#variant-price").val(data.price);
+        $("#variant-price-mask").val(data.price);
+        $('#variant-price-mask').trigger('change');
         $("#variant-sku").val(data.sku);
         $("#inventory-begining").val(data.inventory[0].begining);
         $("#inventory-alert-at").val(data.inventory[0].alertAtQty);
@@ -302,6 +344,7 @@ $(document).ready(function() {
     	var index = 0;
     	$("#list-variant-body").empty();
     	$.each(data, function(key, val){
+    		var myProp = 'alertStatus';
     		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>Rp "+(parseInt(val.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td><td>"+val.sku+"</td><td>"+val.inventory[0].begining+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> <button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button></td></tr>");
     		index++;
     	});

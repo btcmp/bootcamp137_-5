@@ -39,7 +39,7 @@ public class ItemsController {
 	@RequestMapping("/index")
 	public String index(Model model) {
 
-		model.addAttribute("category", ks.getAll());
+		model.addAttribute("category", ks.selectAll());
 		model.addAttribute("title", "Data Items");
 		return "items/index";
 	}
@@ -50,6 +50,15 @@ public class ItemsController {
 		ResponseMessage rm = new ResponseMessage();
 		rm.setStatus("success");
 		rm.setData(itemInventoryService.getAllItemInventory());
+		return rm;
+	}
+	
+	@RequestMapping("/get-all-data/{id}")
+	@ResponseBody
+	public ResponseMessage getAllData(@PathVariable String id) {
+		ResponseMessage rm = new ResponseMessage();
+		rm.setStatus("success");
+		rm.setData(itemInventoryService.getInventory(id));
 		return rm;
 	}
 	
