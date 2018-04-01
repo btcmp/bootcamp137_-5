@@ -1,6 +1,13 @@
 package com.miniproject.pos.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.miniproject.pos.model.ItemInventory;
 import com.miniproject.pos.model.ItemVariant;
@@ -36,9 +45,15 @@ public class ItemsController {
 	@Autowired
 	KategoriService ks;
 	
+	@Autowired
+	ServletContext servletContext;
+	
+	@Autowired 
+	 private HttpSession httpSession;
+	
 	@RequestMapping("/index")
 	public String index(Model model) {
-
+		System.out.println(httpSession.getAttribute("coba"));
 		model.addAttribute("category", ks.selectAll());
 		model.addAttribute("title", "Data Items");
 		return "items/index";
@@ -96,6 +111,29 @@ public class ItemsController {
 		itemsService.save(items);
 		rm.setStatus("success");
 		rm.setKeterangan("Data Berhasil Disimpan");
+		return rm;
+	}
+	
+	@RequestMapping(value="/upload", method=RequestMethod.POST)
+	@ResponseBody
+	public ResponseMessage upload(@RequestParam("file") MultipartFile file) {
+	    ResponseMessage rm = new ResponseMessage();
+		try {
+			String tamp = file.getOriginalFilename().toString();
+			String[] type = tamp.split("\\.");
+			int len = type.length;
+			String name = (System.currentTimeMillis())+"."+type[len-1];
+			BufferedImage src = ImageIO.read(new ByteArrayInputStream(file.getBytes()));
+		    File destination = new File(servletContext.getRealPath("/assets/img/"+name));
+		    ImageIO.write(src, type[len-1], destination);
+		    rm.setData(name);
+		    rm.setStatus("success");
+		    rm.setKeterangan("Image berhasil diupload");
+		    } catch(Exception e) {
+		        e.printStackTrace();
+		        rm.setStatus("danger");
+			    rm.setKeterangan("Image gagal diupload");
+		    }
 		return rm;
 	}
 	

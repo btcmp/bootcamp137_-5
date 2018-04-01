@@ -54,6 +54,7 @@ public class ItemsService {
 			if(iv.getId() == null) {
 				ivDao.save(iv);
 				itemI.setVariantId(iv);
+				itemI.setEndingQty(itemI.getBegining());
 				iiDao.save(itemI);
 			}else {
 				ivDao.update(iv);

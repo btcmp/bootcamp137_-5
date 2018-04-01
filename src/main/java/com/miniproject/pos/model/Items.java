@@ -14,13 +14,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name="pos_mst_item")
@@ -62,11 +62,21 @@ public class Items {
 	@OneToMany( fetch = FetchType.LAZY,mappedBy="itemId")
 	private List<ItemVariant> variants;
 	
+	@Column(nullable=true)
+	private String image;
 	
 	public Items() {
 		this.active = true;
 	}
 	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	public String getId() {
 		return id;
 	}

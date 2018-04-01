@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "bootstrap-fileinput": "^4.4.7",
     "datatables.net-bs": "^1.10.16",
     "datatables.net-buttons-bs": "^1.5.1",
     "daterangepicker": "^2.1.27",

@@ -54,7 +54,7 @@
 	<!-- /.row -->
 </section>
 <div id="myModal" class="modal fade" role="dialog">
-	<div class="modal-dialog">
+	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -70,7 +70,7 @@
 					<div class="form-group">
 						<div class="row">
 							<div class="col-md-4">
-								<img alt="" src="" style="width: 100%; height: 100%" />
+								<input id="file" type="file"/>
 							</div>
 							<div class="col-md-8">
 								<div class="form-group">
@@ -121,6 +121,7 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="uploadbutton">Upload</button></div>
 							<div class="col-md-4"><button type="button" class="btn btn-primary" id="btn-items-back">Back</button></div>
 							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="btn-items-cancel" disabled>Cancel</button></div>
 							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-items-save" disabled>Save</button></div>

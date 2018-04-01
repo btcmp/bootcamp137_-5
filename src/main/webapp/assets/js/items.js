@@ -1,4 +1,10 @@
 $(document).ready(function() {
+	
+	$("#file").fileinput({
+		showUpload:false,  
+		previewFileType:'any'
+	});
+	
     var table = $('#items-list').DataTable( {
     	"paging":false,
     	"searching":false,
@@ -91,7 +97,7 @@ $(document).ready(function() {
         $('#variant-price').val(numDecimal);
         $('#variant-price').trigger('change');
     });
-        
+    
     var ok;
     var state;
     var listVariant = [];
@@ -103,65 +109,98 @@ $(document).ready(function() {
     $(document).on('submit','#form-items', function(e) {
     	e.preventDefault();
     	if(ok){
-    		var items;
-    		var link;
-    		var method;
-    		if(state == 'simpan'){
-    			items = {
-    				'name'	: $('#items-name').val(),
-    				'categoryId'	: {
-    					'id' : $('#items-category-id').val(),
-    				},
-    				'variants' : listVariant
-    			};
-    			link = baseUrl+'items/save'
-    			method = 'POST';
+    		var oMyForm = new FormData();
+    		var image = $('#file').get(0).files[0];
+    		if(image != null){
+	        	oMyForm.append("file", image);
+	        	$.ajax({
+	        	    url: baseUrl+'items/upload',
+	        	    type: "POST",
+	        	    contentType: false,
+	        	    processData: false,
+	        	    cache: false,
+	        	    data: oMyForm,
+	        	    success: function(response) {
+	        	        if(response.status == "success"){
+	        	        	submitForm(response.data);
+	        	        }else{
+	        	        	displayNotif(response.keterangan, response.status);
+	        	        }
+	        	    },
+	        	    error: function() {
+	        	        alert("unable to create the record");
+	        	    }
+	        	});
     		}else{
-    			tempUpdate.name = $('#items-name').val();
-    			if(tempUpdate.categoryId == null){
-    				tempUpdate.categoryId = {"id":$('#items-category-id').val()};
-    			}else{
-    				tempUpdate.categoryId.id = $('#items-category-id').val();
-    			}
-    			tempUpdate.variants = listVariant;
-    			items = tempUpdate;
-    			link = baseUrl+'items/update';
-    			method = 'PUT';
+    			submitForm(null);
     		}
-    		
-    		$.ajax({
-    			type : method,
-    			url :link,
-    			data :JSON.stringify(items),
-    			contentType: 'application/json',
-    			success:function(data){
-    				if(data.status == 'success'){
-    					table.ajax.reload( null, false );
-    					$('#myModal').modal('hide');
-    					clearForm();
-    					displayNotif(data.keterangan, data.status);
-    					$('#form-items').parsley().reset();
-    				}else{
-    					$.each(data.error, function(key, value) {
-    						$('#'+value[0]).parsley().removeError(value[0]+'-error', {updateClass: true});
-    						$('#'+value[0]).parsley().addError(value[0]+'-error', {message: value[1], updateClass: true});
-    					});
-    					$('.callout-warning').toggleClass('hidden', false);
-    				}
-    			},
-    			error:function(){
-    				alert('Terjadi kesalahan saat menghubugni server');
-    			}
-    		});
     	}
       	ok = false;
         return false;
     });
+    
+    function submitForm(imageName){
+    	var items;
+		var link;
+		var method;
+		if(state == 'simpan'){
+			items = {
+				'name'	: $('#items-name').val(),
+				'categoryId'	: {
+					'id' : $('#items-category-id').val(),
+				},
+				'image' : imageName,
+				'variants' : listVariant
+			};
+			link = baseUrl+'items/save';
+			method = 'POST';
+		}else{
+			tempUpdate.name = $('#items-name').val();
+			if(tempUpdate.categoryId == null){
+				tempUpdate.categoryId = {"id":$('#items-category-id').val()};
+			}else{
+				tempUpdate.categoryId.id = $('#items-category-id').val();
+			}
+			if(imageName != null){
+				tempUpdate.image = imageName;
+			}
+			tempUpdate.variants = listVariant;
+			items = tempUpdate;
+			link = baseUrl+'items/update';
+			method = 'PUT';
+		}
+		
+		$.ajax({
+			type : method,
+			url :link,
+			data :JSON.stringify(items),
+			contentType: 'application/json',
+			success:function(data){
+				if(data.status == 'success'){
+					table.ajax.reload( null, false );
+					$('#myModal').modal('hide');
+					clearForm();
+					displayNotif(data.keterangan, data.status);
+					$('#form-items').parsley().reset();
+				}else{
+					$.each(data.error, function(key, value) {
+						$('#'+value[0]).parsley().removeError(value[0]+'-error', {updateClass: true});
+						$('#'+value[0]).parsley().addError(value[0]+'-error', {message: value[1], updateClass: true});
+					});
+					$('.callout-warning').toggleClass('hidden', false);
+				}
+			},
+			error:function(){
+				alert('Terjadi kesalahan saat menghubugni server');
+			}
+		});
+    }
 
     function clearForm(){
     	$('#items-id').val('');
        	$('#items-name').val('');
        	$('#items-category-id').val('');
+       	$('#file').fileinput('clear');
     	listVariant = [];
     }
     
@@ -186,6 +225,16 @@ $(document).ready(function() {
         				$('#items-name').val(tempUpdate.name);
     					$('#items-id').val(tempUpdate.id);
         				$('#items-category-id').val(tempUpdate.categoryId.id);
+        				if(tempUpdate.image != null){
+        					$('#file').fileinput('destroy');
+        					$("#file").fileinput({
+        						showUpload:false,  
+        						previewFileType:'any',
+        						initialPreview: [
+        						    "<img src='"+baseUrl+"assets/img/"+tempUpdate.image+"' class='file-preview-image' style='width:auto;height:auto;max-width:100%;max-height:100%;'>",
+        						]
+        					});
+        				}
         				createTableVariant(listVariant);
     				}
     			},

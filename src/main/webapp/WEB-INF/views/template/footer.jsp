@@ -27,6 +27,7 @@
 <script src="${baseUrl }assets/node_modules/pnotify/dist/iife/PNotify.js"></script>
 <script src="${baseUrl }assets/node_modules/daterangepicker/moment.min.js"></script>
 <script src="${baseUrl }assets/node_modules/daterangepicker/daterangepicker.js"></script>
+<script src="${baseUrl }assets/node_modules/bootstrap-fileinput/js/fileinput.min.js"></script>
 
 <!-- AdminLTE App -->
 <script src="${baseUrl }assets/dist/js/adminlte.min.js"></script>
