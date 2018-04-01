@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.miniproject.pos.dao.ItemInventoryDao;
 import com.miniproject.pos.dao.ItemVariantDao;
+import com.miniproject.pos.model.ItemInventory;
 import com.miniproject.pos.model.ItemVariant;
 
 @Service
@@ -36,8 +37,23 @@ public class ItemVariantService {
 		return itemVariantDao.getItemVariantById(id);
 	}
 	
-	public List<ItemVariant> getAllItemVariant(){
+	public List<ItemVariant> getAllItemVariant(String outletId){
 		List<ItemVariant> list = itemVariantDao.getAllItemVariant();
+		for(ItemVariant iv:list) {
+			ItemInventory ii = itemInventoryDao.getInventoryByVariantId(iv.getId(), outletId);
+			iv.setInventory(null);
+			iv.singleInventorySet(ii);
+		}
+		return list;
+	}
+	
+	public List<ItemVariant> getItemVariantByItem(String itemId, String outletId) {
+		List<ItemVariant> list = itemVariantDao.getItemVariantByItem(itemId);
+		for(ItemVariant iv:list) {
+			ItemInventory ii = itemInventoryDao.getInventoryByVariantId(iv.getId(), outletId);
+			iv.setInventory(null);
+			iv.singleInventorySet(ii);
+		}
 		return list;
 	}
 }

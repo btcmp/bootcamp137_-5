@@ -15,12 +15,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.miniproject.pos.utils.Formatter;
 
 
@@ -73,6 +77,9 @@ public class ItemVariant {
 	@OneToMany(mappedBy = "variantId", fetch = FetchType.LAZY)
 	private List<ItemInventory> inventory;
 	
+	@Transient
+	private ItemInventory singleInventory;
+	
 	public ItemVariant() {
 		this.active = true;
 	}
@@ -89,15 +96,26 @@ public class ItemVariant {
 	public void setItemId(Items itemId) {
 		this.itemId = itemId;
 	}
-
-
-
+	
 	public List<ItemInventory> getInventory() {
 		return inventory;
 	}
 
 	public void setInventory(List<ItemInventory> inventory) {
 		this.inventory = inventory;
+	}
+
+	@JsonProperty("singleInventory")
+	public ItemInventory getSingleInventory() {
+		if(singleInventory == null) {
+			return null;
+		}
+		singleInventory.setVariantId(null);
+		return singleInventory;
+	}
+
+	public void singleInventorySet(ItemInventory singleInventory) {
+		this.singleInventory = singleInventory;
 	}
 
 	public void setId(String id) {

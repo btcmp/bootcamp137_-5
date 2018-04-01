@@ -33,6 +33,7 @@
         <%
         String currentUrl = request.getAttribute("javax.servlet.forward.request_uri").toString();
         String[][] menu = {
+        		{"home","fa fa-dashboard", "Dashboard"},
         		{"kategori/index","fa fa-dashboard", "Kategori"},
         		{"outlet/index","fa fa-dashboard", "Outlet"},
         		{"items/index","fa fa-dashboard", "Items"},

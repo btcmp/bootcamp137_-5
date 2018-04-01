@@ -14,42 +14,42 @@ $(document).ready(function() {
             "targets": 0,
             "data": null,
             "render": function(data){
-            	return data.variantId.itemId.name+" - "+data.variantId.name;
+            	return data.itemId.name+" - "+data.name;
             }
         },
         {
             "targets": 1,
             "data": null,
             "render": function(data){
-            	return data.variantId.itemId.categoryId.name;
+            	return data.itemId.categoryId.name;
             }
         },
         {
             "targets": 2,
             "data": null,
             "render": function(data){
-            	return data.variantId.priceFormatted;
+            	return data.priceFormatted;
             }
         },
         {
             "targets": 3,
             "data": null,
             "render": function(data){
-            	return data.endingQty;
+            	return (data.singleInventory == null)?null:data.singleInventory.endingQty;
             }
         },
         {
             "targets": 4,
             "data": null,
             "render": function(data){
-            	return (data.endingQty > data.alertAtQty)?"Green":"Red";
+            	return (data.singleInventory == null)?null:(data.singleInventory.endingQty > data.singleInventory.alertAtQty)?"Green":"Red";
             }
         },
         {
             "targets": 5,
             "data":null,
             "render": function(data){
-            	return "<button class='btn btn-success update-items' data-id='"+data.variantId.itemId.id+"'>Edit</button>";
+            	return "<button class='btn btn-success update-items' data-id='"+data.itemId.id+"'>Edit</button>";
             }
         }
         ]
@@ -213,14 +213,14 @@ $(document).ready(function() {
     					var tampung;
     					listVariant = [];
         				$.each(response.data, function(key, val){
-        					var inventory =  Object.assign({}, val);
-        					var variant = Object.assign({}, val.variantId);
-        					inventory.variantId = null;
+        					var inventory =  val.singleInventory;
+        					var variant = Object.assign({}, val);
         					variant.inventory = [inventory];
         					variant.itemId = null;
         					delete variant.priceFormatted;
+        					delete variant.singleInventory;
         					listVariant.push(variant);
-        					tempUpdate = val.variantId.itemId;
+        					tempUpdate = val.itemId;
         				});
         				$('#items-name').val(tempUpdate.name);
     					$('#items-id').val(tempUpdate.id);
@@ -311,8 +311,15 @@ $(document).ready(function() {
     		variant.name = $("#variant-name").val();
     		variant.price = $("#variant-price").val();
     		variant.sku = $("#variant-sku").val();
-    		variant.inventory.begining = $("#inventory-begining").val();
-    		variant.inventory.alertAtQty = $("#inventory-alert-at").val();
+    		if(variant.inventory[0] == null){
+    			variant.inventory = [{
+    					"begining" : $("#inventory-begining").val(),
+    					"alertAtQty" : $("#inventory-alert-at").val()
+    			}];
+    		}else{
+	    		variant.inventory[0].begining = $("#inventory-begining").val();
+	    		variant.inventory[0].alertAtQty = $("#inventory-alert-at").val();
+    		}
     		listVariant[index] = variant;
     	}
     	enableSave();
@@ -357,8 +364,8 @@ $(document).ready(function() {
         $("#variant-price-mask").val(data.price);
         $('#variant-price-mask').trigger('change');
         $("#variant-sku").val(data.sku);
-        $("#inventory-begining").val(data.inventory[0].begining);
-        $("#inventory-alert-at").val(data.inventory[0].alertAtQty);
+        $("#inventory-begining").val((data.inventory[0] == null)?"":data.inventory[0].begining);
+        $("#inventory-alert-at").val((data.inventory[0] == null)?"":data.inventory[0].alertAtQty);
     	$("#btn-add-variant").attr("state", "update");
     	$("#btn-add-variant").attr("data-id", id);
         $('#modal-variant').modal('show');
@@ -394,7 +401,7 @@ $(document).ready(function() {
     	$("#list-variant-body").empty();
     	$.each(data, function(key, val){
     		var myProp = 'alertStatus';
-    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>Rp "+(parseInt(val.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td><td>"+val.sku+"</td><td>"+val.inventory[0].begining+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> <button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button></td></tr>");
+    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>Rp "+(parseInt(val.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td><td>"+val.sku+"</td><td>"+((val.inventory[0] == null)?"":val.inventory[0].begining)+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> <button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button></td></tr>");
     		index++;
     	});
     }

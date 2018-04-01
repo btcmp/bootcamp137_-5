@@ -22,7 +22,7 @@ public interface ItemInventoryDao {
 	
 	public List<ItemInventory> getInventory(String id);
 	
-	public ItemInventory getInventoryByVariantId(String idVariant) ;
+	public ItemInventory getInventoryByVariantId(String idVariant, String outlet);
 	
 	public void updateStock(ItemInventory ii);
 }

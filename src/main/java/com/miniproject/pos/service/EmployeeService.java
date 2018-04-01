@@ -126,4 +126,7 @@ public class EmployeeService {
 		return newListOutlet;
 	}
 	
+	public Employee getEmployeeByUsername(String username) {
+		return employeeDAO.getEmployeeByUsername(username);
+	}
 }
