@@ -48,12 +48,15 @@ public class ItemInventoryDaoImpl implements ItemInventoryDao {
 		this.update(ii);
 	}
 	
-	public ItemInventory getInventoryByVariantId(String idVariant) {
+	public ItemInventory getInventoryByVariantId(String idVariant, String outlet) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "select ii from ItemInventory  as ii where ii.variantId.id=:id";
-		ItemInventory ii = (ItemInventory) session.createQuery(hql).setParameter("id", idVariant).list().get(0);
-		return ii;
+		String hql = "select ii from ItemInventory  as ii where ii.variantId.id=:id and ii.outletId.id=:outlet";
+		List<ItemInventory> list = session.createQuery(hql).setParameter("id", idVariant).setParameter("outlet", outlet).list();
+		if(! list.isEmpty()) {
+			return list.get(0);
+		}
+		return null;
 	}
 	
 	public List<ItemInventory> getAllInventory() {

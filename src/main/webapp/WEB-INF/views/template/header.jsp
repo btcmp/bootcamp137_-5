@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <c:set var="baseUrl" value="${pageContext.request.contextPath}/"></c:set>
 <!DOCTYPE html>
 <html>
@@ -24,6 +25,7 @@
 <link rel="stylesheet" href="${baseUrl }assets/node_modules/easy-autocomplete/dist/easy-autocomplete.min.css">
 <link rel="stylesheet" href="${baseUrl }assets/node_modules/easy-autocomplete/dist/easy-autocomplete.themes.min.css">
 <link rel="stylesheet" href="${baseUrl }assets/node_modules/daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="${baseUrl }assets/node_modules/bootstrap-fileinput/css/fileinput.min.css">
 <style type="text/css">
 input.parsley-success,
 select.parsley-success,
@@ -322,7 +324,9 @@ textarea.parsley-error {
                 <img src="${baseUrl }assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
+                 <security:authorize access="isAuthenticated()">
+		<security:authentication property="principal.username" /> - 
+	</security:authorize>
                   <small>Member since Nov. 2012</small>
                 </p>
               </li>
@@ -347,7 +351,12 @@ textarea.parsley-error {
                   <a href="#" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                <form action="${baseUrl}logout" method="post" id="logoutForm">
+  <input type="hidden"
+	name="${_csrf.parameterName}"
+	value="${_csrf.token}" />
+	<button type="submit" name="logout" class="btn btn-default btn-flat">Sign out</button>
+</form>
                 </div>
               </li>
             </ul>

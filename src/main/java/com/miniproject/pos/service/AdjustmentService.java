@@ -54,11 +54,11 @@ public class AdjustmentService {
 		AdjustmentHistory ah = new AdjustmentHistory();
 		ah.setAdjustmentId(adjustment);
 		ah.setStatus(adjustment.getStatus());
+		ad.update(adjustment);
 		if(adjustment.getStatus().equalsIgnoreCase("Approved")) {
 			updateStock(adjustment);
 		}
 		ahd.save(ah);
-		ad.update(adjustment);
 	}
 	
 	public void updateStock(Adjustment adjustm) {

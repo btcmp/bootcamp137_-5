@@ -12,4 +12,6 @@ public interface EmployeeDAO {
 	void update(Employee e);
 	void delete(Employee e);
 	List<Employee> getAllActiveEmployee();
+	
+	Employee getEmployeeByUsername(String username);
 }

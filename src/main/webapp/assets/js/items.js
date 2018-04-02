@@ -1,4 +1,10 @@
 $(document).ready(function() {
+	
+	$("#file").fileinput({
+		showUpload:false,  
+		previewFileType:'any'
+	});
+	
     var table = $('#items-list').DataTable( {
     	"paging":false,
     	"searching":false,
@@ -8,42 +14,42 @@ $(document).ready(function() {
             "targets": 0,
             "data": null,
             "render": function(data){
-            	return data.variantId.itemId.name+" - "+data.variantId.name;
+            	return data.itemId.name+" - "+data.name;
             }
         },
         {
             "targets": 1,
             "data": null,
             "render": function(data){
-            	return data.variantId.itemId.categoryId.name;
+            	return data.itemId.categoryId.name;
             }
         },
         {
             "targets": 2,
             "data": null,
             "render": function(data){
-            	return data.variantId.priceFormatted;
+            	return data.priceFormatted;
             }
         },
         {
             "targets": 3,
             "data": null,
             "render": function(data){
-            	return data.endingQty;
+            	return (data.singleInventory == null)?null:data.singleInventory.endingQty;
             }
         },
         {
             "targets": 4,
             "data": null,
             "render": function(data){
-            	return (data.endingQty > data.alertAtQty)?"Green":"Red";
+            	return (data.singleInventory == null)?null:(data.singleInventory.endingQty > data.singleInventory.alertAtQty)?"Green":"Red";
             }
         },
         {
             "targets": 5,
             "data":null,
             "render": function(data){
-            	return "<button class='btn btn-success update-items' data-id='"+data.variantId.itemId.id+"'>Edit</button>";
+            	return "<button class='btn btn-success update-items' data-id='"+data.itemId.id+"'>Edit</button>";
             }
         }
         ]
@@ -91,7 +97,7 @@ $(document).ready(function() {
         $('#variant-price').val(numDecimal);
         $('#variant-price').trigger('change');
     });
-        
+    
     var ok;
     var state;
     var listVariant = [];
@@ -103,65 +109,98 @@ $(document).ready(function() {
     $(document).on('submit','#form-items', function(e) {
     	e.preventDefault();
     	if(ok){
-    		var items;
-    		var link;
-    		var method;
-    		if(state == 'simpan'){
-    			items = {
-    				'name'	: $('#items-name').val(),
-    				'categoryId'	: {
-    					'id' : $('#items-category-id').val(),
-    				},
-    				'variants' : listVariant
-    			};
-    			link = baseUrl+'items/save'
-    			method = 'POST';
+    		var oMyForm = new FormData();
+    		var image = $('#file').get(0).files[0];
+    		if(image != null){
+	        	oMyForm.append("file", image);
+	        	$.ajax({
+	        	    url: baseUrl+'items/upload',
+	        	    type: "POST",
+	        	    contentType: false,
+	        	    processData: false,
+	        	    cache: false,
+	        	    data: oMyForm,
+	        	    success: function(response) {
+	        	        if(response.status == "success"){
+	        	        	submitForm(response.data);
+	        	        }else{
+	        	        	displayNotif(response.keterangan, response.status);
+	        	        }
+	        	    },
+	        	    error: function() {
+	        	        alert("unable to create the record");
+	        	    }
+	        	});
     		}else{
-    			tempUpdate.name = $('#items-name').val();
-    			if(tempUpdate.categoryId == null){
-    				tempUpdate.categoryId = {"id":$('#items-category-id').val()};
-    			}else{
-    				tempUpdate.categoryId.id = $('#items-category-id').val();
-    			}
-    			tempUpdate.variants = listVariant;
-    			items = tempUpdate;
-    			link = baseUrl+'items/update';
-    			method = 'PUT';
+    			submitForm(null);
     		}
-    		
-    		$.ajax({
-    			type : method,
-    			url :link,
-    			data :JSON.stringify(items),
-    			contentType: 'application/json',
-    			success:function(data){
-    				if(data.status == 'success'){
-    					table.ajax.reload( null, false );
-    					$('#myModal').modal('hide');
-    					clearForm();
-    					displayNotif(data.keterangan, data.status);
-    					$('#form-items').parsley().reset();
-    				}else{
-    					$.each(data.error, function(key, value) {
-    						$('#'+value[0]).parsley().removeError(value[0]+'-error', {updateClass: true});
-    						$('#'+value[0]).parsley().addError(value[0]+'-error', {message: value[1], updateClass: true});
-    					});
-    					$('.callout-warning').toggleClass('hidden', false);
-    				}
-    			},
-    			error:function(){
-    				alert('Terjadi kesalahan saat menghubugni server');
-    			}
-    		});
     	}
       	ok = false;
         return false;
     });
+    
+    function submitForm(imageName){
+    	var items;
+		var link;
+		var method;
+		if(state == 'simpan'){
+			items = {
+				'name'	: $('#items-name').val(),
+				'categoryId'	: {
+					'id' : $('#items-category-id').val(),
+				},
+				'image' : imageName,
+				'variants' : listVariant
+			};
+			link = baseUrl+'items/save';
+			method = 'POST';
+		}else{
+			tempUpdate.name = $('#items-name').val();
+			if(tempUpdate.categoryId == null){
+				tempUpdate.categoryId = {"id":$('#items-category-id').val()};
+			}else{
+				tempUpdate.categoryId.id = $('#items-category-id').val();
+			}
+			if(imageName != null){
+				tempUpdate.image = imageName;
+			}
+			tempUpdate.variants = listVariant;
+			items = tempUpdate;
+			link = baseUrl+'items/update';
+			method = 'PUT';
+		}
+		
+		$.ajax({
+			type : method,
+			url :link,
+			data :JSON.stringify(items),
+			contentType: 'application/json',
+			success:function(data){
+				if(data.status == 'success'){
+					table.ajax.reload( null, false );
+					$('#myModal').modal('hide');
+					clearForm();
+					displayNotif(data.keterangan, data.status);
+					$('#form-items').parsley().reset();
+				}else{
+					$.each(data.error, function(key, value) {
+						$('#'+value[0]).parsley().removeError(value[0]+'-error', {updateClass: true});
+						$('#'+value[0]).parsley().addError(value[0]+'-error', {message: value[1], updateClass: true});
+					});
+					$('.callout-warning').toggleClass('hidden', false);
+				}
+			},
+			error:function(){
+				alert('Terjadi kesalahan saat menghubugni server');
+			}
+		});
+    }
 
     function clearForm(){
     	$('#items-id').val('');
        	$('#items-name').val('');
        	$('#items-category-id').val('');
+       	$('#file').fileinput('clear');
     	listVariant = [];
     }
     
@@ -174,18 +213,28 @@ $(document).ready(function() {
     					var tampung;
     					listVariant = [];
         				$.each(response.data, function(key, val){
-        					var inventory =  Object.assign({}, val);
-        					var variant = Object.assign({}, val.variantId);
-        					inventory.variantId = null;
+        					var inventory =  val.singleInventory;
+        					var variant = Object.assign({}, val);
         					variant.inventory = [inventory];
         					variant.itemId = null;
         					delete variant.priceFormatted;
+        					delete variant.singleInventory;
         					listVariant.push(variant);
-        					tempUpdate = val.variantId.itemId;
+        					tempUpdate = val.itemId;
         				});
         				$('#items-name').val(tempUpdate.name);
     					$('#items-id').val(tempUpdate.id);
         				$('#items-category-id').val(tempUpdate.categoryId.id);
+        				if(tempUpdate.image != null){
+        					$('#file').fileinput('destroy');
+        					$("#file").fileinput({
+        						showUpload:false,  
+        						previewFileType:'any',
+        						initialPreview: [
+        						    "<img src='"+baseUrl+"assets/img/"+tempUpdate.image+"' class='file-preview-image' style='width:auto;height:auto;max-width:100%;max-height:100%;'>",
+        						]
+        					});
+        				}
         				createTableVariant(listVariant);
     				}
     			},
@@ -262,8 +311,15 @@ $(document).ready(function() {
     		variant.name = $("#variant-name").val();
     		variant.price = $("#variant-price").val();
     		variant.sku = $("#variant-sku").val();
-    		variant.inventory.begining = $("#inventory-begining").val();
-    		variant.inventory.alertAtQty = $("#inventory-alert-at").val();
+    		if(variant.inventory[0] == null){
+    			variant.inventory = [{
+    					"begining" : $("#inventory-begining").val(),
+    					"alertAtQty" : $("#inventory-alert-at").val()
+    			}];
+    		}else{
+	    		variant.inventory[0].begining = $("#inventory-begining").val();
+	    		variant.inventory[0].alertAtQty = $("#inventory-alert-at").val();
+    		}
     		listVariant[index] = variant;
     	}
     	enableSave();
@@ -308,8 +364,8 @@ $(document).ready(function() {
         $("#variant-price-mask").val(data.price);
         $('#variant-price-mask').trigger('change');
         $("#variant-sku").val(data.sku);
-        $("#inventory-begining").val(data.inventory[0].begining);
-        $("#inventory-alert-at").val(data.inventory[0].alertAtQty);
+        $("#inventory-begining").val((data.inventory[0] == null)?"":data.inventory[0].begining);
+        $("#inventory-alert-at").val((data.inventory[0] == null)?"":data.inventory[0].alertAtQty);
     	$("#btn-add-variant").attr("state", "update");
     	$("#btn-add-variant").attr("data-id", id);
         $('#modal-variant').modal('show');
@@ -345,7 +401,7 @@ $(document).ready(function() {
     	$("#list-variant-body").empty();
     	$.each(data, function(key, val){
     		var myProp = 'alertStatus';
-    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>Rp "+(parseInt(val.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td><td>"+val.sku+"</td><td>"+val.inventory[0].begining+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> <button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button></td></tr>");
+    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>Rp "+(parseInt(val.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td><td>"+val.sku+"</td><td>"+((val.inventory[0] == null)?"":val.inventory[0].begining)+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> <button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button></td></tr>");
     		index++;
     	});
     }

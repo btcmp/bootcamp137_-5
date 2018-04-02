@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.miniproject.pos.model.ItemVariant;
+import com.miniproject.pos.utils.Constants;
 
 @Repository
 public class ItemVariantDaoImpl implements ItemVariantDao {
@@ -45,8 +46,8 @@ public class ItemVariantDaoImpl implements ItemVariantDao {
 	public List<ItemVariant> getAllItemVariant() {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "from ItemVariant";
-		List<ItemVariant> list = session.createQuery(hql).list();
+		String hql = "Select iv from ItemVariant iv join iv.itemId as i where iv.active=:active and i.active=:active";
+		List<ItemVariant> list = session.createQuery(hql).setParameter("active", Constants.ACTIVE).list();
 		return list;
 	}
 	
