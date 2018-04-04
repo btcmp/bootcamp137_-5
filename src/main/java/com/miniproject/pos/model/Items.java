@@ -30,8 +30,8 @@ public class Items {
 	@GeneratedValue(generator="system-uuid")
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
-	@Column(nullable=true)
 	
+	@Column(unique=true,nullable=true)
 	@Size(max=255)
 	private String name;
 	

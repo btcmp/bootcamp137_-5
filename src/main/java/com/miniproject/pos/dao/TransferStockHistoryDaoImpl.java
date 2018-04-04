@@ -25,7 +25,7 @@ public class TransferStockHistoryDaoImpl implements TransferStockHistoryDao {
 	public List<TransferStockHistory> getTransferStockHistoryByIdTransfer(String id) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "from TransferStockHistory as tsh where tsh.transferId.id=:id";
+		String hql = "from TransferStockHistory as tsh where tsh.transferId.id=:id order by tsh.createdOn ASC";
 		return session.createQuery(hql).setParameter("id", id).list();
 	}
 

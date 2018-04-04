@@ -1,5 +1,7 @@
 package com.miniproject.pos.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +26,13 @@ public class TransferStockController {
 	@Autowired
 	OutletService os;
 	
+	@Autowired 
+	private HttpSession httpSession;
+	
 	@RequestMapping("/index")
 	public String index(Model model) {
+		String outletId = httpSession.getAttribute("outletId").toString();
+		model.addAttribute("outletId", os.getOne(outletId));
 		model.addAttribute("title", "Data Transfer Stock");
 		model.addAttribute("outlet", os.selectAll());
 		return "transfer-stock/index";
@@ -53,7 +60,9 @@ public class TransferStockController {
 	@ResponseBody
 	public ResponseMessage save(@RequestBody TransferStock ts) {
 		ResponseMessage rm = new ResponseMessage();
-		tss.save(ts);
+		String outletId = httpSession.getAttribute("outletId").toString();
+		String userId = httpSession.getAttribute("userId").toString();
+		tss.save(ts, outletId, userId);
 		rm.setStatus("success");
 		rm.setKeterangan("Data Berhasil Disimpan");
 		return rm;
@@ -65,7 +74,8 @@ public class TransferStockController {
 		ResponseMessage rm = new ResponseMessage();
 		TransferStock ts = tss.getTransferStock(id);
 		ts.setStatus(status);
-		tss.update(ts);
+		String userId = httpSession.getAttribute("userId").toString();
+		tss.update(ts, userId);
 		rm.setStatus("success");
 		rm.setKeterangan("Status berhasil diubah");
 		return rm;

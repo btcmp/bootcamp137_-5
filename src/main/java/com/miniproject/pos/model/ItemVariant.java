@@ -42,7 +42,7 @@ public class ItemVariant {
 	@Size(max=255)
 	private String name;
 	
-	@Column(nullable=false)
+	@Column(unique=true, nullable=false)
 	@Size(max=50)
 	private String sku;
 	

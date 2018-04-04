@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rates-template" pageWidth="740" pageHeight="842" columnWidth="700" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3737c8f8-35e7-4ea0-bf9f-c557f6bbbdf3">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="title" class="java.lang.String" isForPrompting="false"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="priceFormatted" class="java.lang.String"/>
+	<field name="itemId" class="com.miniproject.pos.model.Items"/>
+	<field name="singleInventory" class="com.miniproject.pos.model.ItemInventory"/>
+	<title>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="260" y="0" width="200" height="60" uuid="484c515c-140d-44fd-b136-d7291f932429"/>
+				<textElement verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="55">
+			<staticText>
+				<reportElement x="0" y="0" width="140" height="50" uuid="350d7da5-84d7-40bc-9149-50b2abc4ceed"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="0" width="140" height="50" uuid="350d7da5-84d7-40bc-9149-50b2abc4ceee"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Category]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="140" height="50" uuid="350d7da5-84d7-40bc-9149-50b2abc4ceef"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unit Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="0" width="140" height="50" uuid="78b2639e-0ea8-4667-9d15-5b110b05a04e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[In Stock]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="560" y="0" width="140" height="50" uuid="be1a149f-b48f-4951-ac7f-d56db105bac7"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Alert]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="44">
+			<textField>
+				<reportElement x="0" y="0" width="140" height="25" uuid="cc1993f1-786d-4e11-bc70-d8339637fa07"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itemId}.getName() +" - "+ $F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="140" height="25" uuid="cc1993f1-786d-4e11-bc70-d8339637fa08"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{itemId}.getCategoryId().getName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="140" height="25" uuid="cc1993f1-786d-4e11-bc70-d8339637fa09"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{priceFormatted}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="0" width="140" height="25" uuid="e5c9b9bc-e236-4261-82d9-9607f916c5b4"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{singleInventory} == null ? "" : $F{singleInventory}.getEndingQty()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="560" y="0" width="140" height="25" uuid="6c5908ba-1ed0-4f21-ab2d-a82abcccd86d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{singleInventory} == null ? "" : $F{singleInventory}.getEndingQty() > $F{singleInventory}.getAlertAtQty() ? "Green" : "Red"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

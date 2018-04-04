@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rates-template" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3737c8f8-35e7-4ea0-bf9f-c557f6bbbdf3">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="title" class="java.lang.String" isForPrompting="false"/>
+	<field name="createdBy" class="com.miniproject.pos.model.User"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="notes" class="java.lang.String"/>
+	<title>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="238" y="0" width="200" height="60" uuid="484c515c-140d-44fd-b136-d7291f932429"/>
+				<textElement verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="150">
+			<staticText>
+				<reportElement x="20" y="10" width="100" height="20" uuid="0d72ca8e-7a16-45ab-848a-4a057155fe09"/>
+				<text><![CDATA[Created By :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="40" width="100" height="20" uuid="f99bad8e-f1ce-4d59-b8c9-6852229ae022"/>
+				<text><![CDATA[Adjustment Status :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="70" width="100" height="20" uuid="2d56aa32-5c11-4659-bb5f-f9281d0588fc"/>
+				<text><![CDATA[Notes : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="100" width="100" height="20" uuid="4a66cbb1-8f7b-40d0-b284-1edb661b3441"/>
+				<text><![CDATA[Status History :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="130" width="100" height="20" uuid="5b6f926e-bd0b-41a5-accb-9c49ee840c28"/>
+				<text><![CDATA[Adjustment Stock : ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="130" y="10" width="100" height="20" uuid="e89d0c46-0ea4-4413-9c05-25ee3a670cb1"/>
+				<textFieldExpression><![CDATA[$F{createdBy}.getUsername()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="40" width="100" height="20" uuid="4677b957-88fb-49a7-b788-94b3919b8280"/>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="130" y="70" width="100" height="20" uuid="29c567b4-1ddd-4b80-9a5b-47229b7f6ff8"/>
+				<textFieldExpression><![CDATA[$F{notes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

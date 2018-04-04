@@ -30,6 +30,7 @@
 								<th>Transfer Date</th>
 								<th>From outlet</th>
 								<th>To Outlet</th>
+								<th>Notes</th>
 								<th>Status</th>
 								<th>#</th>
 							</tr>
@@ -61,20 +62,22 @@
 				<form id="form-transfer" action="#" method="post"
 					data-parsley-validate="">
 					<div class="form-group">
-						<label for="nama" class="form-control">Create Transfer Stock : <span>Nama Outlet</span></label> 
+						<label for="nama" class="form-control">Create Transfer Stock : <span>${ outletId.name }</span></label> 
 					</div>
 					<div class="form-group">
 						<label for="outlet">To Outlet</label>
 						<select id="transfer-outlet-id" class="form-control" data-parsley-required="true">
 							<option value="">Outlet</option>
 							<c:forEach items="${outlet}" var="jrs">
-								<option value="${jrs.id }">${jrs.name }</option>
+								<c:if test="${ outletId.id != jrs.id }">
+									<option value="${jrs.id }">${jrs.name }</option>
+								</c:if>
 							</c:forEach>
 						</select>
 					</div>
 					<div class="form-group">
 						<label for="nama">Notes:</label> <textarea name="transfer-notes"
-							class="form-control" id="transfer-notes"></textarea>
+							class="form-control" id="transfer-notes" data-parsley-required="true"></textarea>
 					</div>
 					<div class="form-group">
 						<label for="nama">Transfer Item:</label>
@@ -104,8 +107,8 @@
 					
 					<div class="form-group">
 						<div class="row">
-							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
-							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="btn-transfer-back">Back</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="btn-transfer-cancel">Cancel</button></div>
 							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-transfer-save">Save</button></div>
 						</div>
 					</div>
@@ -147,9 +150,9 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
-							<div class="col-md-4"><button type="button" class="btn btn-primary" id="add-data">Back</button></div>
-							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="add-data">Cancel</button></div>
-							<div class="col-md-4"><button type="button" class="btn btn-primary pull-right" id="btn-add-item">Add</button></div>
+							<div class="col-md-4"><button type="button" class="btn btn-primary" id="btn-back-item">Back</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="btn-cancel-item">Cancel</button></div>
+							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-add-item">Add</button></div>
 						</div>
 					</div>
 				</form>
@@ -217,7 +220,7 @@
 	</div>
 </div>
 
-<div class="modal modal-danger fade" id="modal-danger">
+<div class="modal modal-warning fade" id="modal-status">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -228,13 +231,13 @@
 				<h4 class="modal-title">Peringatan !!!!!</h4>
 			</div>
 			<div class="modal-body">
-				<p>Apakah anda yakin ingin menghapus data ?</p>
+				<p>Apakah anda yakin ingin mengubah status ?</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline pull-left"
 					data-dismiss="modal">Tidak</button>
-				<button type="button" id="hapus-data" data-id=""
-					class="btn btn-outline">Ya, Hapus Data</button>
+				<button type="button" id="ubah-status" data-id=""
+					class="btn btn-outline">Ya, Ubah Status</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

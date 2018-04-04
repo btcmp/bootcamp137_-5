@@ -3,10 +3,11 @@ package com.miniproject.pos.dao;
 import java.util.List;
 
 import com.miniproject.pos.model.ItemVariant;
+import com.miniproject.pos.utils.UniqueException;
 
 public interface ItemVariantDao {
 
-	public void save(ItemVariant itemVariant);
+	public void save(ItemVariant itemVariant)throws UniqueException;
 	
 	public void update(ItemVariant itemVariant);
 	
@@ -15,6 +16,8 @@ public interface ItemVariantDao {
 	public ItemVariant getItemVariantById(String id);
 	
 	public List<ItemVariant> getAllItemVariant();
+	
+	public List<ItemVariant> getAllItemVariant(String id);
 	
 	public List<ItemVariant> getItemVariantByItem(String itemId);
 }

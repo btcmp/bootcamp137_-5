@@ -3,27 +3,26 @@ package com.miniproject.pos.controller;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.miniproject.pos.model.ItemInventory;
 import com.miniproject.pos.model.ItemVariant;
 import com.miniproject.pos.model.Items;
 import com.miniproject.pos.model.Outlet;
@@ -32,7 +31,12 @@ import com.miniproject.pos.service.ItemInventoryService;
 import com.miniproject.pos.service.ItemVariantService;
 import com.miniproject.pos.service.ItemsService;
 import com.miniproject.pos.service.KategoriService;
+import com.miniproject.pos.utils.ExportPdf;
 import com.miniproject.pos.utils.ResponseMessage;
+import com.miniproject.pos.utils.UniqueException;
+
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @Controller
 @RequestMapping("/items")
@@ -78,7 +82,8 @@ public class ItemsController {
 	public ResponseMessage getAllData(@PathVariable String id) {
 		ResponseMessage rm = new ResponseMessage();
 		rm.setStatus("success");
-		rm.setData(itemInventoryService.getInventory(id));
+		String outletId = httpSession.getAttribute("outletId").toString();
+		rm.setData(itemVariantService.getAllItemVariant(outletId, id));
 		return rm;
 	}
 	
@@ -94,8 +99,9 @@ public class ItemsController {
 	
 	@RequestMapping("/get-all-variant")
 	@ResponseBody
-	public List<ItemInventory> getVariant() {
-		return itemInventoryService.getInventoryAll();
+	public List<ItemVariant> getVariant() {
+		String outletId = httpSession.getAttribute("outletId").toString();
+		return itemVariantService.getAllItemVariant(outletId);
 	}
 	
 	@RequestMapping(value="/delete-variant/{id}", method=RequestMethod.DELETE)
@@ -118,9 +124,15 @@ public class ItemsController {
 		user.setId(httpSession.getAttribute("userId").toString());
 		Outlet outlet = new Outlet();
 		outlet.setId(httpSession.getAttribute("outletId").toString());
-		itemsService.save(items, user, outlet);
-		rm.setStatus("success");
-		rm.setKeterangan("Data Berhasil Disimpan");
+		try {
+			itemsService.save(items, user, outlet);
+			rm.setStatus("success");
+			rm.setKeterangan("Data Berhasil Disimpan");
+		}catch(UniqueException e) {
+			rm.setError(e.error());
+			rm.setStatus("danger");
+			rm.setKeterangan("Data gagal disimpan");
+		}
 		return rm;
 	}
 	
@@ -147,6 +159,17 @@ public class ItemsController {
 		return rm;
 	}
 	
+	@RequestMapping(value="/report", method = RequestMethod.GET)
+	public void getReport(HttpServletResponse response){
+	    Map<String, Object> param = new HashMap();
+	    param.put("title", "List Data Items");
+	    ExportPdf ep = new ExportPdf();
+	    String outletId = httpSession.getAttribute("outletId").toString();
+	    JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(itemVariantService.getAllItemVariant(outletId));
+		JasperPrint jasperPrint = ep.getObjectPdf("items.jrxml", param, dataSource);
+	    ep.sendPdfResponse(response, jasperPrint, "newbie");
+	}
+	
 	@RequestMapping(value="/update", method=RequestMethod.PUT)
 	@ResponseBody
 	public ResponseMessage update(@RequestBody(required=false) Items items) {
@@ -155,15 +178,21 @@ public class ItemsController {
 		user.setId(httpSession.getAttribute("userId").toString());
 		Outlet outlet = new Outlet();
 		outlet.setId(httpSession.getAttribute("outletId").toString());
-		itemsService.update(items, user, outlet);
-		rm.setStatus("success");
-		rm.setKeterangan("Data Berhasil Disimpan");
+		try {
+			itemsService.update(items, user, outlet);
+			rm.setStatus("success");
+			rm.setKeterangan("Data Berhasil Diupdate");
+		}catch(UniqueException e) {
+			rm.setError(e.error());
+			rm.setStatus("danger");
+			rm.setKeterangan("Data gagal diupdate");
+		}
 		return rm;
 	}
 	
-	@ExceptionHandler
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	public void handle(Exception e) {
-	    System.out.println(e);
-	}
+//	@ExceptionHandler
+//	@ResponseStatus(HttpStatus.BAD_REQUEST)
+//	public void handle(Exception e) {
+//	    System.out.println(e);
+//	}
 }

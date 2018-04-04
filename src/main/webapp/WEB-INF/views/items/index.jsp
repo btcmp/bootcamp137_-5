@@ -26,8 +26,13 @@
 						<input id="item-name-variant"/>
 					</div>
 					<div class="col-md-9">
+					<div class="col-md-9">
+							<a target="_blank" href="${baseUrl}/items/report "><button class="btn btn-primary pull-right" id="export-data">Export</button></a>
+						</div>
+						<div class="col-md-3">
 						<button class="btn btn-primary pull-right" id="add-data">Add
 							Items</button>
+							</div>
 					</div>
 					<table id="items-list"
 						class="table table-striped table-bordered table-hover">
@@ -160,7 +165,7 @@
 								<input name="variant-price-mask" type="text"
 									placeholder="Unit Price" value="0" data-parsley-required="true"
 									class="form-control" id="variant-price-mask">
-								<input name="variant-price" type="hidden" data-parsley-required="true" id="variant-price">
+								<input name="variant-price" type="hidden" data-parsley-required="true" value="0" id="variant-price">
 							</div>
 							<div class="col-md-4">
 								<input name="variant-sku" type="text" placeholder="SKU"
@@ -174,22 +179,22 @@
 						<h3>Set Begining Stock</h3>
 						<div class="row">
 							<div class="col-md-6">
-								<input name="inventory-begining" type="text"
+								<input name="inventory-begining" type="number"
 									placeholder="Begining Stock" data-parsley-required="true"
-									class="form-control" id="inventory-begining">
+									min="0" class="form-control" id="inventory-begining">
 							</div>
 							<div class="col-md-6">
-								<input name="inventory-alert-at" type="text"
+								<input name="inventory-alert-at" type="number"
 									placeholder="Alert At" data-parsley-required="true"
-									class="form-control" id="inventory-alert-at">
+									min="0" class="form-control" id="inventory-alert-at">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="row">
 							<div class="col-md-4"><button type="button" class="btn btn-primary" id="btn-back-variant">Back</button></div>
-							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="btn-cancel-variant" disabled>Cancel</button></div>
-							<div class="col-md-4"><button type="button" state="create" class="btn btn-primary pull-right" id="btn-add-variant">Add</button></div>
+							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="btn-cancel-variant">Cancel</button></div>
+							<div class="col-md-4"><button type="submit" state="create" class="btn btn-primary pull-right" id="btn-add-variant">Add</button></div>
 						</div>
 					</div>
 				</form>

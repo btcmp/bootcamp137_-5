@@ -77,12 +77,12 @@
 					data-parsley-validate="">
 					<div class="form-group">
 						<label for="nama" class="form-control">Create Adjustment :
-							<span>Nama Outlet</span>
+							<span>${ outlet.name }</span>
 						</label>
 					</div>
 					<div class="form-group">
 						<label for="nama">Notes:</label>
-						<textarea name="adjust-notes" class="form-control"
+						<textarea name="adjust-notes" class="form-control" data-parsley-required="true"
 							id="adjust-notes"></textarea>
 					</div>
 					<div class="form-group">
@@ -113,14 +113,14 @@
 					<div class="form-group">
 						<div class="row">
 							<div class="col-md-4">
-								<button type="button" class="btn btn-primary" id="add-data">Back</button>
+								<button type="button" class="btn btn-primary" id="btn-adjust-back">Back</button>
 							</div>
 							<div class="col-md-4 text-center">
-								<button type="button" class="btn btn-primary" id="add-data">Cancel</button>
+								<button type="button" class="btn btn-primary" id="btn-adjust-cancel">Cancel</button>
 							</div>
 							<div class="col-md-4">
 								<button type="submit" class="btn btn-primary pull-right"
-									id="btn-adjust-save">Save</button>
+									id="btn-adjust-save" disabled>Save</button>
 							</div>
 						</div>
 					</div>
@@ -163,14 +163,14 @@
 					<div class="form-group">
 						<div class="row">
 							<div class="col-md-4">
-								<button type="button" class="btn btn-primary" id="add-data">Back</button>
+								<button type="button" class="btn btn-primary" id="btn-back-item">Back</button>
 							</div>
 							<div class="col-md-4 text-center">
-								<button type="button" class="btn btn-primary" id="add-data">Cancel</button>
+								<button type="button" class="btn btn-primary" id="btn-cancel-item">Cancel</button>
 							</div>
 							<div class="col-md-4">
-								<button type="button" class="btn btn-primary pull-right"
-									id="btn-add-item">Add</button>
+								<button type="submit" class="btn btn-primary pull-right"
+									id="btn-add-item" disabled>Add</button>
 							</div>
 						</div>
 					</div>
@@ -185,9 +185,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<select data-id="" class="close" id="status-more">
-					<option value="">More</option>
-					<option value="Approved">Approved</option>
-					<option value="Reject">Reject</option>
+					
 				</select>
 				<h4 class="modal-title">Adjustment Detail</h4>
 			</div>
@@ -234,7 +232,7 @@
 	</div>
 </div>
 
-<div class="modal modal-danger fade" id="modal-danger">
+<div class="modal modal-warning fade" id="modal-status">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -245,13 +243,13 @@
 				<h4 class="modal-title">Peringatan !!!!!</h4>
 			</div>
 			<div class="modal-body">
-				<p>Apakah anda yakin ingin menghapus data ?</p>
+				<p>Apakah anda yakin ingin mengubah status ?</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline pull-left"
 					data-dismiss="modal">Tidak</button>
-				<button type="button" id="hapus-data" data-id=""
-					class="btn btn-outline">Ya, Hapus Data</button>
+				<button type="button" id="ubah-status" data-id=""
+					class="btn btn-outline">Ya, Ubah Status</button>
 			</div>
 		</div>
 		<!-- /.modal-content -->

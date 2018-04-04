@@ -14,6 +14,7 @@ import com.miniproject.pos.model.ItemVariant;
 import com.miniproject.pos.model.Items;
 import com.miniproject.pos.model.Outlet;
 import com.miniproject.pos.model.User;
+import com.miniproject.pos.utils.UniqueException;
 
 @Service
 @Transactional
@@ -28,7 +29,7 @@ public class ItemsService {
 	@Autowired
 	ItemInventoryDao iiDao;
 	
-	public void save(Items items, User user, Outlet outlet) {
+	public void save(Items items, User user, Outlet outlet) throws UniqueException{
 		List<ItemVariant> itemVariants = items.getVariants();
 		items.setVariants(null);
 		items.setCreatedBy(user);
@@ -48,7 +49,7 @@ public class ItemsService {
 		}
 	}
 	
-	public void update(Items items, User user, Outlet outlet) {
+	public void update(Items items, User user, Outlet outlet) throws UniqueException{
 		List<ItemVariant> itemVariants = items.getVariants();
 		items.setVariants(null);
 		items.setModifiedBy(user);

@@ -47,6 +47,16 @@ public class ItemVariantService {
 		return list;
 	}
 	
+	public List<ItemVariant> getAllItemVariant(String outletId, String id){
+		List<ItemVariant> list = itemVariantDao.getAllItemVariant(id);
+		for(ItemVariant iv:list) {
+			ItemInventory ii = itemInventoryDao.getInventoryByVariantId(iv.getId(), outletId);
+			iv.setInventory(null);
+			iv.singleInventorySet(ii);
+		}
+		return list;
+	}
+	
 	public List<ItemVariant> getItemVariantByItem(String itemId, String outletId) {
 		List<ItemVariant> list = itemVariantDao.getItemVariantByItem(itemId);
 		for(ItemVariant iv:list) {
