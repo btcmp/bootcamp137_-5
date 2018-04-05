@@ -16,4 +16,6 @@ public interface SalesOrderDetailDao {
 	public SalesOrderDetail getOne(String id);
 	
 	public List<SalesOrderDetail> selectAll();
+
+	public List<SalesOrderDetail> getSalesOrderDetailBySalesOrderId(String id);
 }

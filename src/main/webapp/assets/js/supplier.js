@@ -11,6 +11,8 @@ $(function() {
 		})
 		$('#btn-save-sup').on('click', function(evt) {
 			evt.preventDefault();
+			var formsave = $('#form-save');
+			var validsave = formsave.parsley().validate();
 			var out = {
 					name : $('#save-name-sup').val(),
 					address : $('#save-address-sup').val(),
@@ -28,24 +30,23 @@ $(function() {
 					email : $('#save-email-sup').val(),
 					active : 1
 			}
-			//console.log(out);
 		
-		
-			$.ajax({
-				url : baseUrl+"supplier/save",
-				type : 'POST',
-				contentType : 'application/json',
-				data : JSON.stringify(out),
-				success : function(data) {
-					//console.log(data);
-					alert('save success');
-					window.location = baseUrl+"supplier/index";
-				},
-				error : function() {
-					alert('saving failed!');
-				}                              
-			});
-			
+			if(validsave==true){
+				$.ajax({
+					url : baseUrl+"supplier/save",
+					type : 'POST',
+					contentType : 'application/json',
+					data : JSON.stringify(out),
+					success : function(data) {
+						//console.log(data);
+						alert('save success');
+						window.location = baseUrl+"supplier/index";
+					},
+					error : function() {
+						alert('saving failed!');
+					}                              
+				});
+			}
 		});
 		
 		
@@ -109,7 +110,6 @@ $(function() {
 		$('.editsupplier').on('click', function(evt) {
 			evt.preventDefault();
 			var id = $(this).attr('id');
-			//console.log(id);
 			$.ajax({
 				url : baseUrl+"supplier/get-id/"+id,
 				type : 'GET',
@@ -136,8 +136,6 @@ $(function() {
 			$('#edit-code-sup').val(sup.postalCode);
 			$('#edit-phone-sup').val(sup.phone);
 			$('#edit-email-sup').val(sup.email);
-			
-			//getDistrictByProv(idprov);
 		};
 		
 		function getRegionByProvinsi(idProv,regionid) {
@@ -154,7 +152,6 @@ $(function() {
 					})
 					
 					$('#edit-reg-sup').html(region);
-					//console.log($('#edit-reg-sup').html());
 					$('#edit-reg-sup').val(regionid);
 				},
 				error : function() {
@@ -188,6 +185,8 @@ $(function() {
 		
 //----------------------------------------------------------------------------------------------------nonactive-------------------
 		$('#btn-nonactive').on('click', function() {
+			var formedit = $('#form-edit');
+			var validedit = formedit.parsley().validate();
 			var supplier = {
 					id : $('#edit-id-sup').val(),
 					name : $('#edit-name-sup').val(),
@@ -207,26 +206,30 @@ $(function() {
 					active : 0
 					
 			}
-			//console.log(supplier);
-			$.ajax({
-				url : baseUrl+"supplier/update",
-				type : 'PUT',
-				data : JSON.stringify(supplier),
-				contentType : 'application/json',
-				success : function(data) {
-					alert('Supplier nonactive')
-					window.location = baseUrl+"supplier/index";
-				},
-				error : function() {
-					alert('update failed!!');
-				}
-			});
+			
+			if(validedit==true){
+				$.ajax({
+					url : baseUrl+"supplier/update",
+					type : 'PUT',
+					data : JSON.stringify(supplier),
+					contentType : 'application/json',
+					success : function(data) {
+						alert('Supplier nonactive')
+						window.location = baseUrl+"supplier/index";
+					},
+					error : function() {
+						alert('update failed!!');
+					}
+				});
+			}
 			
 		});
 		
 //-------------------------------------------------------------------------------------------------------------update----------
 		
 		$('#btn-update-sup').on('click', function() {
+			var formedit = $('#form-edit');
+			var validedit = formedit.parsley().validate();
 			var supplier = {
 					id : $('#edit-id-sup').val(),
 					name : $('#edit-name-sup').val(),
@@ -245,29 +248,28 @@ $(function() {
 					email : $('#edit-email-sup').val(),
 					active : 1
 			}
-			//console.log(supplier);
 			
-			$.ajax({
-				url : baseUrl+"supplier/update",
-				type : 'PUT',
-				data : JSON.stringify(supplier),
-				contentType : 'application/json',
-				success : function(data) {
-					alert('update success!!')
-					window.location = baseUrl+"supplier/index";
-				},
-				error : function() {
-					alert('update failed!!');
-				}
-			});
-			
+			if(validedit==true){
+				$.ajax({
+					url : baseUrl+"supplier/update",
+					type : 'PUT',
+					data : JSON.stringify(supplier),
+					contentType : 'application/json',
+					success : function(data) {
+						alert('update success!!')
+						window.location = baseUrl+"supplier/index";
+					},
+					error : function() {
+						alert('update failed!!');
+					}
+				});
+			}
 		});
 		
 //----------------------------------------------------------------------------------------edit region--------------------
 		
 		$('#edit-prov-sup').on('change', function() {
 			var id = $(this).val();
-			//console.log(id);
 			if (id!==""){
 				$.ajax({
 					url : baseUrl+"region/get-region?id="+id,
@@ -293,7 +295,6 @@ $(function() {
 		
 		$('#edit-reg-sup').on('change', function() {
 			var id = $(this).val();
-			//console.log(id);
 			if (id!=""){
 				$.ajax({
 					url : baseUrl+"kecamatan/get-kecamatan?id="+id,
@@ -319,7 +320,6 @@ $(function() {
 		
 		$("#btn-carri").on('click', function() {
 			var kata  = $("#carri").val();
-			//console.log(kata);
 			window.location =  baseUrl+"supplier/index/src?search="+ kata;
 		});
 				

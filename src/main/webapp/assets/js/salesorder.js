@@ -4,9 +4,6 @@ $(function() {
 	$('#table-customer').DataTable({
 		searching : false
 	});
-	/*$('#salesorder').DataTable({
-		searching : false
-	});*/
 //-------------------------------------------------------------------------------search item---------------------------------------------
 	var allReadyId = [];
 		var options = {
@@ -20,7 +17,7 @@ $(function() {
 				},
 				onClickEvent : function() {
 					if($('.customer').attr('id') === undefined){
-						alert('tolol isi customer dlu')
+						alert('silahkan pilih customer terlebih dahulu')
 					}
 					
 					else{
@@ -29,23 +26,25 @@ $(function() {
 						var c = ('x'+value.variantId.id);
 						if(allReadyId.indexOf(c.toString())==-1){
 							$('#table-item').append(
-									"<tr>" +
+									"<tr id="+value.id+">" +
 									"<td class= nama-item"+value.variantId.id+">"+value.variantId.itemId.name+" - "+value.variantId.name+"</td>" +
 									"<td class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
 									"<td class= qty-item"+value.variantId.id+">"+value.endingQty+"</td>" +
 									"<td><input id="+value.variantId.id+" class='check-item' type='checkbox'></input></td>" +
 									"</tr>"
 							);
+							$('#pay-sods').prop('disabled',true);
 							$('#nama-item').val('');}
 						else{
 							$('#table-item').append(
-									"<tr>" +
+									"<tr id="+value.id+">" +
 									"<td class= nama-item"+value.variantId.id+">"+value.variantId.itemId.name+" - "+value.variantId.name+"</td>" +
 									"<td class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
 									"<td class= qty-item"+value.variantId.id+">"+value.endingQty+"</td>" +
 									"<td><input id="+value.variantId.id+" class='check-item' type='checkbox' checked disabled></input></td>" +
 									"</tr>"
 							);
+							$('#pay-sods').prop('disabled',true);
 							$('#nama-item').val('');
 						}
 		
@@ -59,31 +58,11 @@ $(function() {
 	};
 	$('#nama-item').easyAutocomplete(options);
 	
-	
-	$('body').on('input', '.quantity', function(e) {
-		var jumlah = $(this).val();
-		var id = $(this).attr('id');
-		var hargaUnit = parseInt($('.hargaaaa'+id).text().split("Rp.")[1]);
-		var hargaTotal = jumlah * hargaUnit;
-		$('#total'+id).val("Rp."+hargaTotal);
-		$('#total-harga-fix').empty();
-		var total = 0;
-		$('#salesorder > tbody > tr').each(function(index,value) {
-			var price = $(value).find('td').eq(2).text().split("Rp.")[1];
-			total = total + parseInt(price);
-		})
-		$('#total-harga-fix').append(
-				"<tr>" +
-				"<td>Rp."+total+"</td>" +
-				"</tr>" 
-		)
-		var harga = $('#total-harga-fix').text().split("Rp.")[1];
-		$('.bayar-sod').text("Charge Rp."+harga);
-	})	
-	
 	var idx ;
 	
 	$('body').on('click', ':checkbox', function(){
+		var idinven = $('#table-item').find('tr').attr('id');
+		//console.log(idinven);
 		var id = $(this).attr('id');
 		var idz = ('x'+id);
 		allReadyId.push(idz);
@@ -111,33 +90,62 @@ $(function() {
 				"</tr>"
 		)
 		var harga = $('#total-harga-fix').text().split("Rp.")[1];
-		$('.bayar-sod').text("Charge Rp."+harga);
+		if(harga == 0){
+			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled', true);
+		}else{
+			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled', false);
+		}
 				
 	});
 	
-	$('body').on('click', 'a.delete', function(evt) {
-		evt.preventDefault();
-		var id = $(this).attr('id');
-		var getIndex = allReadyId.indexOf(id.to=String());
-		document.getElementById(idx).disabled=false;
-		$('#'+idx).prop('checked', false);
-		$('#ritem'+id).remove();
-		allReadyId.splice(getIndex,1);
-		$('#table-item').empty();
-		$('#total-harga-fix').empty();
-		var total = 0;
-		$('#salesorder > tbody > tr').each(function(index,value) {
-			var price = $(value).find('td').eq(2).text().split("Rp.")[1];
-			total = total + parseInt(price);
-		})
-		$('#total-harga-fix').append(
-				"<tr>" +
-				"<td>Rp."+total+"</td>" +
-				"</tr>"
-		)
-		var harga = $('#total-harga-fix').text().split("Rp.")[1];
-		$('.bayar-sod').text("Charge Rp."+harga);
-	});
+			$('body').on('input', '.quantity', function(e) {
+				e.preventDefault();
+				var jumlah = $(this).val();
+				var id = $(this).attr('id');
+				var hargaUnit = parseInt($('.hargaaaa'+id).text().split("Rp.")[1]);
+				var hargaTotal = jumlah * hargaUnit;
+				$('#total'+id).val("Rp."+hargaTotal);
+				$('#total-harga-fix').empty();
+				var total = 0;
+					$('#salesorder > tbody > tr').each(function(index,value) {
+						var price = $(value).find('td').eq(2).text().split("Rp.")[1];
+						total = total + parseInt(price);
+					})
+					$('#total-harga-fix').append(
+							"<tr>" +
+							"<td>Rp."+total+"</td>" +
+							"</tr>" 
+					)
+				var harga = $('#total-harga-fix').text().split("Rp.")[1];
+					$('.bayar-sod').text("Charge Rp."+harga);
+					$('#pay-sods').prop('disabled',false);
+			})
+	
+			
+			$('body').on('click', 'a.delete', function(evt) {
+				evt.preventDefault();
+				var id = $(this).attr('id');
+				var getIndex = allReadyId.indexOf(id.to=String());
+				document.getElementById(idx).disabled=false;
+				$('#'+idx).prop('checked', false);
+				$('#ritem'+id).remove();
+				allReadyId.splice(getIndex,1);
+				$('#table-item').empty();
+				$('#total-harga-fix').empty();
+				var total = 0;
+				$('#salesorder > tbody > tr').each(function(index,value) {
+					var price = $(value).find('td').eq(2).text().split("Rp.")[1];
+					total = total + parseInt(price);
+				})
+				$('#total-harga-fix').append(
+						"<tr>" +
+						"<td>Rp."+total+"</td>" +
+						"</tr>"
+				)
+				var harga = $('#total-harga-fix').text().split("Rp.")[1];
+				$('.bayar-sod').text("Charge Rp."+harga);
+				
+			});
 	
 //-------------------------------------------------------------------------------------------------------------------------------
 	
@@ -164,9 +172,13 @@ $(function() {
 		
 	})
 	
+	$('#btn-send').on('click', function() {
+		alert('Send success!');
+	})
+	
 	$('#btn-done').click(function() {
 		var salesOrderDetail = [];
-		$('#list-item-pilih > tr').each(function(index,data) {
+		$('#list-item-pilih').each(function(index,data) {
 			var detail= {
 					itemVariant : {
 						id : $(data).find('td').eq(0).attr('id'),
@@ -176,9 +188,8 @@ $(function() {
 					subTotal : $(data).find('td').eq(2).text().split("Rp.")[1]
 					
 			}
+			console.log(detail);
 			salesOrderDetail.push(detail);
-			//console.log(salesOrderDetail);
-			
 		})
 			var so ={
 						customer : {
@@ -187,21 +198,32 @@ $(function() {
 						salesOrderDetails : salesOrderDetail,
 						grandTotal :  parseInt($('.bayar-sod').text().split("Charge Rp.")[1])
 				}
-				console.log(so);
 				$.ajax({
 					url : baseUrl+"/salesorder/save",
 					type : 'POST',
 					data : JSON.stringify(so),
 					contentType : 'application/json',
-					success : function() {
-						alert('save success')
+					success : function(data) {
+							$.ajax({
+								url : baseUrl+"/salesorder/update-stock",
+								type : 'PUT',
+								contentType : 'application/json',
+								data : JSON.stringify(so),
+								success : function(data) {
+									alert('update stoke done');
+								},
+								error : function() {
+									alert('error update stock');
+								},
+										
+							});
+						alert('transaction success');
 						window.location = baseUrl+"/salesorder/index";
-					},
+					},//ajaxsave
 					error : function() {
 						alert('save error');
 					}
 				})
-				//aaaaa
 	})
 	
 //-------------------------------------------------------------------------------search cust----------------------------------------
@@ -230,9 +252,9 @@ $(function() {
 			renderData += "<td id='customer-name"+custom.id+"'>";
 			renderData += custom.name;
 			renderData += "</td>";
-			renderData += "<td>";
+			renderData += "<td  id='customer-email"+custom.id+"'>";
 			renderData += custom.email;
-			renderData += "</td>";
+			renderData += "</td >";
 			renderData += "<td>";
 			renderData += custom.phone;
 			renderData += "</td>";
@@ -251,29 +273,17 @@ $(function() {
 		tbody.empty();
 	}
 	
-		$(document).on('click', '.pilih-customer', function() {
-			var id = $(this).attr('id');
-			//console.log(id);
-			var name = $('#customer-name'+id).text();
-			console.log(name);
-			$('.customer').text(name);
-			$('.customer').attr("id",id);
-			$('#choose-cust').modal('toggle');
+	$(document).on('click', '.pilih-customer', function() {
+		var id = $(this).attr('id');
+		var name = $('#customer-name'+id).text();
+		var email = $('#customer-email'+id).text();
+		$('.customer').text(name);
+		$('.customer').attr("id",id);
+		$('.email-cust').text(email);
+		$('#choose-cust').modal('toggle');
 			
-			/*//alert("aa");
-			var element = $(this).parent().parent();
-			//console.log(element);
-			var td = element.find("td").eq(0).text();
-			//console.log(td);
-			$('#customer').text(td);
-			customer = {
-					name : element.find("td").eq(0).text(),
-					email : element.find("td").eq(1).text(),
-					phone : element.find("td").eq(2).text()
-			}
-			//console.log(customer);
-*/			
-		});
+
+	});
 	
 	
 	
@@ -286,8 +296,13 @@ $(function() {
 		$('#add-new').on('click', function() {
 			$('#new-cust').modal();
 		})
+		$('#btn-cancel-save').on('click', function(evt) {
+			$('#new-cust').modal('toggle');
+		})
 		$('#btn-simpan').on('click', function(evt) {
 			evt.preventDefault();
+			var formsave = $('#form-save');
+			var validsave = formsave.parsley().validate();
 			var customer = {
 					name : $('#save-name-cust').val(),
 					email : $('#save-email-cust').val(),
@@ -305,33 +320,77 @@ $(function() {
 					},
 					active : 1
 			}
-			console.log(customer);
-		
-		
+			var dupemail;
+			var dupphone;
 			$.ajax({
-				url : baseUrl+"customer/save",
-				type : 'POST',
-				contentType : 'application/json',
-				data : JSON.stringify(customer),
-				success : function(data) {
-					//console.log(data);
-					alert('save success');
-					window.location = baseUrl+"salesorder/index";
-				},
-				error : function() {
-					alert('saving failed!');
-				}                              
-			});
+				url : baseUrl+"salesorder/get-all-email",
+				type : 'GET',
+				cotentType : 'application/json',
+				success : function(listcustomer) {
+					dupemail = 0;
+					$.each(listcustomer , function(index, email) {
+						if($('#save-email-cust').val() == email){
+							console.log($('#save-email-cust').val()+ "+" +email);
+							dupemail = 1;
+						}
+					})
+					if(dupemail == 1){
+						alert('email has been used');
+					}
+					else{
+						$.ajax({
+							url : baseUrl+"salesorder/get-all-phone",
+							type : 'GET',
+							contentType : 'application/json',
+							success : function(listphone) {
+								dupphone=0;
+								$.each(listphone , function(index, phone) {
+									if($('#save-phone-cust').val() == phone){
+										dupphone = 1;
+									}
+								})
+								if (dupphone==1){
+									alert('phone number has been used')
+								}else{
+									if(validsave==true){
+										$.ajax({
+											url : baseUrl+"customer/save",
+											type : 'POST',
+											contentType : 'application/json',
+											data : JSON.stringify(customer),
+											success : function(data) {
+												alert('save success');
+												window.location = baseUrl+"salesorder/index";
+											},
+											error : function() {
+												alert('saving failed!');
+											}                              
+										});
+									}//ajaxsave
+								}
+							},
+							error : function() {
+								alert('error')
+							}
+						})//get phone
+					}//else email
+				},//success email
+				error: function() {
+					alert('error');
+					
+				}
+			})
+		
 			
 		});
 		
 		
 //---------------------------------------------------------------------------------------------------------list region---------------------------------------------
 		
+	
 		$('#save-pro-cust').on('change', function() {
 			var id = $(this).val();
-			//console.log(id);
-			if (id!==""){
+			if (id !=""){
 				$.ajax({
 					url : baseUrl+"region/get-region?id="+id,
 					type : 'GET',
@@ -349,6 +408,20 @@ $(function() {
 						alert('get failed');
 					}
 				});
+			}else{
+				$.ajax({
+					url : baseUrl+"region/get-region?id="+id,
+					type : 'GET',
+					success : function(regionss) {
+						var region = [];
+							var reg = '<option value=/"/">Region</option>';
+							region.push(reg);
+							
+							$('#save-reg-cust').html(region);
+					}, error : function(){
+						alert('get failed');
+					}
+				});
 			}
 		});		
 		
@@ -358,8 +431,7 @@ $(function() {
 							
 		$('#save-reg-cust').on('change', function() {
 			var id = $(this).val();
-			//console.log(id);
-			if (id!=""){
+			if (id !=""){
 				$.ajax({
 					url : baseUrl+"kecamatan/get-kecamatan?id="+id,
 					type : 'GET',
@@ -381,10 +453,4 @@ $(function() {
 		});
 				
 		
-//------------------------------------------------------------------------------pilih cust----------------------------------------------------------------
-
-		/*$('.pilih-customer').on('click', function() {
-			//alert("terpilih");
-		});*/
-
 });

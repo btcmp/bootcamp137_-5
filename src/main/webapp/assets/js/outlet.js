@@ -12,6 +12,20 @@ $(function() {
 			window.location = baseUrl+"outlet/index/src?search="+word;
 		});
 	
+//--------------------------------------------------------------------------------------------------------------cancel save-------------------------------------
+		
+		$('#btn-cancel-save').on('click', function() {
+			$('#save-name').val('');
+			$('#save-address').val('');
+			$('#save-code').val('');
+			$('#save-phone').val('');
+			$('#save-email').val('');
+			$('#save-pro').val('');
+			$('#save-reg').val('');
+			$('#save-dis').val('');
+			
+		})
+		
 
 //----------------------------------------------------------------------save---------------------------------------------------
 		$('#add').on('click', function() {
@@ -19,6 +33,8 @@ $(function() {
 		})
 		$('#btn-save').on('click', function(evt) {
 			evt.preventDefault();
+			var formsave = $('#form-save');
+			var validsave = formsave.parsley().validate();
 			var out = {
 					name : $('#save-name').val(),
 					address : $('#save-address').val(),
@@ -38,7 +54,7 @@ $(function() {
 			}
 			//console.log(out);
 		
-		
+		if(validsave == true){
 			$.ajax({
 				url : baseUrl+"outlet/save",
 				type : 'POST',
@@ -53,6 +69,7 @@ $(function() {
 					alert('saving failed!');
 				}                              
 			});
+		}
 			
 		});
 		
@@ -147,7 +164,7 @@ $(function() {
 		
 		function getRegionByProvinsi(idProv,regid) {
 			$.ajax({
-				url : baseUrl+"/region/get-region?id",idProv,
+				url : baseUrl+"/region/get-region?id="+idProv,
 				type : "GET",
 				success : function(regionss) {
 					var region = [];
@@ -194,6 +211,8 @@ $(function() {
 //------------------------------------------------------------------------------------------------------nonactive-------------------------------------------
 		
 		$('#btn-nonactive').on('click', function() {
+			var formedit = $('#form-edit');
+			var validedit = formedit.parsley().validate();
 			var outlet = {
 					id : $('#edit-id').val(),
 					name : $('#edit-name-out').val(),
@@ -212,25 +231,28 @@ $(function() {
 					email : $('#edit-email-out').val(),
 					active : 0
 			}
-			
-			$.ajax({
-				url : baseUrl+"outlet/update",
-				type : 'PUT',
-				data : JSON.stringify(outlet),
-				contentType : 'application/json',
-				success : function(data) {
-					alert('Outlet non-active');
-					window.location = baseUrl+"outlet/index";
-				},
-				error : function() {
-					alert('update failed!!');
-				}
-			});
+			if(validedit == true){
+				$.ajax({
+					url : baseUrl+"outlet/update",
+					type : 'PUT',
+					data : JSON.stringify(outlet),
+					contentType : 'application/json',
+					success : function(data) {
+						alert('Outlet non-active');
+						window.location = baseUrl+"outlet/index";
+					},
+					error : function() {
+						alert('update failed!!');
+					}
+				});
+			}
 		});
 		
 //------------------------------------------------------------------------------------------------update----------------------------------------------
 		
 		$('#btn-update').on('click', function() {
+			var formedit = $('#form-edit');
+			var validedit = formedit.parsley().validate();
 			var outlet = {
 					id : $('#edit-id').val(),
 					name : $('#edit-name-out').val(),
@@ -249,21 +271,21 @@ $(function() {
 					email : $('#edit-email-out').val(),
 					active : 1
 			}
-			
-			$.ajax({
-				url : baseUrl+"outlet/update",
-				type : 'PUT',
-				data : JSON.stringify(outlet),
-				contentType : 'application/json',
-				success : function(data) {
-					alert('update success!!')
-					window.location = baseUrl+"outlet/index";
-				},
-				error : function() {
-					alert('update failed!!');
-				}
-			});
-			
+			if(validedit == true){
+				$.ajax({
+					url : baseUrl+"outlet/update",
+					type : 'PUT',
+					data : JSON.stringify(outlet),
+					contentType : 'application/json',
+					success : function(data) {
+						alert('update success!!')
+						window.location = baseUrl+"outlet/index";
+					},
+					error : function() {
+						alert('update failed!!');
+					}
+				});
+			}
 		});
 		
 //----------------------------------------------------------------------------------------------edit region------------------------------------------

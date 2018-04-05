@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.miniproject.pos.dao.ItemInventoryDao;
 import com.miniproject.pos.dao.ItemVariantDao;
 import com.miniproject.pos.dao.SalesOrderDao;
 import com.miniproject.pos.dao.SalesOrderDetailDao;
+import com.miniproject.pos.model.ItemInventory;
 import com.miniproject.pos.model.ItemVariant;
 import com.miniproject.pos.model.SalesOrder;
 import com.miniproject.pos.model.SalesOrderDetail;
@@ -26,7 +28,11 @@ public class SalesOrderService {
 	@Autowired
 	ItemVariantDao itemVariantDao;
 	
+	@Autowired
+	ItemInventoryDao itemInveentoryDao;
+	
 	public void save(SalesOrder salesOrder) {
+		
 		List<SalesOrderDetail> sodss = salesOrder.getSalesOrderDetails();
 		salesOrder.setSalesOrderDetails(null);
 		salesOrderDao.save(salesOrder);
@@ -36,7 +42,7 @@ public class SalesOrderService {
 			sod.setSalesOrder(salesOrder);
 			salesOrderDetailDao.save(sod);
 		}
-		
+	
 		
 	}
 	
@@ -44,8 +50,17 @@ public class SalesOrderService {
 		salesOrderDao.delete(salesOrder);
 	}
 	
-	public void update(SalesOrder salesOrder) {
-		salesOrderDao.update(salesOrder);
+	public void update(SalesOrder salesOrder, String outletId) {
+		List<SalesOrderDetail> salesOrderDetail = salesOrder.getSalesOrderDetails();
+		System.out.println("sod= "+salesOrderDetail);
+		for (SalesOrderDetail salesOrderDetail2 : salesOrderDetail) {
+			ItemInventory ii = itemInveentoryDao.getInventoryByVariantId(salesOrderDetail2.getItemVariant().getId(), outletId);
+			int so = ii.getSalesOrderQty() + salesOrderDetail2.getQty();
+			int ending = ii.getBegining() + ii.getPurchaseQty() - so - ii.getTransferStockQty();
+			ii.setSalesOrderQty(so);
+			ii.setEndingQty(ending);
+			itemInveentoryDao.update(ii);
+		}
 	}
 	
 	public SalesOrder getOne(String id) {

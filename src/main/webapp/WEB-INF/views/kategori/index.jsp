@@ -67,9 +67,9 @@
 				<h5 class="modal-title" id="exampleModalLabel">Category</h5>
 			</div>
 			<div class="modal-body">
-				<form action="#">
+				<form id="form-save" action="#">
 					<div class="form-group">
-						<input type="text" class="form-control" id="save-name" aria-describedby="emailHelp" placeholder="Category Name" />
+						<input required data-parsley-length="[4, 50]" type="text" class="form-control datavalid" id="save-name" aria-describedby="emailHelp" placeholder="Category Name" />
 					</div>
 
 				</form>
@@ -91,11 +91,11 @@
 				<h5 class="modal-title" id="exampleModalLabel">Category</h5>
 			</div>
 			<div class="modal-body">
-				<form action="#">
+				<form id="form-edit" action="#">
 					<input type="hidden" name="edit-id" id="edit-id"/>
 					
 					<div class="form-group">
-						<input type="text" class="form-control" id="edit-name-kat" aria-describedby="emailHelp" placeholder="Category Name" />
+						<input required data-parsley-length="[4, 50]" type="text" class="form-control" id="edit-name-kat" aria-describedby="emailHelp" placeholder="Category Name" />
 					</div>
 					
 				</form>

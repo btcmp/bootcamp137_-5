@@ -72,18 +72,18 @@
 				<h5 class="modal-title" id="exampleModalLabel">Supplier Detail</h5>
 			</div>
 			<div class="modal-body">
-				<form action="#">
+				<form id="form-save" action="#">
 					<div class="form-group">
-						<input type="text" class="form-control" id="save-name-sup" aria-describedby="emailHelp" placeholder="Supplier Name" />
+						<input required data-parsley-length= "[4,50]" type="text" class="form-control" id="save-name-sup" aria-describedby="emailHelp" placeholder="Supplier Name" />
 					</div>
 					
 					<div class="form-group">
-						<input type="text" class="form-control" id="save-address-sup" aria-describedby="emailHelp" placeholder="Address" />
+						<input data-parsley-minlength= "4" type="text" class="form-control" id="save-address-sup" aria-describedby="emailHelp" placeholder="Address" />
 					</div>
 					
 					<div class="row form-group">
 						<div class="col-sm-4">
-							<select class="form-control" id="save-pro-sup">
+							<select class="form-control" id="save-pro-sup" required>
 								<option value="">Provinsi</option>
 								<c:forEach var="prov" items="${provs}">
 									<option id="save-prov" value="${prov.id}"> ${prov.name}</option>
@@ -91,12 +91,12 @@
 							</select>
 						</div>
 						<div class="col-sm-4">
-							<select class="form-control" name="save-reg" id="save-reg-sup">
+							<select class="form-control" name="save-reg" id="save-reg-sup" required>
 								<option value=""> Region</option>
 							</select>
 						</div>
 						<div class="col-sm-4">
-							<select class="form-control" name="save-dis" id="save-dis-sup">
+							<select class="form-control" name="save-dis" id="save-dis-sup" required>
 								<option value="">District</option>
 							</select>
 						</div>
@@ -104,8 +104,8 @@
 					
 					<div class="row form-group">
 						<div class="col-sm-4"><input type="text" class="form-control" id="save-code-sup" placeholder="Postal Code" /></div>
-						<div class="col-sm-4"><input type="text" class="form-control" id="save-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
-						<div class="col-sm-4"><input type="text" class="form-control" id="save-email-sup" aria-describedby="emailHelp" placeholder="Email" /></div>
+						<div data-parsley-length="[4,16]" class="col-sm-4"><input type="text" class="form-control" id="save-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
+						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="save-email-sup" aria-describedby="emailHelp" placeholder="Email" /></div>
 					</div>
 				</form>
 			</div>
@@ -126,20 +126,20 @@
 				<h5 class="modal-title" id="exampleModalLabel">Supplier</h5>
 			</div>
 			<div class="modal-body">
-				<form action="#">
+				<form id="form-edit" action="#">
 					<input type="hidden" name="edit-id" id="edit-id-sup"/>
 					
 					<div class="form-group">
-						<input type="text" class="form-control" id="edit-name-sup" aria-describedby="emailHelp" placeholder="Outlet Name" />
+						<input required data-parsley-length="[4,50]" type="text" class="form-control" id="edit-name-sup" aria-describedby="emailHelp" placeholder="Outlet Name" />
 					</div>
 					
 					<div class="form-group">
-						<input type="text" class="form-control" id="edit-address-sup" aria-describedby="emailHelp" placeholder="Address" />
+						<input data-parsley-minlength="4" type="text" class="form-control" id="edit-address-sup" aria-describedby="emailHelp" placeholder="Address" />
 					</div>
 					
 					<div class="row form-group">
 						<div class="col-sm-4">
-							<select class="form-control" id="edit-prov-sup">
+							<select class="form-control" id="edit-prov-sup" required>
 								<option value="">Provinsi</option>
 								<c:forEach var="prov" items="${provs}">
 									<option value="${prov.id}"> ${prov.name}</option>
@@ -147,12 +147,12 @@
 							</select>
 						</div>
 						<div class="col-sm-4">
-							<select class="form-control" name="edit-reg-sup" id="edit-reg-sup">
+							<select class="form-control" id="edit-reg-sup" required>
 								<option value=""> Region</option>
 							</select>
 						</div>
 						<div class="col-sm-4">
-							<select class="form-control"id="edit-dis-sup">
+							<select class="form-control"id="edit-dis-sup" required>
 								<option value="">District</option>
 							</select>
 						</div>
@@ -160,8 +160,8 @@
 					
 					<div class="row form-group">
 						<div class="col-sm-4"><input type="text" class="form-control" id="edit-code-sup" placeholder="Postel Code" /></div>
-						<div class="col-sm-4"><input type="text" class="form-control" id="edit-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
-						<div class="col-sm-4"><input type="text" class="form-control" id="edit-email-sup" aria-describedby="emailHelp" placeholder="Email" /></div>
+						<div data-parsley-length="[4,16]" class="col-sm-4"><input type="text" class="form-control" id="edit-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
+						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="edit-email-sup" aria-describedby="emailHelp" placeholder="Email" /></div>
 					</div>
 					
 				</form>

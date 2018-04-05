@@ -122,7 +122,7 @@ public class SalesOrderDetail {
 	
 	@ManyToOne
 	private ItemVariant itemVariant;
-
+	
 	public SalesOrder getSalesOrder() {
 		return salesOrder;
 	}

@@ -49,7 +49,7 @@
 						</tfoot>
 					</table>
 						<a href="#" class="clear-sod btn btn-primary">Clear Sale</a>
-						<a href="#" class="bayar-sod btn btn-primary">Charge Rp</a>
+						<button id="pay-sods" class="bayar-sod btn btn-primary" disabled>Charge Rp</button>
 					</div>
 
 				</div>
@@ -112,34 +112,42 @@
 				<h5 class="modal-title" id="exampleModalLabel">New Customer</h5>
 			</div>
 			<div class="modal-body">
-				<form action="#">
+				<form id="form-save" action="#">
 					<div class="form-group">
 						<label>PROFILE</label>
-						<input type="text" class="form-control" id="save-name-cust" aria-describedby="emailHelp" placeholder="Customer Name" />
-						<input type="email" class="form-control" id="save-email-cust" aria-describedby="emailHelp" placeholder="Email" />
-						<input type="text" class="form-control" id="save-phone-cust" aria-describedby="emailHelp" placeholder="Phone" />
+						<input required data-parsley-length="[4,50]" type="text" class="form-control" id="save-name-cust" aria-describedby="emailHelp" placeholder="Customer Name" />
+						<input required type="email" class="form-control" id="save-email-cust" aria-describedby="emailHelp" placeholder="Email" />
+						<input data-parsley-length="[4,16]" type="text" class="form-control" id="save-phone-cust" aria-describedby="emailHelp" placeholder="Phone ex.+62xxxxxxxxxx" />
 					</div>
 					
 					<div class="form-group">
 						<label>Day Of Birth</label>
-						<input type="date" max="2018-03-27" class="form-control" id="save-dob-cust" aria-describedby="emailHelp" placeholder="Day Of Birth" />
+						<input type="date" max="2018-04-04" class="form-control" id="save-dob-cust" aria-describedby="emailHelp" placeholder="Day Of Birth" />
 					</div>
 					
 					<div class="form-group">
 						<label>Address</label>
-						<input type="text" class="form-control" id="save-address-cust" aria-describedby="emailHelp" placeholder="address" />
-							<select class="form-control" id="save-pro-cust">
-								<option value="">Provinsi</option>
-								<c:forEach var="prov" items="${prs}">
-									<option id="sprov" value="${prov.id}"> ${prov.name}</option>
-								</c:forEach>
+						<input data-parsley-minlength="4" style="height: 80px;" type="text" class="form-control" id="save-address-cust" aria-describedby="emailHelp" placeholder="address" />
+					</div>
+					<div class="row">
+						<div class="col-lg-4">
+							<select class="form-control" id="save-pro-cust" required>
+									<option value=""> Provinsi</option>
+									<c:forEach var="prov" items="${prs}">
+										<option id="sprov" value="${prov.id}"> ${prov.name}</option>
+									</c:forEach>
 							</select>
-							<select class="form-control" name="save-reg" id="save-reg-cust">
-								<option value=""> Region</option>
-							</select>
-							<select class="form-control" name="save-dis" id="save-dis-cust">
-								<option value="">District</option>
-							</select>
+						</div>
+						<div class="col-lg-4">
+								<select class="form-control" id="save-reg-cust" required>
+									<option value=""> Region</option>
+								</select>
+						</div>
+						<div class="col-lg-4">
+								<select class="form-control" id="save-dis-cust" required>
+									<option value="">District</option>
+								</select>
+						</div>
 					</div>
 				</form>
 			</div>
@@ -194,6 +202,17 @@
 					<div class="form-group" style="text-align: center; margin-left: 25%; margin-right: 25%;">
 						<output type="number" class="form-control" id="id-pay" aria-describedby="emailHelp"></output>
 					</div>
+					<div style="text-align: center;">
+						<label>How do you want to receive your receipts?</label>
+					</div>
+					<div class="row form-group" style="margin-bottom: 20px;">
+						<div  class="col-lg-8">
+							<output type="number" class="form-control email-cust" aria-describedby="emailHelp"></output>
+						</div>
+						<div class="col-lg-4">
+							<button type="button" id="btn-send" class="form-control btn btn-primary">Send</button>
+						</div>
+					</div> 
 					
 				</form>
 			</div>
