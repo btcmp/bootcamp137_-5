@@ -6,15 +6,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name="pos_t_po_detail")
+@Table(name="pos_t_pr_detail")
 public class PurchaseRequestDetail {
 
 	//properties
@@ -34,17 +39,21 @@ public class PurchaseRequestDetail {
 	private int requestQty;
 	
 	@ManyToOne
-	@Column(name="created_by")
+	@JoinColumn(name="created_by")
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Column(name="created_on")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
 	
 	@ManyToOne
-	@Column(name="modified_by")
+	@JoinColumn(name="modified_by")
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Column(name="modified_on")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date ModifiedOn;
 
 	

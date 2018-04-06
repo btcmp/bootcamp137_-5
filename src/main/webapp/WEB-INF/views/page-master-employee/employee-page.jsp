@@ -24,12 +24,12 @@
 				<div class="box-body">
 					<!-- START OF THE CONTENT -->
 					<div class="container-fluid">
-						<form class="form-room" >
+						<form id="form-save-emp" class="form-room" >
 							<div>
 								<div class="row form-group">
-									<div class="col-sm-4"><input type="text" class="form-control cancelable" id="save-fname" placeholder="first name"></div>
-									<div class="col-sm-4"><input type="text" class="form-control cancelable" id="save-lname" placeholder="last name"></div>
-									<div class="col-sm-4"><input type="text" class="form-control cancelable" id="save-email" placeholder="email"></div>
+									<div class="col-sm-4"><input required type="text" class="form-control cancelable" id="save-fname" placeholder="first name"></div>
+									<div class="col-sm-4"><input required type="text" class="form-control cancelable" id="save-lname" placeholder="last name"></div>
+									<div class="col-sm-4"><input required type="email" class="form-control cancelable" id="save-email" placeholder="email"></div>
 								</div>
 								<div class="row form-group">
 									<div class="col-sm-4">
@@ -124,7 +124,7 @@
 								<c:forEach items="${listOutlet}" var="outlet">
 								<tr>
 									<td>${outlet.name}</td>
-									<td><input type="checkbox" class="selected-outlet" id="${outlet.id}"></td>
+									<td><input type="checkbox" name="assign-outlet-list" class="selected-outlet" id="${outlet.id}" data-parsley-mincheck="1"></td>
 								</tr>
 								</c:forEach>
 							</tbody>
@@ -164,18 +164,18 @@
 					<h2 class="modal-title">Edit Employee</h2>
 				</div>
 				<div class="modal-body">
-				<form class="form-room">
+				<form id="form-edit-emp" class="form-room">
 					<div>
 						<input type="hidden" class="form-control cancelable" id="edit-id">
 						<div class="row form-group">
 							<div class="col-sm-4">
-								<input type="text" class="form-control cancelable" id="edit-fname" placeholder="first name">
+								<input required type="text" class="form-control cancelable" id="edit-fname" placeholder="first name">
 							</div>
 							<div class="col-sm-4">
-								<input type="text" class="form-control cancelable" id="edit-lname" placeholder="last name">
+								<input required type="text" class="form-control cancelable" id="edit-lname" placeholder="last name">
 							</div>
 							<div class="col-sm-4">
-								<input type="text" class="form-control cancelable" id="edit-email" placeholder="email">
+								<input required type="text" class="form-control cancelable" id="edit-email" placeholder="email">
 							</div>
 						</div>
 						<div class="row form-group">
@@ -188,14 +188,14 @@
 							<div class="col-sm-4">
 								<button type="button" class="btn btn-primary" id="btn-assign-outlet-edit">Assign Outlet</button>
 							</div>
-							<div class="col-sm-2 checkbox">
+							<div class="col-sm-4 checkbox">
 								<input type="checkbox" id="edit-hasAccount">Create Account
 							</div>
 						</div>
 					</div>
 					<hr>
 					<div class="row form-group" id="user-form-edit">
-						<div class="col-sm-2">
+						<div class="col-sm-4">
 							<label for="edit-role">Role</label>
 							<select id="edit-role">
 								<c:forEach items="${listRole}" var="role">

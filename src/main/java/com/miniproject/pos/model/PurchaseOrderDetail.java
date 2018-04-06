@@ -4,12 +4,18 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="pos_t_po_detail")
@@ -22,7 +28,7 @@ public class PurchaseOrderDetail {
 	@GenericGenerator(name="system-uuid", strategy="uuid2")
 	private String id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private PurchaseOrder purchaseOrder;
 	
 	@ManyToOne
@@ -38,17 +44,21 @@ public class PurchaseOrderDetail {
 	private float subTotal;
 	
 	@ManyToOne
-	@Column(name="created_by")
+	@JoinColumn(name="created_by")
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Column(name="created_on")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
 	
 	@ManyToOne
-	@Column(name="modified_by")
+	@JoinColumn(name="modified_by")
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Column(name="modified_on")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date ModifiedOn;
 
 	
