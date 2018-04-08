@@ -1,5 +1,11 @@
 package com.miniproject.pos.controller;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -35,6 +41,9 @@ public class EmployeeController {
 	@Autowired
 	OutletService outletService;
 	
+	@Autowired
+	HttpSession httpSession;
+	
 	@RequestMapping
 	public String index(Model model) {
 		model.addAttribute("listEmployee", employeeService.getAll());
@@ -58,12 +67,18 @@ public class EmployeeController {
 	@RequestMapping(value="/save-emp", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void saveEmployee(@RequestBody Employee e) {
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		e.setCreatedBy(user);
 		employeeService.save(e);
 	}
 	
 	@RequestMapping(value="/update", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public void edit(@RequestBody Employee e) {
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		e.setModifiedBy(user);
 		employeeService.update(e);
 	}
 	
@@ -77,6 +92,28 @@ public class EmployeeController {
 	@ResponseStatus(HttpStatus.OK)
 	public void editEmployee(@RequestBody Employee e) {
 		employeeService.update(e);
+	}
+	
+	@RequestMapping(value="/get-all-username", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getUsername() {
+		List<String> listUsername = new ArrayList();
+		List<User> listUser = userService.getAll();
+		for (User user : listUser) {
+			listUsername.add(user.getUsername());
+		}
+		return listUsername;
+	}
+	
+	@RequestMapping(value="/get-all-email", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getEmail() {
+		List<String> listEmail = new ArrayList();
+		List<Employee> listEmployee = employeeService.getAll();
+		for (Employee emp : listEmployee) {
+			listEmail.add(emp.getEmail());
+		}
+		return listEmail;
 	}
 	
 }

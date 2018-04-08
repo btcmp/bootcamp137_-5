@@ -6,7 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.miniproject.pos.dao.ItemInventoryDao;
+import com.miniproject.pos.dao.ItemVariantDao;
 import com.miniproject.pos.dao.SalesOrderDetailDao;
+import com.miniproject.pos.model.ItemInventory;
+import com.miniproject.pos.model.ItemVariant;
 import com.miniproject.pos.model.SalesOrderDetail;
 
 @Service
@@ -15,6 +19,12 @@ public class SalesOrderDetailService {
 
 	@Autowired
 	SalesOrderDetailDao salesOrderDetailDao;
+	
+	@Autowired
+	ItemVariantDao itemVariantDao;
+	
+	@Autowired
+	ItemInventoryDao inventoryDao;
 	
 	public void save (SalesOrderDetail salesOrderDetail) {
 		salesOrderDetailDao.save(salesOrderDetail);
@@ -26,6 +36,8 @@ public class SalesOrderDetailService {
 	
 	public void update (SalesOrderDetail salesOrderDetail) {
 		salesOrderDetailDao.update(salesOrderDetail);
+		
+		
 	}
 	
 	public SalesOrderDetail getOne(String id) {

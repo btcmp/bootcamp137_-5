@@ -51,47 +51,23 @@ public class EmployeeService {
 	}
 	
 	public void update(Employee e) {
-		/*Employee prevEmp = get(e.getId());
-		
-		if(prevEmp.isHaveAccount()) {
-			if(e.getUser()==null) {
-				e.setHaveAccount(true);
-				e.setUser(prevEmp.getUser());
-				e.getUser().setActive(false);
-			} else {
-				e.getUser().setEmployee(e);
-				e.getUser().setActive(true);
-				userDAO.update(e.getUser());
-				e.setUser(null);
-			}
-		} else {
-			if(e.getUser()==null) {
-				
-			} else {
-				e.getUser().setEmployee(e);
-				e.getUser().setId(null);
-				e.getUser().setActive(true);
-			}
-		}
-		
-		e.setListOutlet(getListAssignedOutlet(e.getListOutlet()));
-		employeeDAO.update(e);*/
-		
 		User u;
 		e.setListOutlet(getListAssignedOutlet(e.getListOutlet()));
 		if(e.getUser() != null) {
 			u = userDAO.getUserByEmployee(e);
-			if(!u.equals(null)) {
+			if(u!=null) {
 				e.getUser().setId(u.getId());
 			}
 			e.getUser().setEmployee(e);
 		} else {
 			u = userDAO.getUserByEmployee(e);
-			if(!u.equals(null)) {
+			if(u!=null) {
 				u.setActive(false);
 				e.setUser(u);
 			}
 		}
+		e.setCreatedOn(get(e.getId()).getCreatedOn());
+		e.setCreatedBy(get(e.getId()).getCreatedBy());
 		employeeDAO.update(e);
 		
 	}
@@ -115,6 +91,8 @@ public class EmployeeService {
 				e.getUser().setActive(false);
 			}
 		}
+		e.setCreatedOn(get(e.getId()).getCreatedOn());
+		e.setCreatedBy(get(e.getId()).getCreatedBy());
 		employeeDAO.update(e);
 	}
 	

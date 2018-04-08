@@ -8,7 +8,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -17,7 +19,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.miniproject.pos.utils.Formatter;
 
 @Entity
 @Table(name="pos_t_pr")
@@ -34,7 +42,7 @@ public class PurchaseRequest {
 	private Outlet outlet;
 	
 	@Column(name="ready_time")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date readyTime;
 	
 	@Column(name="pr_no", nullable=false)
@@ -46,26 +54,32 @@ public class PurchaseRequest {
 	private String status;
 	
 	@ManyToOne
-	@Column(name="created_by")
+	@JoinColumn(name="created_by")
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Column(name="created_on")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
 	
 	@ManyToOne
-	@Column(name="modified_by")
+	@JoinColumn(name="modified_by")
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Column(name="modified_on")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date ModifiedOn;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="purchaseRequest", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy="purchaseRequest", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	List<PurchaseRequestDetail> listPurchaseRequestDetail;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy="purchaseRequest", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy="purchaseRequest", cascade = CascadeType.ALL, orphanRemoval = true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	List<PurchaseRequestHistory> listPurchaseRequestHistory;
 	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy="purchaseRequest", cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER)
 	private PurchaseOrder purchaseOrder;
 	
 	//setters and getters
@@ -128,6 +142,10 @@ public class PurchaseRequest {
 
 	public Date getCreatedOn() {
 		return createdOn;
+	}
+	
+	public String getCreatedOnFormatted() {
+		return Formatter.date(createdOn, "dd/MM/yyyy");
 	}
 
 	public void setCreatedOn(Date createdOn) {

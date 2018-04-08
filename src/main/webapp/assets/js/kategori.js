@@ -5,9 +5,7 @@ $(function() {
 		});
 	
 		$('#btn-cari').on('click', function() {
-			//alert("aaaaa");
 			var kata = $('#cari').val();
-			//console.log(kata);
 			window.location = baseUrl+"kategori/index/src?search="+kata;
 		})
 
@@ -17,27 +15,29 @@ $(function() {
 		})
 		$('#btn-save').on('click', function(evt) {
 			evt.preventDefault();
+			var formsave = $('#form-save');
+			var validsave = formsave.parsley().validate();
 			var kat = {
 					name : $('#save-name').val(),
 					active : 1
 			}
-			//console.log(kat);
 		
-		
-			$.ajax({
-				url : baseUrl+"kategori/save",
-				type : 'POST',
-				contentType : 'application/json',
-				data : JSON.stringify(kat),
-				success : function(data) {
-					//console.log(data);
-					alert('save success');
-					window.location = baseUrl+"kategori/index";
-				},
-				error : function() {
-					alert('saving failed!');
-				}                              
-			});
+			if (validsave == true){
+				$.ajax({
+					url : baseUrl+"kategori/save",
+					type : 'POST',
+					contentType : 'application/json',
+					data : JSON.stringify(kat),
+					success : function(data) {
+						//console.log(data);
+						alert('save success');
+						window.location = baseUrl+"kategori/index";
+					},
+					error : function() {
+						alert('saving failed!');
+					}                              
+				});
+			}
 			
 		});
 		
@@ -55,7 +55,6 @@ $(function() {
 		$('.editkategori').on('click', function(evt) {
 			evt.preventDefault();
 			var id = $(this).attr('id');
-			//console.log(id)
 			$.ajax({
 				url : baseUrl+"kategori/get-id/"+id,
 				type : 'GET',
@@ -78,50 +77,58 @@ $(function() {
 	//-----------------------------------------------------------------------------------------------------nonactive-----------------------------------
 		
 		$('#btn-nonactive').on('click', function() {
+			var formedit = $('#form-edit');
+			var validedit = formedit.parsley().validate();
 			var kat = {
 					id : $('#edit-id').val(),
 					name : $('#edit-name-kat').val(),
 					active : 0
 			}
 			
-			$.ajax({
-				url : baseUrl+"kategori/update",
-				type : 'PUT',
-				data : JSON.stringify(kat),
-				contentType : 'application/json',
-				success : function(data) {
-					alert('kategori nonactive')
-					window.location = baseUrl+"kategori/index";
-				},
-				error : function() {
-					alert('update failed!!');
-				}
-			});
+			if (validedit == true){
+				$.ajax({
+					url : baseUrl+"kategori/update",
+					type : 'PUT',
+					data : JSON.stringify(kat),
+					contentType : 'application/json',
+					success : function(data) {
+						alert('kategori nonactive')
+						window.location = baseUrl+"kategori/index";
+					},
+					error : function() {
+						alert('update failed!!');
+					}
+				});
+			}
 			
 		});
 		
 //------------------------------------------------------------------------------------------------------edit------------------------------------------------
 		
 		$('#btn-update').on('click', function() {
+			var formedit = $('#form-edit');
+			var validedit = formedit.parsley().validate();
 			var kat = {
 					id : $('#edit-id').val(),
 					name : $('#edit-name-kat').val(),
 					active : 1
 			}
 			
-			$.ajax({
-				url : baseUrl+"kategori/update",
-				type : 'PUT',
-				data : JSON.stringify(kat),
-				contentType : 'application/json',
-				success : function(data) {
-					alert('update success!!')
-					window.location = baseUrl+"kategori/index";
-				},
-				error : function() {
-					alert('update failed!!');
-				}
-			});
+			if(validedit == true){
+				$.ajax({
+					url : baseUrl+"kategori/update",
+					type : 'PUT',
+					data : JSON.stringify(kat),
+					contentType : 'application/json',
+					success : function(data) {
+						alert('update success!!')
+						window.location = baseUrl+"kategori/index";
+					},
+					error : function() {
+						alert('update failed!!');
+					}
+				});
+			}
 			
 		});
 

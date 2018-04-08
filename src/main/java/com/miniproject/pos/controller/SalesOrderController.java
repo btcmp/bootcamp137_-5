@@ -1,6 +1,9 @@
 package com.miniproject.pos.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,13 +53,17 @@ public class SalesOrderController {
 	@Autowired
 	ItemInventoryService itemInventoryService;
 	
+	@Autowired
+	private HttpSession httpSession;
+	
 	@RequestMapping(value="/index")
 	public String index(Model model) {
+		String outletId = httpSession.getAttribute("outletId").toString();
 		List<SalesOrder> so = salesOrderService.selectAll();
 		List<SalesOrderDetail> sod = salesOrderDetailService.selectAll();
 		List<Customer> cus = customerService.selectAll();
 		List<Provinsi> pr = provinsiService.selectAll();
-		List<ItemVariant> iv = itemVariantService.getAllItemVariant();
+		List<ItemVariant> iv = itemVariantService.getAllItemVariant(outletId);
 		List<ItemInventory> listItems = itemInventoryService.getAllItemInventory();
 		model.addAttribute("sods", sod);
 		model.addAttribute("sos", so);
@@ -75,23 +82,10 @@ public class SalesOrderController {
 		return cus;
 	}
 	
-	@RequestMapping(value="/index/src-item")
-	public List<ItemInventory> listItemBySearchName(@RequestParam(value="search", defaultValue="") String search, Model model){
-		List<ItemInventory> itmi = itemInventoryService.getAllItemInventory();
-		model.addAttribute("itmis", itmi);
-		return itmi;
-	}
-	
 	@RequestMapping(value="/save", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void save(@RequestBody SalesOrder salesOrder) {
 		salesOrderService.save(salesOrder);
-	}
-	
-	@RequestMapping(value="/update", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.OK)
-	public void update(@RequestBody SalesOrder salesOrder) {
-		salesOrderService.update(salesOrder);
 	}
 	
 	@RequestMapping(value="/get-id/{id}", method=RequestMethod.GET)
@@ -106,6 +100,35 @@ public class SalesOrderController {
 		SalesOrder so = new SalesOrder();
 		so.setId(id);
 		salesOrderService.delete(so);
+	}
+	
+	@RequestMapping(value="/get-all-email", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getEmailFromCustomer() {
+		List<String> listcustomer = new ArrayList();
+		List<Customer> list = customerService.selectAll();
+		for (Customer customer : list) {
+			listcustomer.add(customer.getEmail());
+		}
+		return listcustomer;
+	}
+	
+	@RequestMapping(value="/get-all-phone", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getPhoneFromCustomer(){
+		List<String> listphone = new ArrayList();
+		List<Customer> telp = customerService.selectAll();
+		for (Customer customer : telp) {
+			listphone.add(customer.getPhone());
+		}
+		return listphone;
+	}
+	
+	@RequestMapping(value="/update-stock", method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public void updateStockInventory(@RequestBody SalesOrder salesOrder, String outletId) {
+		outletId = httpSession.getAttribute("outletId").toString();
+		salesOrderService.update(salesOrder, outletId);
 	}
 	
 }

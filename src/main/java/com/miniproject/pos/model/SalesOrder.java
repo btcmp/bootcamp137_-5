@@ -15,7 +15,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name="POS_T_SO")
@@ -33,6 +35,7 @@ public class SalesOrder {
 	@JoinColumn(name="created_by", nullable=true)
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
@@ -41,6 +44,7 @@ public class SalesOrder {
 	@JoinColumn(name="modified_by", nullable=true)
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@JoinColumn(name="modified_on", nullable=true)
 	private Date modifiedOn;

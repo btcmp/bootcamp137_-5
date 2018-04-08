@@ -19,7 +19,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Email;
 
 @Entity
@@ -51,6 +53,7 @@ public class Employee {
 	@JoinColumn(name = "created_by")
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Column(name = "created_on")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
@@ -59,6 +62,7 @@ public class Employee {
 	@JoinColumn(name = "modified_by")
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Column(name = "modified_on")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modifiedOn;

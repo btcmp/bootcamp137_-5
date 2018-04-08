@@ -48,4 +48,12 @@ public class SalesOrderDetailDaoImpl implements SalesOrderDetailDao{
 		return session.createCriteria(SalesOrderDetail.class).list();
 	}
 
+	public List<SalesOrderDetail> getSalesOrderDetailBySalesOrderId(String id) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "from SalesOrderDetail sod where sod.salesOrder.id = :idsod";
+		List<SalesOrderDetail> sods = session.createQuery(hql).setParameter("idsod", id).list();
+		return sods;
+	}
+
 }

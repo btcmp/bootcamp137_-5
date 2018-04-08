@@ -3,6 +3,7 @@ package com.miniproject.pos.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -56,7 +57,7 @@ public class Kategori {
 	@Transient 
 	private int itemStock;
 	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy="categoryId")
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="categoryId", cascade=CascadeType.ALL, orphanRemoval=true)
 	private List<Items> items;
 	
 	public List<Items> getItems() {
