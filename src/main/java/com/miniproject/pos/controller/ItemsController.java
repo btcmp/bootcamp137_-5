@@ -108,11 +108,29 @@ public class ItemsController {
 	@ResponseBody
 	public ResponseMessage deleteVariant(@PathVariable String id) {
 		ResponseMessage rm = new ResponseMessage();
-		rm.setStatus("success");
 		ItemVariant iv = itemVariantService.getItemVariantById(id);
-		iv.setActive(false);
-		itemVariantService.update(iv);
-		rm.setKeterangan("Data berhasil dihapus");
+		if(itemVariantService.nonActiveVariant(iv)) {
+			rm.setStatus("success");
+			rm.setKeterangan("Data berhasil dihapus");
+		}else {
+			rm.setStatus("error");
+			rm.setKeterangan("Gagal menghapus data");
+		}
+		return rm;
+	}
+	
+	@RequestMapping(value="/delete-items/{id}", method=RequestMethod.DELETE)
+	@ResponseBody
+	public ResponseMessage deleteItems(@PathVariable String id) {
+		ResponseMessage rm = new ResponseMessage();
+		Items items = itemsService.getItemsById(id);
+		if(itemsService.nonActiveItems(items)) {
+			rm.setStatus("success");
+			rm.setKeterangan("Data berhasil dihapus");
+		}else {
+			rm.setStatus("error");
+			rm.setKeterangan("Gagal menghapus data");
+		}
 		return rm;
 	}
 	
@@ -130,7 +148,7 @@ public class ItemsController {
 			rm.setKeterangan("Data Berhasil Disimpan");
 		}catch(UniqueException e) {
 			rm.setError(e.error());
-			rm.setStatus("danger");
+			rm.setStatus("error");
 			rm.setKeterangan("Data gagal disimpan");
 		}
 		return rm;
@@ -153,7 +171,7 @@ public class ItemsController {
 		    rm.setKeterangan("Image berhasil diupload");
 		    } catch(Exception e) {
 		        e.printStackTrace();
-		        rm.setStatus("danger");
+		        rm.setStatus("error");
 			    rm.setKeterangan("Image gagal diupload");
 		    }
 		return rm;
@@ -184,7 +202,7 @@ public class ItemsController {
 			rm.setKeterangan("Data Berhasil Diupdate");
 		}catch(UniqueException e) {
 			rm.setError(e.error());
-			rm.setStatus("danger");
+			rm.setStatus("error");
 			rm.setKeterangan("Data gagal diupdate");
 		}
 		return rm;

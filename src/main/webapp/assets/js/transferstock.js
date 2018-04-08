@@ -2,7 +2,7 @@ $(document).ready(function() {
     var table = $('#transfer-list').DataTable({
     	"paging":false,
     	"searching":false,
-        "ajax": baseUrl+"transfer-stock/get-all-data",
+        "ajax": baseUrl+"transfer-stock/get-all-data/all",
         "columnDefs": [ 
         {
             "targets": 0,
@@ -90,6 +90,11 @@ $(document).ready(function() {
 
     	$("#item-name-variant").easyAutocomplete(options);
     	
+    	$("#filter-to-outlet").on("change", function(){
+    		var id = $(this).val();
+    		table.ajax.url(baseUrl+"transfer-stock/get-all-data/"+id).load();
+    	});
+    	
     	$("#btn-cancel-item").on("click", function(){
     		$("#btn-add-item").prop("disabled", true);
 			$("#form-list-item").empty();
@@ -128,7 +133,7 @@ $(document).ready(function() {
     		var id = $(this).attr("data-id");
     		if(status != ""){
     			if(status == "Print"){
-    				
+    				window.open(baseUrl+'transfer-stock/print/'+id, '_blank');
     			}else{
     				$("#ubah-status").attr("data-id", id);
     				$("#modal-status").modal("show");

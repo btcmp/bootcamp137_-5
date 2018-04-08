@@ -44,7 +44,7 @@ public class ExportPdf {
 
 	    return jasperPrint;
 	}
-
+	
 	public void sendPdfResponse(HttpServletResponse response, JasperPrint jasperPrint, String fileName){
 
 	    //Remove all whitespace from file name

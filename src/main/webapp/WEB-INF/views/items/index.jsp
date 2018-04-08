@@ -126,6 +126,11 @@
 					</div>
 					<div class="form-group">
 						<div class="row">
+							<div class="col-md-12"><button type="button" class="btn btn-danger" style="display:none"" id="btn-items-delete">Del</button></div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="row">
 							<div class="col-md-4"><button type="button" class="btn btn-primary" id="btn-items-back">Back</button></div>
 							<div class="col-md-4 text-center"><button type="button" class="btn btn-primary" id="btn-items-cancel" disabled>Cancel</button></div>
 							<div class="col-md-4"><button type="submit" class="btn btn-primary pull-right" id="btn-items-save" disabled>Save</button></div>

@@ -91,9 +91,12 @@ public class AdjustmentController {
 	@RequestMapping(value="/print/{id}", method = RequestMethod.GET)
 	public void print(@PathVariable String id, HttpServletResponse response){
 	    Map<String, Object> param = new HashMap();
-	    param.put("title", "List Data Adjustment");
+	    param.put("title", "Data Detail Adjustment");
+	    //param.put("historyFile", getClass().getClassLoader().getResourceAsStream("sub_adjustment_history.jrxml"));
+	    param.put("detailFile", getClass().getClassLoader().getResourceAsStream("sub_adjustment_detail.jrxml"));
 	    ExportPdf ep = new ExportPdf();
-	    JRBeanArrayDataSource dataSource = new JRBeanArrayDataSource(new Adjustment[] {as.getAdjustmentById(id)});
+	    Adjustment adj = as.getAdjustmentById(id);
+	    JRBeanArrayDataSource dataSource = new JRBeanArrayDataSource(new Adjustment[] {adj});
 		JasperPrint jasperPrint = ep.getObjectPdf("adjustment-detail.jrxml", param, dataSource);
 	    ep.sendPdfResponse(response, jasperPrint, "newbie");
 	}

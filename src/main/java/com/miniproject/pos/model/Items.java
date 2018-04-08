@@ -22,6 +22,9 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.miniproject.pos.utils.Constants;
+
 @Entity
 @Table(name="pos_mst_item")
 public class Items {
@@ -65,8 +68,21 @@ public class Items {
 	@Column(nullable=true)
 	private String image;
 	
+	@Transient
+	private boolean removeable;
+	
 	public Items() {
-		this.active = true;
+		this.active = Constants.ACTIVE;
+		this.removeable = false;
+	}
+	
+	@JsonProperty("removeable")
+	public boolean getRemoveable() {
+		return this.removeable;
+	}
+	
+	public void setRemoveable(boolean remove) {
+		this.removeable = remove;
 	}
 	
 	public String getImage() {

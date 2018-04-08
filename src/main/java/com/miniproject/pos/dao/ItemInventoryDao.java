@@ -25,4 +25,8 @@ public interface ItemInventoryDao {
 	public ItemInventory getInventoryByVariantId(String idVariant, String outlet);
 	
 	public void updateStock(ItemInventory ii);
+	
+	public Long getTotalStockByIdVariant(String idVariant);
+	
+	public Long getTotalStockByIdItems(String idItems);
 }

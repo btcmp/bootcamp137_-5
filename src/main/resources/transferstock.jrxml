@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rates-template" pageWidth="800" pageHeight="842" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3737c8f8-35e7-4ea0-bf9f-c557f6bbbdf3">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="title" class="java.lang.String" isForPrompting="false"/>
+	<field name="createdOnFormatted" class="java.lang.String"/>
+	<field name="fromOutlet" class="com.miniproject.pos.model.Outlet"/>
+	<field name="toOutlet" class="com.miniproject.pos.model.Outlet"/>
+	<field name="notes" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<title>
+		<band height="90" splitType="Stretch">
+			<textField>
+				<reportElement x="90" y="0" width="580" height="60" uuid="484c515c-140d-44fd-b136-d7291f932429"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{title}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="55">
+			<staticText>
+				<reportElement x="0" y="0" width="140" height="50" uuid="350d7da5-84d7-40bc-9149-50b2abc4ceed"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Transfer Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="640" y="0" width="120" height="50" uuid="ca91bf91-69b9-4e6a-9743-341cf5103914"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="0" width="140" height="50" uuid="1a90dea7-1c3b-4bb8-8e3a-725b564fbda6"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[From Outlet]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="140" height="50" uuid="5d406b88-f4a2-4369-a1ea-806536dc9e57"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[To Outlet]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="0" width="220" height="50" uuid="b919b191-899c-44b2-b58a-cf18b30e59fa"/>
+				<textElement verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Notes]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30">
+			<textField>
+				<reportElement x="0" y="0" width="140" height="25" uuid="cc1993f1-786d-4e11-bc70-d8339637fa07"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{createdOnFormatted}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="0" width="220" height="25" uuid="b77ac348-b910-48d3-8f43-4e412a57a92f"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{notes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="640" y="0" width="120" height="25" uuid="fd6920f6-ac29-47bb-9cc0-b4471cc8f2b0"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="0" width="140" height="25" uuid="a5e205eb-a2b1-42ae-bf46-210f95c5ebe1"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fromOutlet}.getName()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="140" height="25" uuid="356e6402-ef56-4a69-9cc1-6828e53ab277"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{toOutlet}.getName()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

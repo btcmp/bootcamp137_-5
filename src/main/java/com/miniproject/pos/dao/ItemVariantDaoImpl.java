@@ -2,6 +2,7 @@ package com.miniproject.pos.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,10 +72,19 @@ public class ItemVariantDaoImpl implements ItemVariantDao {
 	public List<ItemVariant> getItemVariantByItem(String itemId) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "from ItemVariant where itemId.id=:id";
-		List<ItemVariant> list = session.createQuery(hql).setParameter("id", itemId).list();
+		String hql = "from ItemVariant where itemId.id=:id and active=:active";
+		List<ItemVariant> list = session.createQuery(hql).setParameter("id", itemId).setParameter("active", Constants.ACTIVE).list();
 		session.flush();
 		return list;
 	}
-
+	
+	public void nonActiveVariant(List<String> idVariants, String itemId) {
+		Session session = sf.getCurrentSession();
+		String hql = "update ItemVariant as iv SET active=:active WHERE iv.id NOT IN (:ids) and iv.itemId.id=:id";
+		Query query = session.createQuery(hql);
+		query.setParameter("active", Constants.NONACTIVE);
+		query.setParameterList("ids", idVariants);
+		query.setParameter("id", itemId);
+		query.executeUpdate();
+	}
 }

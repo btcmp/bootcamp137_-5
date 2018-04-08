@@ -20,4 +20,6 @@ public interface ItemVariantDao {
 	public List<ItemVariant> getAllItemVariant(String id);
 	
 	public List<ItemVariant> getItemVariantByItem(String itemId);
+	
+	public void nonActiveVariant(List<String> idVariants, String itemId);
 }

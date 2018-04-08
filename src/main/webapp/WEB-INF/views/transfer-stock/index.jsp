@@ -20,9 +20,26 @@
 				</div>
 				<!-- /.box-header -->
 				<div class="box-body">
-					<p>
-						<button class="btn btn-primary" id="add-data">Create</button>
-					</p>
+				<div class="col-md-3">
+						<div class="input-group">
+							<select id="filter-to-outlet" class="form-control">
+							<option value="all">All Outlet</option>
+							<c:forEach items="${outlet}" var="jrs">
+								<c:if test="${ outletId.id != jrs.id }">
+									<option value="${jrs.id }">${jrs.name }</option>
+								</c:if>
+							</c:forEach>
+						</select>
+						</div>
+					</div>
+					<div class="col-md-9">
+						<div class="col-md-9">
+							<a target="_blank" href="${baseUrl}/transfer-stock/report "><button class="btn btn-primary pull-right" id="export-data">Export</button></a>
+						</div>
+						<div class="col-md-3">
+							<button class="btn btn-primary pull-right" id="add-data">Create</button>
+						</div>
+					</div>
 					<table id="transfer-list"
 						class="table table-striped table-bordered table-hover">
 						<thead>

@@ -105,8 +105,12 @@ public class TransferStockSevice {
 		}
 	}
 	
-	public List<TransferStock> getAllTransferStock(){
-		return tsd.getAllTransferStock();
+	public List<TransferStock> getAllTransferStock(String outletId, String toOutlet){
+		if(toOutlet.equalsIgnoreCase("all")) {
+			return tsd.getAllTransferStock(outletId);
+		}else {
+			return tsd.getAllTransferStockFilterToOutlet(outletId, toOutlet);
+		}
 	}
 	
 	public TransferStock getTransferStockById(String id) {
