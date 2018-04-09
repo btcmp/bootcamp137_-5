@@ -21,23 +21,47 @@ $(function() {
 					name : $('#save-name').val(),
 					active : 1
 			}
-		
-			if (validsave == true){
-				$.ajax({
-					url : baseUrl+"kategori/save",
-					type : 'POST',
-					contentType : 'application/json',
-					data : JSON.stringify(kat),
-					success : function(data) {
-						//console.log(data);
-						alert('save success');
-						window.location = baseUrl+"kategori/index";
-					},
-					error : function() {
-						alert('saving failed!');
-					}                              
-				});
-			}
+			var dupname;
+			$.ajax({
+				url : baseUrl+"kategori/get-all-name",
+				type : 'GET',
+				contentType : 'application/json',
+				success : function(listname) {
+					dupname = 0;
+					$.each(listname , function(index,name) {
+						if($('#save-name').val().toLowerCase() == name.toLowerCase()){
+							dupname = 1;
+						}
+					});
+					if(dupname == 1){
+						alert('kategori name has been used');
+					}
+					else{
+						if (validsave == true){
+							$.ajax({
+								url : baseUrl+"kategori/save",
+								type : 'POST',
+								contentType : 'application/json',
+								data : JSON.stringify(kat),
+								success : function(data) {
+									//console.log(data);
+									alert('save success');
+									window.location = baseUrl+"kategori/index";
+								},
+								error : function() {
+									alert('saving failed!');
+								}                              
+							});
+						}
+					}
+				},
+				error : function() {
+					alert('error getting all name')
+				}
+			})
+			
+			
+			
 			
 		});
 		

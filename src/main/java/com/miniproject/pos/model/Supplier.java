@@ -35,6 +35,7 @@ public class Supplier {
 	@Column(nullable=true)
 	private String address;
 	
+	@Size(max=14)
 	@Column(nullable=true)
 	private String phone;
 	

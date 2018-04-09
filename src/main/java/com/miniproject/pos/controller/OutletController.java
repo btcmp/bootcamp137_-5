@@ -1,5 +1,6 @@
 package com.miniproject.pos.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,4 +99,36 @@ public class OutletController {
 		outletService.delete(otl);
 	}
 	
+	@RequestMapping(value="/get-all-name", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getAllName(){
+		List<String> listname = new ArrayList();
+		List<Outlet> out = outletService.getAll();
+		for (Outlet outlet : out) {
+			listname.add(outlet.getName());
+		}
+		return listname;
+	}
+	
+	@RequestMapping(value="/get-all-email", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getAllEmail(){
+		List<String> listemail = new ArrayList<String>();
+		List<Outlet> out = outletService.getAll();
+		for (Outlet outlet : out) {
+			listemail.add(outlet.getEmail());
+		}
+		return listemail;
+	}
+	
+	@RequestMapping(value="/get-all-id", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getAllAttOutlet(){
+		List<String> listAttOut = new ArrayList<String>();
+		List<Outlet> out = outletService.getAll();
+		for (Outlet outlet : out) {
+			listAttOut.add(outlet.getId());
+		}
+		return listAttOut;
+	}
 }

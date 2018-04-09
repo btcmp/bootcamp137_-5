@@ -103,8 +103,8 @@
 					</div>
 					
 					<div class="row form-group">
-						<div class="col-sm-4"><input type="text" class="form-control" id="save-code-sup" placeholder="Postal Code" /></div>
-						<div data-parsley-length="[4,16]" class="col-sm-4"><input type="text" class="form-control" id="save-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
+						<div class="col-sm-4"><input type="number" class="form-control" id="save-code-sup" placeholder="Postal Code" /></div>
+						<div data-parsley-required="true" class="col-sm-4" datavalid><input type="text" class="form-control" id="save-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
 						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="save-email-sup" aria-describedby="emailHelp" placeholder="Email" /></div>
 					</div>
 				</form>

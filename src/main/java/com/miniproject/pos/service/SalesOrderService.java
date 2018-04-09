@@ -12,8 +12,10 @@ import com.miniproject.pos.dao.SalesOrderDao;
 import com.miniproject.pos.dao.SalesOrderDetailDao;
 import com.miniproject.pos.model.ItemInventory;
 import com.miniproject.pos.model.ItemVariant;
+import com.miniproject.pos.model.Outlet;
 import com.miniproject.pos.model.SalesOrder;
 import com.miniproject.pos.model.SalesOrderDetail;
+import com.miniproject.pos.model.User;
 
 @Service
 @Transactional
@@ -31,10 +33,12 @@ public class SalesOrderService {
 	@Autowired
 	ItemInventoryDao itemInveentoryDao;
 	
-	public void save(SalesOrder salesOrder) {
+	public void save(SalesOrder salesOrder, User user, Outlet outlet) {
 		
 		List<SalesOrderDetail> sodss = salesOrder.getSalesOrderDetails();
 		salesOrder.setSalesOrderDetails(null);
+		salesOrder.setModifiedOn(null);
+		salesOrder.setCreatedBy(user);
 		salesOrderDao.save(salesOrder);
 		
 		

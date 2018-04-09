@@ -1,5 +1,6 @@
 package com.miniproject.pos.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,17 @@ public class KategoriController {
 		Kategori kat = new Kategori();
 		kat.setId(id);
 		kategoriService.delete(kat);
+	}
+	
+	@RequestMapping(value="/get-all-name", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getAllName(){
+		List<String> listname = new ArrayList<String>();
+		List<Kategori> kat = kategoriService.selectAll();
+		for (Kategori kategori : kat) {
+			listname.add(kategori.getName());
+		}
+		return listname;
 	}
 }
 
