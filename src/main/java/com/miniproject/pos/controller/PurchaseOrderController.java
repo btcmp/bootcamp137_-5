@@ -255,4 +255,33 @@ public class PurchaseOrderController {
 		}
 	}
 	
+	@RequestMapping(value = "/get-list-by-serch", method = RequestMethod.GET)
+	@ResponseBody
+	public List<PurchaseOrder> getListPOBySearch(String search){
+		List<PurchaseOrder> listPO = poService.getlistPOBySearch(search);
+		
+		if (listPO == null) {
+			return null;
+		} else {
+			for (PurchaseOrder po : listPO) {
+				for (PurchaseOrderDetail pod : po.getListPurchaseOrderDetail()) {
+					pod.setPurchaseOrder(null);
+				}
+				
+				for (PurchaseOrderHistory poh : po.getListPurchaseOrderHistory()) {
+					poh.setPurchaseOrder(null);
+				}
+				
+				if (po.getPurchaseRequest() != null) {
+					po.getPurchaseRequest().setListPurchaseRequestDetail(null);
+					po.getPurchaseRequest().setListPurchaseRequestHistory(null);
+					po.getPurchaseRequest().setPurchaseOrder(null);
+					po.getCreatedBy().setEmployee(employeeService.getEmployeeByUsername(po.getCreatedBy().getUsername()));
+					po.getCreatedBy().getEmployee().setUser(null);
+				}
+			}
+			return listPO;
+		}
+	}
+	
 }

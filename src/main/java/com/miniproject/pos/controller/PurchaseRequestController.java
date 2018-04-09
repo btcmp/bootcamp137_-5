@@ -206,4 +206,30 @@ public class PurchaseRequestController {
 			return listPR;
 		}
 	}
+	
+	@RequestMapping(value="/get-list-by-search/{search}", method = RequestMethod.GET)
+	@ResponseBody
+	public List<PurchaseRequest> getListBySearch(@PathVariable String search){
+		List<PurchaseRequest> listPR = prService.getListPRBySearch(search);
+		if (listPR == null) {
+			return null;
+		} else {
+			for (PurchaseRequest pr : listPR) {
+				
+				for (PurchaseRequestDetail prd : pr.getListPurchaseRequestDetail()) {
+					prd.setPurchaseRequest(null);
+				}
+				
+				for (PurchaseRequestHistory prh : pr.getListPurchaseRequestHistory()) {
+					prh.setPurchaseRequest(null);
+				}
+				
+				if (pr.getPurchaseOrder()!= null) {
+					pr.setPurchaseOrder(null);
+				}
+			}
+			return listPR;
+		}
+	}
+	
 }

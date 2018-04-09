@@ -482,6 +482,12 @@ $(document).ready(function(){
 	}
 	$('#search-item').easyAutocomplete(options);
 	
+	$('#search-item').on('change', function(){
+		if($(this).val() == ''){
+			refreshItemList([]);
+		}
+	});
+	
 	
 	//refresh pr list (show all pr data)
 	function refreshPRList(){
@@ -599,6 +605,45 @@ $(document).ready(function(){
 			getRejectedPRList();
 		}
 	});
+	
+	
+	//search by text input
+	$('#search-text').on('change', function(){
+		if ($(this).val()==''){
+			refreshPRList();
+		} else {
+			console.log($(this).val());
+			getPRListBySearch($(this).val());
+		}
+	});
+	
+	function getPRListBySearch(search){
+		tabPR.clear();
+		$.ajax({
+			url : baseUrl+'purchase-request/get-list-by-search/'+search,
+			type : 'GET',
+			contentType : 'application/json',
+			success : function(listPR){
+				if(listPR != ''){
+					$.each(listPR, function(index, pr){
+						tabPR.row.add([
+							pr.createdOnFormatted,
+							pr.prNo,
+							pr.notes,
+							pr.status,
+							'<button id="' + pr.id + '" class="edit btn btn-secondary">Edit</button><button id="' + pr.id + '" class="view btn btn-secondary">View</button>'		
+						]).draw();
+					});
+				} else {
+					tabPR.draw();
+				}
+			},
+			error : function(){
+				alert('error getting data');
+			}
+		})
+	}
+	
 	
 	
 });
