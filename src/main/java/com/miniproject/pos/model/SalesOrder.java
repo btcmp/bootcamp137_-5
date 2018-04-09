@@ -44,7 +44,6 @@ public class SalesOrder {
 	@JoinColumn(name="modified_by", nullable=true)
 	private User modifiedBy;
 	
-	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@JoinColumn(name="modified_on", nullable=true)
 	private Date modifiedOn;

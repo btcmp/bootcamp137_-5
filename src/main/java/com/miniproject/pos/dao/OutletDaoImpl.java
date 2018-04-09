@@ -61,4 +61,10 @@ public class OutletDaoImpl implements OutletDao{
 		return outlets;
 	}
 
+	public List<Outlet> getAll() {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		return session.createCriteria(Outlet.class).list();
+	}
+
 }

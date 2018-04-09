@@ -21,9 +21,11 @@ import com.miniproject.pos.model.Customer;
 import com.miniproject.pos.model.ItemInventory;
 import com.miniproject.pos.model.ItemVariant;
 import com.miniproject.pos.model.Items;
+import com.miniproject.pos.model.Outlet;
 import com.miniproject.pos.model.Provinsi;
 import com.miniproject.pos.model.SalesOrder;
 import com.miniproject.pos.model.SalesOrderDetail;
+import com.miniproject.pos.model.User;
 import com.miniproject.pos.service.CustomerService;
 import com.miniproject.pos.service.ItemInventoryService;
 import com.miniproject.pos.service.ItemVariantService;
@@ -85,7 +87,11 @@ public class SalesOrderController {
 	@RequestMapping(value="/save", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void save(@RequestBody SalesOrder salesOrder) {
-		salesOrderService.save(salesOrder);
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		Outlet outlet = new Outlet();
+		outlet.setId(httpSession.getAttribute("outletId").toString());
+		salesOrderService.save(salesOrder, user, outlet);
 	}
 	
 	@RequestMapping(value="/get-id/{id}", method=RequestMethod.GET)

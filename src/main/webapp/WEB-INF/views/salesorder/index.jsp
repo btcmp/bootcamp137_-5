@@ -23,7 +23,7 @@
 				<div class="col-lg-6">
 					<input type="text" id="nama-item" class="form-control" placeholder="Search">
 					<table id="table-item" class="table table-stripped table-bordered table-hover">
-					
+						
 					</table>
 				</div>
 				<div class="col-lg-6">
@@ -49,7 +49,7 @@
 						</tfoot>
 					</table>
 						<a href="#" class="clear-sod btn btn-primary">Clear Sale</a>
-						<button id="pay-sods" class="bayar-sod btn btn-primary" disabled>Charge Rp</button>
+						<button id="pay-sods" class="bayar-sod btn btn-primary">Charge Rp</button>
 					</div>
 
 				</div>
@@ -171,11 +171,9 @@
 					<div class="col-lg-2">
 						<label>Cash</label>
 					</div>
-					<div class="col-lg-2">
-						<label style="float: right;">Rp.</label>
-					</div>
 					<div class="col-lg-8 form-group">
-						<input type="number" class="form-control" id="id-cash" aria-describedby="emailHelp"/>
+						<input type="text" value="0" class="form-control" id="id-cash" aria-describedby="emailHelp"/>
+						<input name="cash-price" type="hidden" data-parsley-required="true" id="cash-price">
 					</div>
 					
 				</form>

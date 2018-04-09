@@ -52,24 +52,69 @@ $(function() {
 					email : $('#save-email').val(),
 					active : 1
 			}
-			//console.log(out);
-		
-		if(validsave == true){
+		var dupname;
+		var dupemail;
 			$.ajax({
-				url : baseUrl+"outlet/save",
-				type : 'POST',
+				url : baseUrl+"outlet/get-all-name",
+				type : 'GET',
 				contentType : 'application/json',
-				data : JSON.stringify(out),
-				success : function(data) {
-					//console.log(data);
-					alert('save success');
-					window.location = baseUrl+"outlet/index";
-				},
+				success : function(listname) {
+					dupname = 0;
+					$.each(listname , function(index,nama) {
+						if($('#save-name').val().toLowerCase() == nama.toLowerCase()){
+							dupname = 1;
+						}
+					})
+					if(dupname == 1){
+						alert('outlate name has been used');
+					}
+					else{
+						$.ajax({
+							url : baseUrl+"outlet/get-all-email",
+							type : 'GET',
+							contentType : 'application/json',
+							success : function(listemail) {
+								dupemail = 0;
+								$.each(listemail , function(index,email) {
+									if($('#save-email').val().toLowerCase() == email.toLowerCase()){
+										dupemail = 1;
+									}
+								});
+								if(dupemail == 1){
+									alert("email has been used");
+								}
+								else{
+									if(validsave == true){
+										$.ajax({
+											url : baseUrl+"outlet/save",
+											type : 'POST',
+											contentType : 'application/json',
+											data : JSON.stringify(out),
+											success : function(data) {
+												//console.log(data);
+												alert('save success');
+												window.location = baseUrl+"outlet/index";
+											},//succesajaxsave
+											error : function() {
+												alert('saving failed!');
+											}//errorajaxname             
+										});//ajaxname
+									}
+									
+								}
+							},
+							error : function() {
+								alert('error getting email');
+							}
+						})
+					};//elsedupname
+				},//ajaxsuccessgetallname
 				error : function() {
-					alert('saving failed!');
-				}                              
-			});
-		}
+					alert('error getting list name');
+				}
+			})//ajaxgetallname
+			
+		
 			
 		});
 		
@@ -134,7 +179,6 @@ $(function() {
 		$('.editoutlet').on('click', function(evt) {
 			evt.preventDefault();
 			var id = $(this).attr('id');
-			//console.log(id);
 			$.ajax({
 				url : baseUrl+"outlet/get-id/"+id,
 				type : 'GET',
@@ -270,7 +314,7 @@ $(function() {
 					phone : $('#edit-phone-out').val(),
 					email : $('#edit-email-out').val(),
 					active : 1
-			}
+			}		
 			if(validedit == true){
 				$.ajax({
 					url : baseUrl+"outlet/update",
