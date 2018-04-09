@@ -54,10 +54,11 @@ public class UserDAOImpl implements UserDAO{
 		Session session = sessionFactory.getCurrentSession();
 		String hql = "from User u where u.employee.id like :empid";
 		List<User> listUser = session.createQuery(hql).setParameter("empid", e.getId()).list();
-		User u = listUser.get(0);
+		
 		if(listUser.isEmpty()) {
 			return null;
 		} else {
+			User u = listUser.get(0);
 			return u;
 		}
 	}
