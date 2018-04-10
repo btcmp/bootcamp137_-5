@@ -255,9 +255,9 @@ public class PurchaseOrderController {
 		}
 	}
 	
-	@RequestMapping(value = "/get-list-by-serch", method = RequestMethod.GET)
+	@RequestMapping(value = "/get-list-by-search/{search}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<PurchaseOrder> getListPOBySearch(String search){
+	public List<PurchaseOrder> getListPOBySearch(@PathVariable String search){
 		List<PurchaseOrder> listPO = poService.getlistPOBySearch(search);
 		
 		if (listPO == null) {

@@ -122,7 +122,7 @@ public class PurchaseOrderDAOImpl implements PurchaseOrderDAO{
 	public List<PurchaseOrder> getListPOBySearch(String search) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		String hql = "from PurchaseOrder where lower(poNo) like :search or lower(notes) like :search or lower(status) like :search";
+		String hql = "from PurchaseOrder po where lower(po.poNo) like :search or lower(po.supplier.name) like :search or lower(po.status) like :search or po.grandTotal like :search";
 		List<PurchaseOrder> listPO = session.createQuery(hql).setParameter("search","%"+search.toLowerCase()+"%").list();
 		
 		if (listPO.isEmpty()) {

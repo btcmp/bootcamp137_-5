@@ -282,14 +282,25 @@ $(document).ready(function(){
 			success : function(listPO){
 				if(listPO != ''){
 					$.each(listPO, function(index, po){
-						tabPO.row.add([
-							po.createdOnFormatted,
-							po.supplier.name,
-							po.poNo,
-							po.grandTotalFormatted,
-							po.status,
-							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
-						]).draw();
+						if(po.supplier==null){
+							tabPO.row.add([
+								po.createdOnFormatted,
+								'-',
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						} else {
+							tabPO.row.add([
+								po.createdOnFormatted,
+								po.supplier.name,
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						}
 					});
 				}
 			},
@@ -418,5 +429,42 @@ $(document).ready(function(){
 		}
 	});
 	
+	//search by text input
+	$('#search-text').on('change', function(){
+		if ($(this).val()==''){
+			refreshPOList();
+		} else {
+			console.log($(this).val());
+			getPOListBySearch($(this).val());
+		}
+	});
+		
+	function getPOListBySearch(search){
+		tabPO.clear();
+		$.ajax({
+			url : baseUrl+'purchase-order/get-list-by-search/'+search,
+			type : 'GET',
+			contentType : 'application/json',
+			success : function(listPO){
+				if(listPO != ''){
+					$.each(listPO, function(index, po){
+						tabPO.row.add([
+							po.createdOnFormatted,
+							po.supplier.name,
+							po.poNo,
+							po.grandTotalFormatted,
+							po.status,
+							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+						]).draw();
+					});
+				} else {
+					tabPO.draw();
+				}
+			},
+			error : function(){
+				alert('error getting data');
+			}
+		})
+	}
 	
 });
