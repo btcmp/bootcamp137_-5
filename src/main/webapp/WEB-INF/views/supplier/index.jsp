@@ -23,8 +23,9 @@
 				<div>
 					<input type="text" id="carri" placeholder="Search" style="float: left;">
 					<a style="margin-left: 10px;" id="btn-carri" class="btn btn-primary">Search</a>
-					<a style="float: right; width: 15%; margin-bottom: 20px;" id="print-supp" class="btn btn-info" href="#">Export</a>
 					<a style="float: right; width: 15%; margin-bottom: 20px;" id="new" class="btn btn-info" href="#">Create</a>
+					<a style="float: right; width: 15%; margin-bottom: 20px;" id="print-supp" class="btn btn-info" href="#">Export</a>
+					
 				</div>
 					<table id="supplier-list" class="table table-stripped table-bordered table-hover">
 						<thead>

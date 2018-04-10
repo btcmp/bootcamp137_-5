@@ -316,6 +316,7 @@ $(function() {
 					active : 1
 			}
 			var dupnameedeit;
+			var dupemailedit;
 			$.ajax({
 				url : baseUrl+"outlet/get-all",
 				type : 'GET',
@@ -323,33 +324,44 @@ $(function() {
 				success : function(listoutlet) {
 					dupnameedit = 0;
 					$.each(listoutlet, function(index, outlet) {
-						if($('#edit-id').val() == outlet.id){
-							console.log($('#edit-id').val()+" + "+outlet.id);
+						if($('#edit-id').val() != outlet.id){
+							if ($('#edit-name-out').val() == outlet.name){
+								dupnameedeit = 1;
+							}
+							else if ($('#edit-email-out').val() == outlet.email){
+								dupemailedit = 1;
+							}
 						}
-					})
+					});
+					if (dupnameedeit==1){
+						alert('name has been used');
+					}
+					else if(dupemailedit==1){
+						alert('email has been used');
+					}
+					else{
+						if(validedit == true){
+							$.ajax({
+								url : baseUrl+"outlet/update",
+								type : 'PUT',
+								data : JSON.stringify(outlet),
+								contentType : 'application/json',
+								success : function(data) {
+									alert('update success!!')
+									window.location = baseUrl+"outlet/index";
+								},
+								error : function() {
+									alert('update failed!!');
+								}
+							});
+						}
+					}
 				},
 				error : function() {
 					alert('error getting data outlet');
 				}
 			})
 			
-			
-			
-			if(validedit == true){
-				$.ajax({
-					url : baseUrl+"outlet/update",
-					type : 'PUT',
-					data : JSON.stringify(outlet),
-					contentType : 'application/json',
-					success : function(data) {
-						alert('update success!!')
-						window.location = baseUrl+"outlet/index";
-					},
-					error : function() {
-						alert('update failed!!');
-					}
-				});
-			}
 		});
 		
 //----------------------------------------------------------------------------------------------edit region------------------------------------------
