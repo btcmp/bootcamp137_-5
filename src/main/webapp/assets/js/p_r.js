@@ -643,7 +643,4 @@ $(document).ready(function(){
 			}
 		})
 	}
-	
-	
-	
 });

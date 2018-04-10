@@ -131,6 +131,4 @@ public class PurchaseOrderDAOImpl implements PurchaseOrderDAO{
 			return listPO;
 		}
 	}
-	
-	
 }
