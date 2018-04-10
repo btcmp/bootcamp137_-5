@@ -12,20 +12,11 @@
           <img src="${baseUrl }assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p><security:authentication property="principal.username" /> - <%= namaOutlet %></p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-              </span>
-        </div>
-      </form>
+      
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -33,12 +24,12 @@
         <%
         String currentUrl = request.getAttribute("javax.servlet.forward.request_uri").toString();
         String[][] menu = {
-        		{"home","fa fa-dashboard", "Dashboard"},
-        		{"kategori/index","fa fa-dashboard", "Kategori"},
-        		{"outlet/index","fa fa-dashboard", "Outlet"},
-        		{"items/index","fa fa-dashboard", "Items"},
-        		{"adjustment/index","fa fa-dashboard", "Adjustment"},
-        		{"transfer-stock/index","fa fa-dashboard", "Transfer Stock"},
+        		{"home", "fa fa-dashboard", "Dashboard", "ADMIN,BACK_OFFICE"},
+        		{"kategori/index", "fa fa-dashboard", "Kategori", "ADMIN"},
+        		{"outlet/index","fa fa-dashboard", "Outlet", "ADMIN"},
+        		{"items/index","fa fa-dashboard", "Items", "ADMIN"},
+        		{"adjustment/index","fa fa-dashboard", "Adjustment", "BACK_OFFICE"},
+        		{"transfer-stock/index","fa fa-dashboard", "Transfer Stock", "BACK_OFFICE"},
         		};	
         Menu mn = new Menu((String) pageContext.getAttribute("baseUrl"),currentUrl, menu);
         out.print(mn.renderMenu());
