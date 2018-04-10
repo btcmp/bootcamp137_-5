@@ -2,6 +2,7 @@ package com.miniproject.pos.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,10 @@ public class PDFControllerr {
 	@Autowired
 	SupplierService supplierService;
 	
-	@RequestMapping(value = "/supplier", method = RequestMethod.GET)
+	@Autowired
+	private HttpSession httpSession;
+	
+	@RequestMapping(value = "/suplier", method = RequestMethod.GET)
 	ModelAndView generatePdf(HttpServletRequest request,
 	HttpServletResponse response) throws Exception {
 		System.out.println("Calling generatePdf()...");
@@ -28,6 +32,6 @@ public class PDFControllerr {
 		response.setContentType("application/pdf");
 		java.util.List<Supplier> suppliers = supplierService.selectAll();
 
-	return new ModelAndView("pdfViewSupplier","suppliers",suppliers);
+	return new ModelAndView("ViewSupplierpdf","suppliers",suppliers);
  	}
 }

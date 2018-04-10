@@ -322,5 +322,11 @@ $(function() {
 			var kata  = $("#carri").val();
 			window.location =  baseUrl+"supplier/index/src?search="+ kata;
 		});
+		
+//-------------------------------------------------------------------------------print-----------------------------------------
+		
+		$('#print-supp').on('click', function() {
+			window.location =baseUrl+"generate/suplier";
+		})
 				
 });
