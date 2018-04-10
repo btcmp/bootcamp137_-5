@@ -121,14 +121,10 @@ public class OutletController {
 		return listemail;
 	}
 	
-	@RequestMapping(value="/get-all-id", method = RequestMethod.GET)
+	@RequestMapping(value="/get-all", method = RequestMethod.GET)
 	@ResponseBody
-	public List<String> getAllAttOutlet(){
-		List<String> listAttOut = new ArrayList<String>();
+	public List<Outlet> getAllAttOutlet(){
 		List<Outlet> out = outletService.getAll();
-		for (Outlet outlet : out) {
-			listAttOut.add(outlet.getId());
-		}
-		return listAttOut;
+		return out;
 	}
 }

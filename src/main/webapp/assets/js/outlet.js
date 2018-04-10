@@ -314,7 +314,27 @@ $(function() {
 					phone : $('#edit-phone-out').val(),
 					email : $('#edit-email-out').val(),
 					active : 1
-			}		
+			}
+			var dupnameedeit;
+			$.ajax({
+				url : baseUrl+"outlet/get-all",
+				type : 'GET',
+				contentType : 'application/json',
+				success : function(listoutlet) {
+					dupnameedit = 0;
+					$.each(listoutlet, function(index, outlet) {
+						if($('#edit-id').val() == outlet.id){
+							console.log($('#edit-id').val()+" + "+outlet.id);
+						}
+					})
+				},
+				error : function() {
+					alert('error getting data outlet');
+				}
+			})
+			
+			
+			
 			if(validedit == true){
 				$.ajax({
 					url : baseUrl+"outlet/update",
