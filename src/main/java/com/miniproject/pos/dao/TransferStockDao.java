@@ -12,5 +12,7 @@ public interface TransferStockDao {
 	
 	public TransferStock getTransferStockById(String id);
 	
-	public List<TransferStock> getAllTransferStock();
+	public List<TransferStock> getAllTransferStock(String outletId);
+	
+	public List<TransferStock> getAllTransferStockFilterToOutlet(String outletId, String toOutlet);
 }

@@ -25,7 +25,7 @@ public class AdjustmentHistoryDaoImpl implements AdjustmentHistoryDao {
 	public List<AdjustmentHistory> getAdjustmentHistoryByAdjustmentId(String id) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "from AdjustmentHistory ah where ah.adjustmentId.id=:id";
+		String hql = "from AdjustmentHistory ah where ah.adjustmentId.id=:id order by ah.createdOn ASC";
 		return session.createQuery(hql).setParameter("id", id).list();
 	}
 

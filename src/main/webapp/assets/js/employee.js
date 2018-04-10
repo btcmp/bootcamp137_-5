@@ -206,6 +206,7 @@ $(document).ready(function() {
     	}
     	
     	if(selectedEmployee.user != null){
+    		$('#user-form-edit').show();
     		$('#edit-role').val(selectedEmployee.user.role.id);
     		$('#edit-user-id').val(selectedEmployee.user.id);
         	$('#edit-username').val(selectedEmployee.user.username);

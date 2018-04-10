@@ -54,7 +54,7 @@
 									</select>
 								</div>
 								<div class="col-sm-4 "><input type="text" class="form-control cancelable" id="save-username" placeholder="username"></div>
-								<div class="col-sm-4 "><input type="text" class="form-control cancelable" id="save-password" placeholder="password"></div>
+								<div class="col-sm-4 "><input type="password" class="form-control cancelable" id="save-password" placeholder="password"></div>
 							</div>
 							<div class="row form-group" align="right">
 								<button type="button" class="btn btn-primary" id="btn-cancel">Cancel</button>
@@ -208,7 +208,7 @@
 							<input type="text" class="form-control cancelable" id="edit-username" placeholder="username">
 						</div>
 						<div class="col-sm-4 ">
-							<input type="text" class="form-control cancelable" id="edit-password" placeholder="password">
+							<input type="password" class="form-control cancelable" id="edit-password" placeholder="password">
 						</div>
 					</div>
 				</form>

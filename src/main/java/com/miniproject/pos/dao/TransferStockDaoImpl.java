@@ -34,10 +34,16 @@ public class TransferStockDaoImpl implements TransferStockDao {
 		return session.get(TransferStock.class, id);
 	}
 
-	public List<TransferStock> getAllTransferStock() {
+	public List<TransferStock> getAllTransferStock(String outletId) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "from TransferStock";
-		return session.createQuery(hql).list();
+		String hql = "from TransferStock as ts where ts.fromOutlet.id=:id";
+		return session.createQuery(hql).setParameter("id", outletId).list();
+	}
+	public List<TransferStock> getAllTransferStockFilterToOutlet(String outletId, String toOutlet){
+		// TODO Auto-generated method stub
+		Session session = sf.getCurrentSession();
+		String hql = "from TransferStock as ts where ts.fromOutlet.id=:id and ts.toOutlet.id=:toId";
+		return session.createQuery(hql).setParameter("id", outletId).setParameter("toId", toOutlet).list();
 	}
 }

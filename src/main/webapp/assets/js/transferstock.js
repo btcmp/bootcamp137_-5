@@ -1,6 +1,8 @@
 $(document).ready(function() {
     var table = $('#transfer-list').DataTable({
-        "ajax": baseUrl+"transfer-stock/get-all-data",
+    	"paging":false,
+    	"searching":false,
+        "ajax": baseUrl+"transfer-stock/get-all-data/all",
         "columnDefs": [ 
         {
             "targets": 0,
@@ -13,7 +15,7 @@ $(document).ready(function() {
             "targets": 1,
             "data": null,
             "render": function(data){
-            	return data.fromOutlet;
+            	return data.fromOutlet.name;
             }
         },
         {
@@ -27,11 +29,18 @@ $(document).ready(function() {
             "targets": 3,
             "data": null,
             "render": function(data){
-            	return data.status;
+            	return data.notes;
             }
         },
         {
             "targets": 4,
+            "data": null,
+            "render": function(data){
+            	return data.status;
+            }
+        },
+        {
+            "targets": 5,
             "data":null,
             "render": function(data){
             	return "<button class='btn btn-success view-transfer' data-id='"+data.id+"'>View</button>";
@@ -39,12 +48,11 @@ $(document).ready(function() {
         }
         ]
     });
-    
     var detailTransfer = [];
     var options = {
     		url: baseUrl+"items/get-all-variant",
     		getValue: function(response) {
-    			return response.variantId.itemId.name+" - "+response.variantId.name;
+    			return response.itemId.name+" - "+response.name;
     		},
     		list: {
     			match: {
@@ -52,19 +60,28 @@ $(document).ready(function() {
     			},
     			onClickEvent: function() {
     				var value = $("#item-name-variant").getSelectedItemData();
-    				var check = $.grep(detailTransfer, function(obj){
-    						return obj.variantId.id === value.variantId.id;
-    				});
-    				if(check[0] == null){
-    					delete value.variantId.priceFormatted;
-    					var adjust = {
-    							"variantId":value.variantId,
-    							"transferQty":0,
-    							"inStock":value.endingQty
+    				if(value.singleInventory != null){
+    					if(value.singleInventory.endingQty > 0){
+	    				var check = $.grep(detailTransfer, function(obj){
+	    						return obj.variantId.id === value.id;
+	    				});
+	    				if(check[0] == null){
+	    					delete value.priceFormatted;
+	    					var transfer = {
+	    							"variantId":value,
+	    							"transferQty":0,
+	    							"inStock":value.singleInventory.endingQty
+	    					}
+	    					detailTransfer.push(transfer);
+	    					$("#btn-add-item").prop("disabled", false);
+	    					$("#form-list-item").append("<tr id='"+value.id+"'><td>"+value.itemId.name+" - "+value.name+"</td><td>"+value.singleInventory.endingQty+"</td><td><input type='number' class='form-control transfer-qty' data-id='"+value.id+"' max='"+value.singleInventory.endingQty+"' value='1' min='1' requeired/></td></tr>");
+	    					$("#item-name-variant").val('');
+	    				}
+    					}else{
+    						alert("stock is empty");
     					}
-    					detailTransfer.push(adjust);
-    					$("#form-list-item").append("<tr id='"+value.variantId.id+"'><td>"+value.variantId.itemId.name+" - "+value.variantId.name+"</td><td>"+value.endingQty+"</td><td><input type='number' class='form-control transfer-qty' data-id='"+value.variantId.id+"' value='0' min='0' requeired/></td><td><button type='button' class='btn btn-danger delete-item-form' data-id='"+value.variantId.id+"'>X</button></td></tr>");
-    					$("#item-name-variant").val('');
+    				}else{
+    					alert("stock have not initialize");
     				}
     			}
     		},
@@ -72,34 +89,89 @@ $(document).ready(function() {
     	};
 
     	$("#item-name-variant").easyAutocomplete(options);
-        
+    	
+    	$("#filter-to-outlet").on("change", function(){
+    		var id = $(this).val();
+    		table.ajax.url(baseUrl+"transfer-stock/get-all-data/"+id).load();
+    	});
+    	
+    	$("#btn-cancel-item").on("click", function(){
+    		$("#btn-add-item").prop("disabled", true);
+			$("#form-list-item").empty();
+			detailTransfer = [];
+    	});
+    	
+    	function getDate(){
+    		var d = new Date();
+
+    		var month = d.getMonth()+1;
+    		var day = d.getDate();
+
+    		return (day<10 ? '0' : '')  + day + '/' +
+    		    (month<10 ? '0' : '') + month + '/' + d.getFullYear();
+    	}
+    	
+    	$('#search-by-date').daterangepicker(
+    			{
+    			    locale: {
+    			      format: 'DD/MM/YYYY'
+    			    },
+    			    startDate: getDate(),
+    			    endDate: getDate()
+    			}, 
+    			function(start, end, label) {
+    				table.ajax.url(baseUrl+"transfer-stock/get-all-data/"+start.format('DD-MM-YYYY')+"/"+end.format('DD-MM-YYYY')).load();
+    			});
+    	
+    	$("#reset-filter").on("click", function(){
+    		table.ajax.url(baseUrl+"transfer-stock/get-all-data").load();
+    	});
+    	
+    	var status = "";
     	$(document).on('change','#status-more', function(e) {
-    		var status = $(this).val();
+    		status = $(this).val();
     		var id = $(this).attr("data-id");
     		if(status != ""){
-    			$.ajax({
-        			type : "POST",
-        			url :baseUrl+'transfer-stock/status/'+id+"/"+status,
-        			success:function(data){
-        				if(data.status == 'success'){
-        					displayNotif(data.keterangan, data.status);
-        					table.ajax.reload( null, false );
-        					$('#modal-detail').modal('hide');
-        				}
-        			},
-        			error:function(){
-        				alert('Terjadi kesalahan saat menghubugni server');
-        			}
-        		});
+    			if(status == "Print"){
+    				window.open(baseUrl+'transfer-stock/print/'+id, '_blank');
+    			}else{
+    				$("#ubah-status").attr("data-id", id);
+    				$("#modal-status").modal("show");
+    			}
     		}
     	});
     	
+    	$("#ubah-status").on("click", function(){
+    		var id = $(this).attr("data-id");
+    		$.ajax({
+    			type : "POST",
+    			url :baseUrl+'transfer-stock/status/'+id+"/"+status,
+    			success:function(data){
+    				if(data.status == 'success'){
+    					displayNotif(data.keterangan, data.status);
+    					table.ajax.reload( null, false );
+    					$('#modal-status').modal('hide');
+    					$('#modal-detail').modal('hide');
+    				}
+    			},
+    			error:function(){
+    				alert('Terjadi kesalahan saat menghubugni server');
+    			}
+    		});
+        });
+    	
+    	var ok;
+        $('#form-transfer').parsley().on('field:validated', function() {
+            ok = $('.parsley-error').length === 0;
+            $('.callout-warning').toggleClass('hidden', ok);
+        });
     $(document).on('submit','#form-transfer', function(e) {
     	e.preventDefault();
-    		var adjust = {
+    	if(ok){	
+    	var transfer = {
     				'notes'	: $('#transfer-notes').val(),
-    				'toOutlet'	: {
-    					"id" : $('#transfer-outlet-id').val()
+    				'toOutlet' : {
+    					"id" : $("#transfer-outlet-id").val(),
     				},
     				'transferStockDetail' : detailTransfer
     			};
@@ -107,7 +179,7 @@ $(document).ready(function() {
     		$.ajax({
     			type : "POST",
     			url :baseUrl+'transfer-stock/save',
-    			data :JSON.stringify(adjust),
+    			data :JSON.stringify(transfer),
     			contentType: 'application/json',
     			success:function(data){
     				if(data.status == 'success'){
@@ -128,60 +200,66 @@ $(document).ready(function() {
     				alert('Terjadi kesalahan saat menghubugni server');
     			}
     		});
+    	}
+    	ok = false;
         return false;
     });
 
     function clearForm(){
-    	$('#transfer-id').val('');
-       	$('#transfer-name').val('');
-       	$('#transfer-category-id').val('');
-    	listVariant = [];
+    	$('#transfer-notes').val('');
+    	$('#transfer-outlet-id').val('');
+    	$('#form-transfer').parsley().reset();
+    	detailTransfer = []
+    	createTableTransfer(detailTransfer);
+    	$("#btn-transfer-save").prop("disabled", true);
+    	$('.callout-warning').toggleClass('hidden', true);
     }
-        
-
-    $('#hapus-data').on('click', function() {
-    	var id = $(this).attr('data-id');
-    	$.ajax({
-    		type : 'DELETE',
-    		url :baseUrl+'barang/delete/'+id,
-    		success:function(data){
-    			if(data.status == 'success' || data.status =='warning'){
-    				createTable(data);
-    				$('#modal-danger').modal('hide');
-    				displayNotif(data.keterangan, data.status);
-    			}
-    		},
-    		error:function(){
-    			alert('gagal menghapus data');
-    		}
-    	});
-    });
 
     $('#add-data').on('click', function() {
-    	state = 'simpan';
-    	$('#form-transfer').parsley().reset();
     	clearForm();
-    	createTableTransfer(listVariant);
-    	$('.callout-warning').toggleClass('hidden', true);
     	$('#myModal').modal('show');
+    });
+    
+    $("#btn-transfer-cancel").on("click", function(){
+    	clearForm();
+    });
+    
+    $("#btn-transfer-back").on("click", function(){
+    	$('#myModal').modal('hide');
     });
     
     $('#add-item').on('click', function() {
     	formItemsShow();
     });
     
-    
-    $('#btn-add-item').on('click', function() {
-    	$.each($('.transfer-qty'), function(key, val){
-    		var id = val.getAttribute("data-id");
-    		$.map(detailTransfer, function(obj, index) {
-    		    if(obj.variantId.id == id) {
-    		        obj.transferQty = val.value;
-    		    }
-    		});
-    	});
-    	createTableTransfer(detailTransfer);
+    $("#btn-back-item").on("click", function(){
+    	detailTransfer = [];
     	formItemsHide();
+    });
+    
+    var variantOk;
+    $('#form-variant').parsley().on('field:validated', function() {
+        variantOk = $('.parsley-error').length === 0;
+     });
+    $(document).on('submit','#form-variant', function(e) {
+    	e.preventDefault();
+    	if(variantOk){
+    		if(detailTransfer.length > 0){
+		    	$.each($('.transfer-qty'), function(key, val){
+		    		var id = val.getAttribute("data-id");
+		    		$.map(detailTransfer, function(obj, index) {
+		    		    if(obj.variantId.id == id) {
+		    		        obj.transferQty = val.value;
+		    		    }
+		    		});
+		    	});
+		    	$("#btn-transfer-save").prop("disabled", false);
+		    	createTableTransfer(detailTransfer);
+		    	formItemsHide();
+	    	}
+    	}
+    	variantOk =false;
+    	return false;
     });
     
     function formItemsHide(){
@@ -196,6 +274,7 @@ $(document).ready(function() {
     
     function resetFormVariant(){
     	$("#form-list-item").empty();
+    	$("#btn-add-item").prop("disabled", true);
     }
     
     $('#transfer-list').delegate('.view-transfer','click', function() {
@@ -207,13 +286,24 @@ $(document).ready(function() {
 	        			if(response.status == 'success' || response.status =='warning'){
 	        				var data = response.data;
 	        				$("#transfer-status-label").html("");
-	        				$("#transfer-from-outlet-label").html("");
-	        				$("#transfer-to-outlet-label").html("");
 	        				$("#transfer-status-label").html(data.status);
-	        				$("#transfer-from-outlet-label").html(data.fromOutlet);
+	        				$("#transfer-to-outlet-label").html("");
 	        				$("#transfer-to-outlet-label").html(data.toOutlet.name);
+	        				$("#transfer-from-outlet-label").html("");
+	        				$("#transfer-from-outlet-label").html(data.fromOutlet.name);
 	        				$("#transfer-notes-label").val(data.notes);
+	        				$("#transfer-created-by-label").html("");
+	        				$("#transfer-created-by-label").html(data.createdBy.username);
 	        				$("#status-more").attr("data-id", id);
+	        				if(data.status == "Submitted"){
+	        					$("#status-more").html(`<option value="">More</option>
+									<option value="Approved">Approved</option>
+									<option value="Reject">Reject</option>
+									<option value="Print">Print</option>`);
+	        				}else{
+	        					$("#status-more").html(`<option value="">More</option>
+										<option value="Print">Print</option>`);
+	        				}
 	        				$("#status-history").html("");
 	        				$("#label-list-item").empty();
 	        				$.each(data.transferStockHistory, function(key, val){
@@ -231,31 +321,6 @@ $(document).ready(function() {
 	        	});
     });
     
-    $('#list-item').delegate('.delete-item','click', function() {
-    	var id = $(this).attr("data-id");
-    	if(confirm("delete item ?")){
-    		var tamp = listVariant[id];
-    		if(tamp.id == null){
-    			listVariant.splice(id, 1);
-	    		createTableTransfer(listVariant);
-    		}else{
-	    		$.ajax({
-	        		type : 'DELETE',
-	        		url :baseUrl+'adjust/delete-item/'+tamp.id,
-	        		success:function(data){
-	        			if(data.status == 'success' || data.status =='warning'){
-	        				listVariant.splice(id, 1);
-	        	    		createTableTransfer(listVariant);
-	        			}
-	        		},
-	        		error:function(){
-	        			alert('gagal menghapus data');
-	        		}
-	        	});
-    		}
-    	}
-    });
-    
     function createTableTransfer(data){
     	var index = 0;
     	$("#list-item-body").empty();
@@ -264,4 +329,4 @@ $(document).ready(function() {
     		index++;
     	});
     }
-} );
+});

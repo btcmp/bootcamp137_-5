@@ -25,6 +25,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.miniproject.pos.utils.Constants;
 import com.miniproject.pos.utils.Formatter;
 
 
@@ -42,7 +43,7 @@ public class ItemVariant {
 	@Size(max=255)
 	private String name;
 	
-	@Column(nullable=false)
+	@Column(unique=true, nullable=false)
 	@Size(max=50)
 	private String sku;
 	
@@ -80,8 +81,21 @@ public class ItemVariant {
 	@Transient
 	private ItemInventory singleInventory;
 	
+	@Transient
+	private boolean removeable;
+	
 	public ItemVariant() {
-		this.active = true;
+		this.active = Constants.ACTIVE;
+		this.removeable = false;
+	}
+	
+	@JsonProperty("removeable")
+	public boolean getRemoveable() {
+		return this.removeable;
+	}
+	
+	public void setRemoveable(boolean remove) {
+		this.removeable = remove;
 	}
 	
 	//setter n getter

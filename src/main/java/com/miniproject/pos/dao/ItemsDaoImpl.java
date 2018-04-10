@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.miniproject.pos.model.Items;
 import com.miniproject.pos.model.Kategori;
+import com.miniproject.pos.utils.UniqueException;
 
 @Repository
 public class ItemsDaoImpl implements ItemsDao {
@@ -16,18 +17,26 @@ public class ItemsDaoImpl implements ItemsDao {
 	@Autowired
 	SessionFactory sf;
 	
-	public void save(Items items) {
+	public void save(Items items) throws UniqueException {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		session.save(items);
-		session.flush();
+		try {
+			session.save(items);
+			session.flush();
+		}catch(org.hibernate.exception.ConstraintViolationException e) {
+			throw new UniqueException("items", "name", items.getName());
+		}
+		
 	}
 
 	public void update(Items items) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		session.update(items);
-		session.flush();
+		try {session.update(items);
+			session.flush();
+		}catch(org.hibernate.exception.ConstraintViolationException e) {
+			throw new UniqueException("items", "name", items.getName());
+		}
 	}
 
 	public void delete(Items items) {

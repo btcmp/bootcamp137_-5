@@ -15,9 +15,9 @@ public interface AdjustmentDao {
 	
 	public Adjustment getAdjustmentById(String id);
 	
-	public List<Adjustment> getAllAdjustment();
+	public List<Adjustment> getAllAdjustment(String outletId);
 	
-	public List<Adjustment> getAllAdjustmentByDate(Date startDate, Date endDate);
+	public List<Adjustment> getAllAdjustmentByDate(Date startDate, Date endDate, String outletId);
 	
 	public Adjustment getAdjustment(String id);
 }

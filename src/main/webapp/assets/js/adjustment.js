@@ -38,7 +38,7 @@ $(document).ready(function() {
     var options = {
     		url: baseUrl+"items/get-all-variant",
     		getValue: function(response) {
-    			return response.variantId.itemId.name+" - "+response.variantId.name;
+    			return response.itemId.name+" - "+response.name;
     		},
     		list: {
     			match: {
@@ -46,19 +46,24 @@ $(document).ready(function() {
     			},
     			onClickEvent: function() {
     				var value = $("#item-name-variant").getSelectedItemData();
-    				var check = $.grep(detailAdjust, function(obj){
-    						return obj.variantId.id === value.variantId.id;
-    				});
-    				if(check[0] == null){
-    					delete value.variantId.priceFormatted;
-    					var adjust = {
-    							"variantId":value.variantId,
-    							"actualStock":0,
-    							"inStock":value.endingQty
-    					}
-    					detailAdjust.push(adjust);
-    					$("#form-list-item").append("<tr id='"+value.variantId.id+"'><td>"+value.variantId.itemId.name+" - "+value.variantId.name+"</td><td>"+value.endingQty+"</td><td><input type='number' class='form-control adjust-qty' data-id='"+value.variantId.id+"' value='0' min='0' requeired/></td><td><button type='button' class='btn btn-danger delete-item-form' data-id='"+value.variantId.id+"'>X</button></td></tr>");
-    					$("#item-name-variant").val('');
+    				if(value.singleInventory != null){
+	    				var check = $.grep(detailAdjust, function(obj){
+	    						return obj.variantId.id === value.id;
+	    				});
+	    				if(check[0] == null){
+	    					delete value.priceFormatted;
+	    					var adjust = {
+	    							"variantId":value,
+	    							"actualStock":0,
+	    							"inStock":value.singleInventory.endingQty
+	    					}
+	    					detailAdjust.push(adjust);
+	    					$("#btn-add-item").prop("disabled", false);
+	    					$("#form-list-item").append("<tr id='"+value.id+"'><td>"+value.itemId.name+" - "+value.name+"</td><td>"+value.singleInventory.endingQty+"</td><td><input type='number' class='form-control adjust-qty' data-id='"+value.id+"' value='0' min='0' requeired/></td></tr>");
+	    					$("#item-name-variant").val('');
+	    				}
+    				}else{
+    					alert("stock have not initialize");
     				}
     			}
     		},
@@ -66,7 +71,13 @@ $(document).ready(function() {
     	};
 
     	$("#item-name-variant").easyAutocomplete(options);
-        
+    	
+    	$("#btn-cancel-item").on("click", function(){
+    		$("#btn-add-item").prop("disabled", true);
+			$("#form-list-item").empty();
+			detailAdjust = [];
+    	});
+    	
     	function getDate(){
     		var d = new Date();
 
@@ -93,29 +104,48 @@ $(document).ready(function() {
     		table.ajax.url(baseUrl+"adjustment/get-all-data").load();
     	});
     	
+    	var status = "";
     	$(document).on('change','#status-more', function(e) {
-    		var status = $(this).val();
+    		status = $(this).val();
     		var id = $(this).attr("data-id");
     		if(status != ""){
-    			$.ajax({
-        			type : "POST",
-        			url :baseUrl+'adjustment/status/'+id+"/"+status,
-        			success:function(data){
-        				if(data.status == 'success'){
-        					displayNotif(data.keterangan, data.status);
-        					table.ajax.reload( null, false );
-        					$('#modal-detail').modal('hide');
-        				}
-        			},
-        			error:function(){
-        				alert('Terjadi kesalahan saat menghubugni server');
-        			}
-        		});
+    			if(status == "Print"){
+    				window.open(baseUrl+'adjustment/print/'+id, '_blank');
+    			}else{
+    				$("#ubah-status").attr("data-id", id);
+    				$("#modal-status").modal("show");
+    			}
     		}
     	});
+    	
+    	$("#ubah-status").on("click", function(){
+    		var id = $(this).attr("data-id");
+    		$.ajax({
+    			type : "POST",
+    			url :baseUrl+'adjustment/status/'+id+"/"+status,
+    			success:function(data){
+    				if(data.status == 'success'){
+    					displayNotif(data.keterangan, data.status);
+    					table.ajax.reload( null, false );
+    					$('#modal-status').modal('hide');
+    					$('#modal-detail').modal('hide');
+    				}
+    			},
+    			error:function(){
+    				alert('Terjadi kesalahan saat menghubugni server');
+    			}
+    		});
+        });
+    	
+    	var ok;
+        $('#form-adjust').parsley().on('field:validated', function() {
+            ok = $('.parsley-error').length === 0;
+            $('.callout-warning').toggleClass('hidden', ok);
+        });
     $(document).on('submit','#form-adjust', function(e) {
     	e.preventDefault();
-    		var adjust = {
+    	if(ok){	
+    	var adjust = {
     				'notes'	: $('#adjust-notes').val(),
     				'adjustmentDetail' : detailAdjust
     			};
@@ -144,61 +174,65 @@ $(document).ready(function() {
     				alert('Terjadi kesalahan saat menghubugni server');
     			}
     		});
+    	}
+    	ok = false;
         return false;
     });
 
     function clearForm(){
-    	$('#adjust-id').val('');
-       	$('#adjust-name').val('');
-       	$('#adjust-category-id').val('');
-    	listVariant = [];
+    	$('#adjust-notes').val('');
+    	$('#form-adjust').parsley().reset();
+    	detailAdjust = []
+    	createTableAdjust(detailAdjust);
+    	$("#btn-adjust-save").prop("disabled", true);
+    	$('.callout-warning').toggleClass('hidden', true);
     }
-        
-
-    $('#hapus-data').on('click', function() {
-    	var id = $(this).attr('data-id');
-    	$.ajax({
-    		type : 'DELETE',
-    		url :baseUrl+'barang/delete/'+id,
-    		success:function(data){
-    			if(data.status == 'success' || data.status =='warning'){
-    				createTable(data);
-    				$('#modal-danger').modal('hide');
-    				displayNotif(data.keterangan, data.status);
-    			}
-    		},
-    		error:function(){
-    			alert('gagal menghapus data');
-    		}
-    	});
-    });
 
     $('#add-data').on('click', function() {
-    	state = 'simpan';
-    	$('#form-adjust').parsley().reset();
     	clearForm();
-    	createTableAdjust(listVariant);
-    	$('.callout-warning').toggleClass('hidden', true);
-    	$('#form-barang-action').attr('value', 'Simpan');
     	$('#myModal').modal('show');
+    });
+    
+    $("#btn-adjust-cancel").on("click", function(){
+    	clearForm();
+    });
+    
+    $("#btn-adjust-back").on("click", function(){
+    	$('#myModal').modal('hide');
     });
     
     $('#add-item').on('click', function() {
     	formItemsShow();
     });
     
-    
-    $('#btn-add-item').on('click', function() {
-    	$.each($('.adjust-qty'), function(key, val){
-    		var id = val.getAttribute("data-id");
-    		$.map(detailAdjust, function(obj, index) {
-    		    if(obj.variantId.id == id) {
-    		        obj.actualStock = val.value;
-    		    }
-    		});
-    	});
-    	createTableAdjust(detailAdjust);
+    $("#btn-back-item").on("click", function(){
+    	detailAdjust = [];
     	formItemsHide();
+    });
+    
+    var variantOk;
+    $('#form-variant').parsley().on('field:validated', function() {
+        variantOk = $('.parsley-error').length === 0;
+     });
+    $(document).on('submit','#form-variant', function(e) {
+    	e.preventDefault();
+    	if(variantOk){
+	    	if(detailAdjust.length > 0){
+		    	$.each($('.adjust-qty'), function(key, val){
+		    		var id = val.getAttribute("data-id");
+		    		$.map(detailAdjust, function(obj, index) {
+		    		    if(obj.variantId.id == id) {
+		    		        obj.actualStock = val.value;
+		    		    }
+		    		});
+		    	});
+		    	$("#btn-adjust-save").prop("disabled", false);
+		    	createTableAdjust(detailAdjust);
+		    	formItemsHide();
+	    	}
+    	}
+    	variantOk =false;
+    	return false;
     });
     
     function formItemsHide(){
@@ -215,6 +249,8 @@ $(document).ready(function() {
     	$("#form-list-item").empty();
     }
     
+    
+    
     $('#adjust-list').delegate('.view-adjust','click', function() {
     	var id = $(this).attr("data-id");
     	$.ajax({
@@ -226,7 +262,18 @@ $(document).ready(function() {
 	        				$("#adjust-status-label").html("");
 	        				$("#adjust-status-label").html(data.status);
 	        				$("#adjust-notes-label").val(data.notes);
+	        				$("#adjust-created-by-label").html("");
+	        				$("#adjust-created-by-label").html(data.createdBy.username);
 	        				$("#status-more").attr("data-id", id);
+	        				if(data.status == "Submitted"){
+	        					$("#status-more").html(`<option value="">More</option>
+									<option value="Approved">Approved</option>
+									<option value="Reject">Reject</option>
+									<option value="Print">Print</option>`);
+	        				}else{
+	        					$("#status-more").html(`<option value="">More</option>
+										<option value="Print">Print</option>`);
+	        				}
 	        				$("#status-history").html("");
 	        				$("#label-list-item").empty();
 	        				$.each(data.adjustmentHistory, function(key, val){
@@ -244,31 +291,6 @@ $(document).ready(function() {
 	        	});
     });
     
-    $('#list-item').delegate('.delete-item','click', function() {
-    	var id = $(this).attr("data-id");
-    	if(confirm("delete item ?")){
-    		var tamp = listVariant[id];
-    		if(tamp.id == null){
-    			listVariant.splice(id, 1);
-	    		createTableAdjust(listVariant);
-    		}else{
-	    		$.ajax({
-	        		type : 'DELETE',
-	        		url :baseUrl+'adjust/delete-item/'+tamp.id,
-	        		success:function(data){
-	        			if(data.status == 'success' || data.status =='warning'){
-	        				listVariant.splice(id, 1);
-	        	    		createTableAdjust(listVariant);
-	        			}
-	        		},
-	        		error:function(){
-	        			alert('gagal menghapus data');
-	        		}
-	        	});
-    		}
-    	}
-    });
-    
     function createTableAdjust(data){
     	var index = 0;
     	$("#list-item-body").empty();
@@ -277,4 +299,4 @@ $(document).ready(function() {
     		index++;
     	});
     }
-} );
+});

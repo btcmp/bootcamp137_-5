@@ -58,7 +58,7 @@ $(document).ready(function() {
     var options = {
     		url: baseUrl+"items/get-all-variant",
     		getValue: function(response) {
-    			return response.variantId.itemId.name+" - "+response.variantId.name;
+    			return response.itemId.name+" - "+response.name;
     		},
     		list: {
     			match: {
@@ -104,6 +104,8 @@ $(document).ready(function() {
     var tempUpdate;
     $('#form-items').parsley().on('field:validated', function() {
         ok = $('.parsley-error').length === 0;
+        $('.callout-warning').html(`<h4>Oh snap!</h4>
+					<p>This form seems to be invalid :(</p>`)
         $('.callout-warning').toggleClass('hidden', ok);
     });
     $(document).on('submit','#form-items', function(e) {
@@ -184,8 +186,13 @@ $(document).ready(function() {
 					$('#form-items').parsley().reset();
 				}else{
 					$.each(data.error, function(key, value) {
-						$('#'+value[0]).parsley().removeError(value[0]+'-error', {updateClass: true});
-						$('#'+value[0]).parsley().addError(value[0]+'-error', {message: value[1], updateClass: true});
+						if(value[0] == "items"){
+						$('#'+value[0]+"-"+value[1]).parsley().removeError(value[1]+'-error', {updateClass: true});
+						$('#'+value[0]+"-"+value[1]).parsley().addError(value[1]+'-error', {message: value[2], updateClass: true});
+						}else{
+							$('.callout-warning').html(`<h4>Oh snap!</h4>
+							<p>`+value[2]+`</p>`);
+						}
 					});
 					$('.callout-warning').toggleClass('hidden', false);
 				}
@@ -195,7 +202,63 @@ $(document).ready(function() {
 			}
 		});
     }
+    
+    var variantOk;
+    $('#form-variant').parsley().on('field:validated', function() {
+        variantOk = $('.parsley-error').length === 0;
+        $('#warning-variant').toggleClass('hidden', variantOk);
+    });
+    $(document).on('submit','#form-variant', function(e) {
+    	e.preventDefault();
+    	if(variantOk){
+    		var state = $("#btn-add-variant").attr("state");
+        	if(state == "create"){
+        		var variant = {
+            			"name" : $("#variant-name").val(),
+            			"price" : $("#variant-price").val(),
+            			"sku" : $("#variant-sku").val(),
+            			"inventory" : [{
+            				"begining": $("#inventory-begining").val(),
+            				"alertAtQty": $("#inventory-alert-at").val()
+            			}],
+            	};
+        		listVariant.push(variant);
+        	}else{
+        		var index = $("#btn-add-variant").attr("data-id");
+        		var variant = listVariant[index];
+        		variant.name = $("#variant-name").val();
+        		variant.price = $("#variant-price").val();
+        		variant.sku = $("#variant-sku").val();
+        		if(variant.inventory[0] == null){
+        			variant.inventory = [{
+        					"begining" : $("#inventory-begining").val(),
+        					"alertAtQty" : $("#inventory-alert-at").val()
+        			}];
+        		}else{
+    	    		variant.inventory[0].begining = $("#inventory-begining").val();
+    	    		variant.inventory[0].alertAtQty = $("#inventory-alert-at").val();
+        		}
+        		listVariant[index] = variant;
+        	}
+        	enableSave();
+        	createTableVariant(listVariant);
+        	formVariantHide();
+    	}
+      	variantOk = false;
+        return false;
+    });
 
+    $("#btn-items-cancel").on("click", function(){
+    	clearForm();
+    	createTableVariant(listVariant);
+    	disableSave();
+    });
+    
+    $("#inventory-begining").on("change", function(){
+    	var hasil = $(this).val();
+    	$("#inventory-alert-at").attr("max", hasil);
+    });
+    
     function clearForm(){
     	$('#items-id').val('');
        	$('#items-name').val('');
@@ -225,6 +288,13 @@ $(document).ready(function() {
         				$('#items-name').val(tempUpdate.name);
     					$('#items-id').val(tempUpdate.id);
         				$('#items-category-id').val(tempUpdate.categoryId.id);
+        				if(tempUpdate.removeable == true){
+        					$("#btn-items-delete").attr("style", "");
+        					$("#btn-items-delete").attr("data-id", tempUpdate.id);
+        				}else{
+        					$("#btn-items-delete").attr("style", "display:none");
+        					$("#btn-items-delete").attr("data-id", "");
+        				}
         				if(tempUpdate.image != null){
         					$('#file').fileinput('destroy');
         					$("#file").fileinput({
@@ -245,27 +315,32 @@ $(document).ready(function() {
     }
         
 
-    $('#hapus-data').on('click', function() {
+    $('#btn-items-delete').on('click', function() {
     	var id = $(this).attr('data-id');
-    	$.ajax({
-    		type : 'DELETE',
-    		url :baseUrl+'barang/delete/'+id,
-    		success:function(data){
-    			if(data.status == 'success' || data.status =='warning'){
-    				createTable(data);
-    				$('#modal-danger').modal('hide');
-    				displayNotif(data.keterangan, data.status);
-    			}
-    		},
-    		error:function(){
-    			alert('gagal menghapus data');
-    		}
-    	});
+    	if($(this).attr("data-id") != ""){
+		    if(confirm("Hapus data items ? ")){
+    		$.ajax({
+		    		type : 'DELETE',
+		    		url :baseUrl+'items/delete-items/'+id,
+		    		success:function(response){
+		    			if(response.status == "success"){
+		    				table.ajax.reload( null, false );
+		    			}
+	        			displayNotif(response.keterangan, response.status);
+	        			$("#myModal").modal("hide");
+		    		},
+		    		error:function(){
+		    			alert('gagal menghapus data');
+		    		}
+		    	});
+		    }
+    	}
     });
 
     $('#add-data').on('click', function() {
     	state = 'simpan';
     	$('#form-items').parsley().reset();
+    	disableSave();
     	clearForm();
     	createTableVariant(listVariant);
     	$('.callout-warning').toggleClass('hidden', true);
@@ -276,6 +351,10 @@ $(document).ready(function() {
     
     $('#add-variant').on('click', function() {
     	$("#btn-add-variant").attr("state", "create");
+    	$("#btn-cancel-variant").prop("disabled", false);
+    	$("#variant-name").prop("readonly", false);
+    	$("#variant-sku").prop("readonly", false);
+    	$("#inventory-begining").prop("readonly", false);
     	formVariantShow();
     });
     
@@ -290,42 +369,16 @@ $(document).ready(function() {
     
     function enableSave(){
         $('#btn-items-save').prop('disabled', false);
+        if(state == "update")
+        	$('#btn-items-cancel').prop('disabled', true);
+        else
+        	$('#btn-items-cancel').prop('disabled', false);
     }
     
-    $('#btn-add-variant').on('click', function() {
-    	var state = $(this).attr("state");
-    	if(state == "create"){
-    		var variant = {
-        			"name" : $("#variant-name").val(),
-        			"price" : $("#variant-price").val(),
-        			"sku" : $("#variant-sku").val(),
-        			"inventory" : [{
-        				"begining": $("#inventory-begining").val(),
-        				"alertAtQty": $("#inventory-alert-at").val()
-        			}],
-        	};
-    		listVariant.push(variant);
-    	}else{
-    		var index = $(this).attr("data-id");
-    		var variant = listVariant[index];
-    		variant.name = $("#variant-name").val();
-    		variant.price = $("#variant-price").val();
-    		variant.sku = $("#variant-sku").val();
-    		if(variant.inventory[0] == null){
-    			variant.inventory = [{
-    					"begining" : $("#inventory-begining").val(),
-    					"alertAtQty" : $("#inventory-alert-at").val()
-    			}];
-    		}else{
-	    		variant.inventory[0].begining = $("#inventory-begining").val();
-	    		variant.inventory[0].alertAtQty = $("#inventory-alert-at").val();
-    		}
-    		listVariant[index] = variant;
-    	}
-    	enableSave();
-    	createTableVariant(listVariant);
-    	formVariantHide();
-    });
+    function disableSave(){
+        $('#btn-items-save').prop('disabled', true);
+        $('#btn-items-cancel').prop('disabled', true);
+    }
     
     $('#items-list').delegate('.update-items','click', function() {
     	var id = $(this).attr("data-id");
@@ -334,6 +387,7 @@ $(document).ready(function() {
     	ambilDataById(id);
     	$('#form-items').parsley().reset();
     	clearForm();
+    	enableSave();
         $('#myModal').modal('show');
     });
     
@@ -347,18 +401,25 @@ $(document).ready(function() {
     	resetFormVariant();
     }
     
+    $("#btn-cancel-variant").on("click", function(){
+    	resetFormVariant();
+    });
+    
     function resetFormVariant(){
     	$("#variant-name").val("");
-    	$("#variant-price").val("");
+    	$("#variant-price").val("0");
     	$("#variant-price-mask").val("0");
     	$("#variant-sku").val("");
     	$("#inventory-begining").val("");
     	$("#inventory-alert-at").val("");
+    	$('#warning-variant').toggleClass('hidden', true);
+    	$('#form-variant').parsley().reset();
     }
     
     $('#list-variant').delegate('.edit-variant','click', function() {
     	var id = $(this).attr("data-id");
     	var data = listVariant[id];
+    	resetFormVariant();
     	$("#variant-name").val(data.name);
         $("#variant-price").val(data.price);
         $("#variant-price-mask").val(data.price);
@@ -368,40 +429,37 @@ $(document).ready(function() {
         $("#inventory-alert-at").val((data.inventory[0] == null)?"":data.inventory[0].alertAtQty);
     	$("#btn-add-variant").attr("state", "update");
     	$("#btn-add-variant").attr("data-id", id);
+    	if(data.id != null){
+    		$("#btn-cancel-variant").prop('disabled', true);
+    	}
+    	$("#variant-name").prop("readonly", data.id != null);
+    	$("#variant-sku").prop("readonly", data.id != null);
+    	$("#inventory-begining").prop("readonly", (data.id != null)?((data.inventory[0] == null)?false:(data.inventory[0].id != null)):false);
         $('#modal-variant').modal('show');
     });
     
     $('#list-variant').delegate('.delete-variant','click', function() {
     	var id = $(this).attr("data-id");
     	if(confirm("delete variant ?")){
-    		var tamp = listVariant[id];
-    		if(tamp.id == null){
-    			listVariant.splice(id, 1);
-	    		createTableVariant(listVariant);
+    		if(listVariant.length >1){
+	    		listVariant.splice(id, 1);
+		    	createTableVariant(listVariant);
     		}else{
-	    		$.ajax({
-	        		type : 'DELETE',
-	        		url :baseUrl+'items/delete-variant/'+tamp.id,
-	        		success:function(data){
-	        			if(data.status == 'success' || data.status =='warning'){
-	        				listVariant.splice(id, 1);
-	        	    		createTableVariant(listVariant);
-	        			}
-	        		},
-	        		error:function(){
-	        			alert('gagal menghapus data');
-	        		}
-	        	});
+    			alert("Item at least must have one variant");
     		}
     	}
     });
     
     function createTableVariant(data){
     	var index = 0;
+    	var delBtn="";
     	$("#list-variant-body").empty();
     	$.each(data, function(key, val){
-    		var myProp = 'alertStatus';
-    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>Rp "+(parseInt(val.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td><td>"+val.sku+"</td><td>"+((val.inventory[0] == null)?"":val.inventory[0].begining)+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> <button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button></td></tr>");
+    		delBtn ="";
+    		if(val.removeable == null || val.removeable == true){
+    			delBtn = "<button type='button' class='btn btn-danger delete-variant' data-id="+index+">X</button>";
+    		}
+    		$("#list-variant-body").append("<tr><td>"+val.name+"</td><td>Rp "+(parseInt(val.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td><td>"+val.sku+"</td><td>"+((val.inventory[0] == null)?"":val.inventory[0].begining)+"</td><td><button type='button' class='btn btn-success edit-variant' data-id="+index+">edit</button> "+delBtn+" </td></tr>");
     		index++;
     	});
     }

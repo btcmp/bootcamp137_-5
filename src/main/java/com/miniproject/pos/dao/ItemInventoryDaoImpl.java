@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.miniproject.pos.model.ItemInventory;
+import com.miniproject.pos.utils.Constants;
 
 @Repository
 public class ItemInventoryDaoImpl implements ItemInventoryDao {
@@ -70,25 +71,39 @@ public class ItemInventoryDaoImpl implements ItemInventoryDao {
 	public List<ItemInventory> getInventoryByIdItems(String id) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "select ii from ItemInventory as ii inner join ii.variantId as variant inner join variant.itemId as item where item.id=:id and item.active=1 and variant.active=1";
-		List<ItemInventory> list = session.createQuery(hql).setParameter("id", id).list();
+		String hql = "select ii from ItemInventory as ii inner join ii.variantId as variant inner join variant.itemId as item where item.id=:id and item.active=:active and variant.active=:active";
+		List<ItemInventory> list = session.createQuery(hql).setParameter("id", id).setParameter("active", Constants.ACTIVE).list();
 		return list;
 	}
 	
 	public List<ItemInventory> getInventoryAll() {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "select ii from ItemInventory as ii inner join ii.variantId as variant inner join variant.itemId as item where item.active=1 and variant.active=1";
-		List<ItemInventory> list = session.createQuery(hql).list();
+		String hql = "select ii from ItemInventory as ii inner join ii.variantId as variant inner join variant.itemId as item where item.active=:active and variant.active=:active";
+		List<ItemInventory> list = session.createQuery(hql).setParameter("active", Constants.ACTIVE).list();
 		return list;
 	}
 	
 	public List<ItemInventory> getInventory(String id) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "select ii from ItemInventory as ii inner join ii.variantId as variant inner join variant.itemId as item where item.active=1 and variant.active=1 and ii.id=:id";
-		List<ItemInventory> list = session.createQuery(hql).setParameter("id", id).list();
+		String hql = "select ii from ItemInventory as ii inner join ii.variantId as variant inner join variant.itemId as item where item.active=:active and variant.active=:active and ii.id=:id";
+		List<ItemInventory> list = session.createQuery(hql).setParameter("id", id).setParameter("active", Constants.ACTIVE).list();
 		return list;
+	}
+	
+	public Long getTotalStockByIdVariant(String idVariant) {
+		Session session = sf.getCurrentSession();
+		String sql = "select sum(ii.endingQty) from ItemInventory as ii where ii.variantId.id=:id";
+		List<Long> list = session.createQuery(sql).setParameter("id", idVariant).list();
+		return list.get(0);
+	}
+	
+	public Long getTotalStockByIdItems(String idItems) {
+		Session session = sf.getCurrentSession();
+		String sql = "select sum(ii.endingQty) from ItemInventory as ii join ii.variantId as variant where variant.itemId.id=:id";
+		List<Long> list = session.createQuery(sql).setParameter("id", idItems).list();
+		return list.get(0);
 	}
 
 }

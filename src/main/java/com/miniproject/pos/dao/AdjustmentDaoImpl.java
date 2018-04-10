@@ -51,18 +51,18 @@ public class AdjustmentDaoImpl implements AdjustmentDao {
 		return session.get(Adjustment.class, id);
 	}
 
-	public List<Adjustment> getAllAdjustment() {
+	public List<Adjustment> getAllAdjustment(String outletId) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "select a from Adjustment as a";
-		return session.createCriteria(Adjustment.class).list();
+		String hql = "select a from Adjustment as a where a.outletId.id=:outlet";
+		return session.createQuery(hql).setParameter("outlet", outletId).list();
 	}
 	
-	public List<Adjustment> getAllAdjustmentByDate(Date startDate, Date endDate) {
+	public List<Adjustment> getAllAdjustmentByDate(Date startDate, Date endDate, String outletId) {
 		// TODO Auto-generated method stub
 		Session session = sf.getCurrentSession();
-		String hql = "select a from Adjustment as a where a.createdOn between :startDate and :endDate";
-		return session.createQuery(hql).setParameter("endDate", endDate).setParameter("startDate", startDate).list();
+		String hql = "select a from Adjustment as a where a.createdOn between :startDate and :endDate and a.outletId.id=:outlet";
+		return session.createQuery(hql).setParameter("endDate", endDate).setParameter("startDate", startDate).setParameter("outlet", outletId).list();
 	}
 
 }
