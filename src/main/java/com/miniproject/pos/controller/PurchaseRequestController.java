@@ -46,7 +46,7 @@ public class PurchaseRequestController {
 	@RequestMapping
 	public String index(Model model) {
 		model.addAttribute("listPR", prService.getAll());
-		model.addAttribute("listItem", itemInvService.getAllItemInventory());
+		model.addAttribute("listItem", itemInvService.getInventoryAll(httpSession.getAttribute("outletId").toString()));
 		model.addAttribute("outlet", outletService.getOne(httpSession.getAttribute("outletId").toString()));
 		return "page-transaction-pr/pr-page";
 	}
@@ -106,7 +106,7 @@ public class PurchaseRequestController {
 	@RequestMapping(value="/get-all-item", method = RequestMethod.GET)
 	@ResponseBody
 	public List<ItemInventory> getListItem(){
-		return itemInvService.getAllItemInventory();
+		return itemInvService.getInventoryAll(httpSession.getAttribute("outletId").toString());
 	}
 	
 	@RequestMapping(value="/get-all-pr", method = RequestMethod.GET)
