@@ -1,5 +1,6 @@
 package com.miniproject.pos.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.miniproject.pos.model.PurchaseRequest;
@@ -16,4 +17,5 @@ public interface PurchaseRequestDAO {
 	List<PurchaseRequest> getAllApprovedPurchaseRequest();
 	List<PurchaseRequest> getAllRejectedPurchaseRequest();
 	List<PurchaseRequest> getListPRBySearch(String search);
+	List<PurchaseRequest> getListPRByDate(String start, String end);
 }

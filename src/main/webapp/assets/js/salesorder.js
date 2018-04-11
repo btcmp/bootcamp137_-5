@@ -7,7 +7,7 @@ $(function() {
 //-------------------------------------------------------------------------------search item---------------------------------------------
 	var allReadyId = [];
 		var options = {
-			url : baseUrl+"items/get-all-variant",
+			url : baseUrl+"items/get-all-inventory",
 			getValue : function(response) {
 				return  response.variantId.itemId.name+" - "+response.variantId.name;
 			},

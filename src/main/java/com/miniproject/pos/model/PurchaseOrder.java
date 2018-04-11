@@ -193,5 +193,4 @@ public class PurchaseOrder {
 	public void setListPurchaseOrderHistory(List<PurchaseOrderHistory> listPurchaseOrderHistory) {
 		this.listPurchaseOrderHistory = listPurchaseOrderHistory;
 	}
-	
 }

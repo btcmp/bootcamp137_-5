@@ -1,6 +1,31 @@
 $(document).ready(function(){
 	
-	$('#search-date-range').daterangepicker();
+	$('#search-date-range').daterangepicker({
+		locale : {
+			format: 'YYYY-DD-MM'
+		}	
+	});
+	
+	
+	$('#search-date-range').on('change', function(){
+		var daterange = $(this).val().split(" - ");
+		console.log(daterange);
+		var start = daterange[0];
+		var end = daterange[1];
+		console.log(start);
+		$.ajax({
+			url : baseUrl+'purchase-request/search-by-date?start='+start+'&end='+end,
+			type : 'GET',
+			contentType : 'application/json',
+			success : function(listPR){
+				console.log(listPR);
+			},
+			error : function(){
+				alert('error getting data');
+			}
+		
+		});
+	});
 	
 	//setting up data tables
 	var tabPR = $('#pr-table').DataTable({searching : false, paging : false});
@@ -458,7 +483,7 @@ $(document).ready(function(){
 	
 	//Search Item Variant
 	var options = {
-			url : baseUrl+'items/get-all-variant',
+			url : baseUrl+'items/get-all-inventory',
 			getValue : function(response){
 				return response.variantId.itemId.name + ' - ' + response.variantId.name;
 			},
@@ -643,7 +668,4 @@ $(document).ready(function(){
 			}
 		})
 	}
-	
-	
-	
 });

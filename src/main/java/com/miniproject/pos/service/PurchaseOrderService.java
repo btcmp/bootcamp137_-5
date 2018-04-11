@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.miniproject.pos.dao.ItemInventoryDao;
 import com.miniproject.pos.dao.PurchaseOrderDAO;
 import com.miniproject.pos.dao.PurchaseRequestDAO;
+import com.miniproject.pos.model.ItemInventory;
 import com.miniproject.pos.model.PurchaseOrder;
 import com.miniproject.pos.model.PurchaseOrderDetail;
 import com.miniproject.pos.model.PurchaseOrderHistory;
@@ -25,6 +27,9 @@ public class PurchaseOrderService {
 	
 	@Autowired 
 	private PurchaseRequestDAO purchaseRequestDAO;
+	
+	@Autowired
+	private ItemInventoryDao itemInventoryDAO;
 	
 	@Autowired
 	private PurchaseRequestService purchaseRequestService;
@@ -137,13 +142,22 @@ public class PurchaseOrderService {
 		purchaseOrderDAO.update(po);
 	}
 	
-	public void process(String id) {
+	public void process(String id, String outletId) {
 		PurchaseOrder po = get(id);
 		po.setStatus("processed");
 		
 		PurchaseOrderHistory poh = new PurchaseOrderHistory();
 		poh.setPurchaseOrder(po);
 		poh.setStatus("processed");
+		
+		for (PurchaseOrderDetail pod : po.getListPurchaseOrderDetail()) {
+			ItemInventory inv = itemInventoryDAO.getInventoryByVariantId(pod.getVariant().getId(), outletId);
+			int purchaseQty = inv.getPurchaseQty() + pod.getRequestQty();
+			int endingQty = inv.getBegining() + purchaseQty + inv.getAdjustmentQty() - (inv.getTransferStockQty() + inv.getSalesOrderQty());
+			inv.setPurchaseQty(purchaseQty);
+			inv.setEndingQty(endingQty);
+			itemInventoryDAO.update(inv);
+		}
 		
 		po.getListPurchaseOrderHistory().add(poh);
 		purchaseOrderDAO.update(po);

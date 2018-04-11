@@ -107,7 +107,7 @@ public class PurchaseOrderController {
 	@RequestMapping(value="/process", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public void process(@RequestBody String id) {
-		poService.process(id);
+		poService.process(id, httpSession.getAttribute("outletId").toString());
 	}
 	
 	@RequestMapping(value="/get-all-po", method = RequestMethod.GET)
@@ -255,9 +255,9 @@ public class PurchaseOrderController {
 		}
 	}
 	
-	@RequestMapping(value = "/get-list-by-serch", method = RequestMethod.GET)
+	@RequestMapping(value = "/get-list-by-search/{search}", method = RequestMethod.GET)
 	@ResponseBody
-	public List<PurchaseOrder> getListPOBySearch(String search){
+	public List<PurchaseOrder> getListPOBySearch(@PathVariable String search){
 		List<PurchaseOrder> listPO = poService.getlistPOBySearch(search);
 		
 		if (listPO == null) {

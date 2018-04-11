@@ -66,4 +66,9 @@ public class KategoriService {
 		}
 		return kategoris;}
 	}
+
+	public List<Kategori> getAllKategori() {
+		// TODO Auto-generated method stub
+		return kategoriDao.getAllKategori();
+	}
 }

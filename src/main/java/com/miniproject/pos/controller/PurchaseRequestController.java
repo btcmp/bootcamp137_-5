@@ -1,5 +1,6 @@
 package com.miniproject.pos.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -44,7 +46,7 @@ public class PurchaseRequestController {
 	@RequestMapping
 	public String index(Model model) {
 		model.addAttribute("listPR", prService.getAll());
-		model.addAttribute("listItem", itemInvService.getAllItemInventory());
+		model.addAttribute("listItem", itemInvService.getInventoryAll(httpSession.getAttribute("outletId").toString()));
 		model.addAttribute("outlet", outletService.getOne(httpSession.getAttribute("outletId").toString()));
 		return "page-transaction-pr/pr-page";
 	}
@@ -104,7 +106,7 @@ public class PurchaseRequestController {
 	@RequestMapping(value="/get-all-item", method = RequestMethod.GET)
 	@ResponseBody
 	public List<ItemInventory> getListItem(){
-		return itemInvService.getAllItemInventory();
+		return itemInvService.getInventoryAll(httpSession.getAttribute("outletId").toString());
 	}
 	
 	@RequestMapping(value="/get-all-pr", method = RequestMethod.GET)
@@ -211,6 +213,31 @@ public class PurchaseRequestController {
 	@ResponseBody
 	public List<PurchaseRequest> getListBySearch(@PathVariable String search){
 		List<PurchaseRequest> listPR = prService.getListPRBySearch(search);
+		if (listPR == null) {
+			return null;
+		} else {
+			for (PurchaseRequest pr : listPR) {
+				
+				for (PurchaseRequestDetail prd : pr.getListPurchaseRequestDetail()) {
+					prd.setPurchaseRequest(null);
+				}
+				
+				for (PurchaseRequestHistory prh : pr.getListPurchaseRequestHistory()) {
+					prh.setPurchaseRequest(null);
+				}
+				
+				if (pr.getPurchaseOrder()!= null) {
+					pr.setPurchaseOrder(null);
+				}
+			}
+			return listPR;
+		}
+	}
+	
+	@RequestMapping(value="/search-by-date", method = RequestMethod.GET)
+	
+	public List<PurchaseRequest> getlistByDate(@RequestParam(value="start") String start, @RequestParam(value="end") String end){
+		List<PurchaseRequest> listPR = prService.getListPRByDate(start,end);
 		if (listPR == null) {
 			return null;
 		} else {
