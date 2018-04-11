@@ -212,7 +212,7 @@ $(document).ready(function() {
     
     var variantOk;
     $('#form-variant').parsley().on('field:validated', function() {
-        variantOk = $('.parsley-error').length === 0;
+        variantOk = $(this).find('.parsley-error').length === 0;
      });
     $(document).on('submit','#form-variant', function(e) {
     	e.preventDefault();
@@ -248,8 +248,6 @@ $(document).ready(function() {
     function resetFormVariant(){
     	$("#form-list-item").empty();
     }
-    
-    
     
     $('#adjust-list').delegate('.view-adjust','click', function() {
     	var id = $(this).attr("data-id");
@@ -289,6 +287,18 @@ $(document).ready(function() {
 	        			alert('gagal menghubungi server');
 	        		}
 	        	});
+    });
+    
+    $('#list-item-body').delegate('.delete-item','click', function() {
+    	var id = $(this).attr("data-id");
+    	if(detailAdjust.length >1){
+    		if(confirm("delete item ?")){ 		
+    			detailAdjust.splice(id, 1);
+		    	createTableAdjust(detailAdjust);
+    		}
+    	}else{
+			alert("Warning!!! Could not delete item. Adjustment must have at least one item");
+		}
     });
     
     function createTableAdjust(data){
