@@ -61,4 +61,11 @@ public class SupplierDaoImpl implements SupplierDao{
 		return sups;
 	}
 
+	@Override
+	public List<Supplier> getAll() {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		return session.createCriteria(Supplier.class).list();
+	}
+
 }

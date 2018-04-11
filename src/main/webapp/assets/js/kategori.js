@@ -44,7 +44,6 @@ $(function() {
 								contentType : 'application/json',
 								data : JSON.stringify(kat),
 								success : function(data) {
-									//console.log(data);
 									alert('save success');
 									window.location = baseUrl+"kategori/index";
 								},
@@ -59,10 +58,6 @@ $(function() {
 					alert('error getting all name')
 				}
 			})
-			
-			
-			
-			
 		});
 		
 		
@@ -137,23 +132,44 @@ $(function() {
 					name : $('#edit-name-kat').val(),
 					active : 1
 			}
-			
-			if(validedit == true){
-				$.ajax({
-					url : baseUrl+"kategori/update",
-					type : 'PUT',
-					data : JSON.stringify(kat),
-					contentType : 'application/json',
-					success : function(data) {
-						alert('update success!!')
-						window.location = baseUrl+"kategori/index";
-					},
-					error : function() {
-						alert('update failed!!');
+			var dupnameedit;
+			$.ajax({
+				url : baseUrl+"kategori/get-all",
+				type : 'GET',
+				contentType : 'application/json',
+				success : function(kategori) {
+					dupnameedit = 0;
+					$.each(function(index, kategori) {
+						if ($('#edit-id').val() !== kategori.id) {
+							if ($('#edit-name-kat').val() == kategori.name) {
+								dupnameedit=1;
+							}
+						}
+					});
+					if (dupnameedit == 1) {
+						alert('kategori name has been used')
 					}
-				});
-			}
-			
+					else {
+						if(validedit == true){
+							$.ajax({
+								url : baseUrl+"kategori/update",
+								type : 'PUT',
+								data : JSON.stringify(kat),
+								contentType : 'application/json',
+								success : function(data) {
+									alert('update success!!')
+									window.location = baseUrl+"kategori/index";
+								},
+								error : function() {
+									alert('update failed!!');
+								}
+							});
+						}
+					}
+				},
+				error : function() {
+					alert('error getting data')
+				}
+			})
 		});
-
 });

@@ -46,5 +46,10 @@ public class SupplierService {
 		// TODO Auto-generated method stub
 		return supplierDao.getSupplierBySearchName(search);
 	}
+
+	public List<Supplier> getAll() {
+		// TODO Auto-generated method stub
+		return supplierDao.getAll();
+	}
 	
 }
