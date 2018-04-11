@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.miniproject.pos.model.ItemInventory;
 import com.miniproject.pos.model.ItemVariant;
 import com.miniproject.pos.model.Items;
 import com.miniproject.pos.model.Outlet;
@@ -102,6 +103,13 @@ public class ItemsController {
 	public List<ItemVariant> getVariant() {
 		String outletId = httpSession.getAttribute("outletId").toString();
 		return itemVariantService.getAllItemVariant(outletId);
+	}
+	
+	@RequestMapping("/get-all-inventory")
+	@ResponseBody
+	public List<ItemInventory> getInventory() {
+		String outletId = httpSession.getAttribute("outletId").toString();
+		return itemInventoryService.getInventoryAll(outletId);
 	}
 	
 	@RequestMapping(value="/delete-variant/{id}", method=RequestMethod.DELETE)

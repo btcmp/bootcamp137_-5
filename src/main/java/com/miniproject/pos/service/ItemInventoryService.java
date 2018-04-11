@@ -24,8 +24,8 @@ public class ItemInventoryService {
 		return iiDao.getInventoryByIdItems(id);
 	}
 	
-	public List<ItemInventory> getInventoryAll(){
-		return iiDao.getInventoryAll();
+	public List<ItemInventory> getInventoryAll(String outletId){
+		return iiDao.getInventoryAll(outletId);
 	}
 	
 	public List<ItemInventory> getInventory(String id){
