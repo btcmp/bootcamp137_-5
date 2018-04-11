@@ -30,23 +30,66 @@ $(function() {
 					email : $('#save-email-sup').val(),
 					active : 1
 			}
-		
-			if(validsave==true){
-				$.ajax({
-					url : baseUrl+"supplier/save",
-					type : 'POST',
-					contentType : 'application/json',
-					data : JSON.stringify(out),
-					success : function(data) {
-						//console.log(data);
-						alert('save success');
-						window.location = baseUrl+"supplier/index";
-					},
-					error : function() {
-						alert('saving failed!');
-					}                              
-				});
-			}
+			var dupname;
+			var dupemail;
+			$.ajax({
+				url : baseUrl+"supplier/get-all-name",
+				type : 'GET',
+				contentType : 'application/json',
+				success : function(listname) {
+					dupname=0;
+					$.each(listname, function(index, name) {
+						if($('#save-name-sup').val() == name){
+							dupname=1;
+						}
+					});
+					if(dupname==1){
+						alert('name has been used');
+					}
+					else{
+						$.ajax({
+							url : baseUrl+"supplier/get-all-email",
+							type : 'GET',
+							contentType : 'application/json',
+							success : function(listemail) {
+								dupemail=0;
+								$.each(listemail, function(index, email) {
+									if ($('#save-email-sup').val() == email) {
+										dupemail=1;
+									}
+								})
+								if (dupemail==1) {
+									alert('email has been used')
+								}
+								else{
+									if(validsave==true){
+										$.ajax({
+											url : baseUrl+"supplier/save",
+											type : 'POST',
+											contentType : 'application/json',
+											data : JSON.stringify(out),
+											success : function(data) {
+												//console.log(data);
+												alert('save success');
+												window.location = baseUrl+"supplier/index";
+											},
+											error : function() {
+												alert('saving failed!');
+											}                              
+										});
+									}
+								}
+							},
+							error : function() {
+								alert('error getting data')
+							}
+						})
+					}
+				},
+				error : function() {
+					alert('error getting data');
+				}
+			})
 		});
 		
 		
@@ -248,22 +291,52 @@ $(function() {
 					email : $('#edit-email-sup').val(),
 					active : 1
 			}
-			
-			if(validedit==true){
-				$.ajax({
-					url : baseUrl+"supplier/update",
-					type : 'PUT',
-					data : JSON.stringify(supplier),
-					contentType : 'application/json',
-					success : function(data) {
-						alert('update success!!')
-						window.location = baseUrl+"supplier/index";
-					},
-					error : function() {
-						alert('update failed!!');
+			var dupnameedit;
+			var dupemailedit;
+			$.ajax({
+				url : baseUrl+"supplier/get-all",
+				type : 'GET',
+				contentType : 'application/json',
+				success : function(listsupplier) {
+					dupnameedit=0;
+					$.each(listsupplier, function(index, supplier) {
+						if($('#edit-id-sup').val() !== supplier.id){
+							if ($('#edit-name-sup').val() == supplier.name) {
+								dupnameedit=1;
+							}
+							else if ($('#edit-email-sup').val() == supplier.email){
+								dupemailedit=1;
+							}
+						}
+					})
+					if (dupnameedit==1) {
+						alert('name has been used')
 					}
-				});
-			}
+					else if (dupemailedit==1){
+						alert('email has been used')
+					}
+					else{
+						if(validedit==true){
+							$.ajax({
+								url : baseUrl+"supplier/update",
+								type : 'PUT',
+								data : JSON.stringify(supplier),
+								contentType : 'application/json',
+								success : function(data) {
+									alert('update success!!')
+									window.location = baseUrl+"supplier/index";
+								},
+								error : function() {
+									alert('update failed!!');
+								}
+							});
+						}
+					}
+				},
+				error : function() {
+					alert('error getting list')
+				}
+			})	
 		});
 		
 //----------------------------------------------------------------------------------------edit region--------------------

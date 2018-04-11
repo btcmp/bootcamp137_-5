@@ -61,4 +61,11 @@ public class KategoriDaoImpl implements KategoriDao{
 		return kats;
 	}
 
+	@Override
+	public List<Kategori> getAllKategori() {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		return session.createCriteria(Kategori.class).list();
+	}
+
 }

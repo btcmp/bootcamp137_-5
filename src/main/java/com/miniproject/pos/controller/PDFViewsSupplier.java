@@ -21,7 +21,6 @@ public class PDFViewsSupplier extends AbstractPdfView{
 			HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		List<Supplier> suppliers = (List<Supplier>) model.get("suppliers");
-		   System.out.println("hallo");
 		   PdfPTable table = new PdfPTable(4);
 			table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);

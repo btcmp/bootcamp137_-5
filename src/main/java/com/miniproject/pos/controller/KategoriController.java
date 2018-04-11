@@ -76,5 +76,12 @@ public class KategoriController {
 		}
 		return listname;
 	}
+	
+	@RequestMapping(value="/get-all", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Kategori> getAllKategori(){
+		List<Kategori> listkat = kategoriService.getAllKategori();
+		return listkat;
+	}
 }
 
