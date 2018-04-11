@@ -119,11 +119,11 @@ public class PurchaseRequestDAOImpl implements PurchaseRequestDAO{
 	}
 
 	@Override
-	public List<PurchaseRequest> getListPRByDate(String start, String end) {
+	public List<PurchaseRequest> getListPRByDate(Date start, Date end) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		String hql = "from PurchaseRequest pr where pr.createdOn between '"+start+"' and '"+end+"'";
-		List<PurchaseRequest> listPR = session.createQuery(hql).list();
+		String hql = "from PurchaseRequest pr where pr.createdOn between :startDate and :endDate";
+		List<PurchaseRequest> listPR = session.createQuery(hql).setParameter("startDate", start).setParameter("endDate", end).list();
 		
 		if (listPR.isEmpty()) {
 			return null;

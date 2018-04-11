@@ -122,7 +122,7 @@ public class PurchaseRequestService {
 		return purchaseRequestDAO.getListPRBySearch(search);
 	}
 
-	public List<PurchaseRequest> getListPRByDate(String start, String end) {
+	public List<PurchaseRequest> getListPRByDate(Date start, Date end) {
 		// TODO Auto-generated method stub
 		return purchaseRequestDAO.getListPRByDate(start,end);
 	}

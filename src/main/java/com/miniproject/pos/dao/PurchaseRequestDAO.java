@@ -17,5 +17,5 @@ public interface PurchaseRequestDAO {
 	List<PurchaseRequest> getAllApprovedPurchaseRequest();
 	List<PurchaseRequest> getAllRejectedPurchaseRequest();
 	List<PurchaseRequest> getListPRBySearch(String search);
-	List<PurchaseRequest> getListPRByDate(String start, String end);
+	List<PurchaseRequest> getListPRByDate(Date start, Date end);
 }

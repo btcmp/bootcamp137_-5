@@ -1,6 +1,7 @@
 package com.miniproject.pos.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -187,4 +188,9 @@ public class PurchaseOrderService {
 		// TODO Auto-generated method stub
 		return purchaseOrderDAO.getListPOBySearch(search);
 	}
+	
+	public List<PurchaseOrder> getListPOByDate(Date start, Date end){
+		return purchaseOrderDAO.getListPOByDate(start, end);
+	}
+	
 }

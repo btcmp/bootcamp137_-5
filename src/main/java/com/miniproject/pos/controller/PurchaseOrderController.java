@@ -1,5 +1,9 @@
 package com.miniproject.pos.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -19,6 +24,8 @@ import com.miniproject.pos.model.PurchaseOrder;
 import com.miniproject.pos.model.PurchaseOrderDetail;
 import com.miniproject.pos.model.PurchaseOrderHistory;
 import com.miniproject.pos.model.PurchaseRequest;
+import com.miniproject.pos.model.PurchaseRequestDetail;
+import com.miniproject.pos.model.PurchaseRequestHistory;
 import com.miniproject.pos.model.User;
 import com.miniproject.pos.service.EmployeeService;
 import com.miniproject.pos.service.PurchaseOrderService;
@@ -283,5 +290,48 @@ public class PurchaseOrderController {
 			return listPO;
 		}
 	}
+	
+	@RequestMapping(value="/search-by-date", method = RequestMethod.GET)
+	@ResponseBody
+	public List<PurchaseOrder> getlistByDate(@RequestParam(value="start") String start, @RequestParam(value="end") String end){
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		List<PurchaseOrder> listPO = null;
+		try {
+			Date startDate = formatter.parse(start);
+			Date endDate = formatter.parse(end);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(endDate);
+			cal.add(Calendar.DATE, +1);
+			Date endDateInc = cal.getTime();
+			listPO = poService.getListPOByDate(startDate,endDateInc);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (listPO == null) {
+			return null;
+		} else {
+			for (PurchaseOrder po : listPO) {
+				for (PurchaseOrderDetail pod : po.getListPurchaseOrderDetail()) {
+					pod.setPurchaseOrder(null);
+				}
+				
+				for (PurchaseOrderHistory poh : po.getListPurchaseOrderHistory()) {
+					poh.setPurchaseOrder(null);
+				}
+				
+				if (po.getPurchaseRequest() != null) {
+					po.getPurchaseRequest().setListPurchaseRequestDetail(null);
+					po.getPurchaseRequest().setListPurchaseRequestHistory(null);
+					po.getPurchaseRequest().setPurchaseOrder(null);
+					po.getCreatedBy().setEmployee(employeeService.getEmployeeByUsername(po.getCreatedBy().getUsername()));
+					po.getCreatedBy().getEmployee().setUser(null);
+				}
+			}
+			return listPO;
+		}
+		
+	}
+	
 	
 }

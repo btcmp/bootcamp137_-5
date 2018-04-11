@@ -1,5 +1,6 @@
 package com.miniproject.pos.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.miniproject.pos.model.PurchaseOrder;
@@ -17,4 +18,5 @@ public interface PurchaseOrderDAO {
 	List<PurchaseOrder> getAllRejectedPurchaseOrder();
 	List<PurchaseOrder> getAllProcessedPurchaseOrder();
 	List<PurchaseOrder> getListPOBySearch(String search);
+	List<PurchaseOrder> getListPOByDate(Date start, Date end);
 }

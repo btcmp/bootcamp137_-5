@@ -1,5 +1,8 @@
 package com.miniproject.pos.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -235,9 +238,22 @@ public class PurchaseRequestController {
 	}
 	
 	@RequestMapping(value="/search-by-date", method = RequestMethod.GET)
-	
+	@ResponseBody
 	public List<PurchaseRequest> getlistByDate(@RequestParam(value="start") String start, @RequestParam(value="end") String end){
-		List<PurchaseRequest> listPR = prService.getListPRByDate(start,end);
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		List<PurchaseRequest> listPR = null;
+		try {
+			Date startDate = formatter.parse(start);
+			Date endDate = formatter.parse(end);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(endDate);
+			cal.add(Calendar.DATE, +1);
+			Date endDateInc = cal.getTime();
+			listPR = prService.getListPRByDate(startDate,endDateInc);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		if (listPR == null) {
 			return null;
 		} else {
@@ -257,6 +273,7 @@ public class PurchaseRequestController {
 			}
 			return listPR;
 		}
+		
 	}
 	
 }
