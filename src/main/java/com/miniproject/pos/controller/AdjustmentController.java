@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ibm.icu.util.Calendar;
 import com.miniproject.pos.model.Adjustment;
 import com.miniproject.pos.service.AdjustmentService;
 import com.miniproject.pos.service.OutletService;
@@ -57,7 +58,11 @@ public class AdjustmentController {
 		DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		try {
 		  Date dateStart = formatter.parse(startDate);
-		  Date dateEnd = formatter.parse(endDate);
+		  Date dateEndx = formatter.parse(endDate);
+		  Calendar cal = Calendar.getInstance();
+		  cal.setTime(dateEndx);
+		  cal.add(Calendar.DATE, +1);
+		  Date dateEnd = cal.getTime();
 		  rm.setStatus("success");
 		  String outletId = httpSession.getAttribute("outletId").toString();
 		  rm.setData(as.getAllAdjustmentByDate(dateStart, dateEnd, outletId));

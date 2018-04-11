@@ -440,14 +440,14 @@ $(document).ready(function() {
     
     $('#list-variant').delegate('.delete-variant','click', function() {
     	var id = $(this).attr("data-id");
-    	if(confirm("delete variant ?")){
-    		if(listVariant.length >1){
+    	if(listVariant.length >1){
+    		if(confirm("delete variant ?")){ 		
 	    		listVariant.splice(id, 1);
 		    	createTableVariant(listVariant);
-    		}else{
-    			alert("Item at least must have one variant");
     		}
-    	}
+    	}else{
+			alert("Warning!!! Could not delete variant. Item must have at least one variant");
+		}
     });
     
     function createTableVariant(data){

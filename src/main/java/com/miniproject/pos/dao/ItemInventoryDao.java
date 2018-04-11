@@ -18,7 +18,7 @@ public interface ItemInventoryDao {
 	
 	public List<ItemInventory> getInventoryByIdItems(String id);
 	
-	public List<ItemInventory> getInventoryAll();
+	public List<ItemInventory> getInventoryAll(String outletId);
 	
 	public List<ItemInventory> getInventory(String id);
 	
