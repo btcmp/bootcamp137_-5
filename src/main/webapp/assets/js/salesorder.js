@@ -17,18 +17,19 @@ $(function() {
 				},
 				onClickEvent : function() {
 					if($('.customer').attr('id') === undefined){
-						alert('silahkan pilih customer terlebih dahulu')
+						alert('silahkan pilih customer terlebih dahulu');
+						$('#nama-item').val('');
 					}
 					
 					else{
 						$('#table-item').empty();	
 						var value = $('#nama-item').getSelectedItemData();
-						var c = ('x'+value.variantId.id);
+						var c = ('x'+value.id);
 						if(allReadyId.indexOf(c.toString())==-1){
 							$('#table-item').append(
 									"<tr id="+value.id+">" +
 									"<td class= nama-item"+value.variantId.id+">"+value.variantId.itemId.name+" - "+value.variantId.name+"</td>" +
-									"<td class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
+									"<td class= harga-item"+value.variantId.id+">Rp."+value.price+"</td>" +
 									"<td style='display:none;' class= qty-itemqty"+value.variantId.id+">"+value.endingQty+"</td>" +
 									"<td><input id="+value.variantId.id+" class='check-item' type='checkbox'></input></td>" +
 									"</tr>"
@@ -164,7 +165,7 @@ $(function() {
 	        groupSeparator: ',',
 	        digits: 0,
 	        autoGroup: true,
-	        prefix: 'Rp', //No Space, this will truncate the first character
+	        prefix: 'Rp.', //No Space, this will truncate the first character
 	        rightAlign: false
 	    });
 
@@ -172,7 +173,7 @@ $(function() {
 
 	    $('#id-cash').on('change', function () {
 	        var value = $(this).val().split('.');
-	        var numDecimal = Number(value[0].replace(/[^0-9]+/g,''));
+	        var numDecimal = Number(value[1].replace(/[^0-9]+/g,''));
 	        $('#cash-price').val(numDecimal);
 	        $('#cash-price').trigger('change');
 	    });

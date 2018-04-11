@@ -17,4 +17,6 @@ public interface SupplierDao {
 	public List<Supplier> selectAlll();
 
 	public List<Supplier> getSupplierBySearchName(String search);
+
+	public List<Supplier> getAll();
 }

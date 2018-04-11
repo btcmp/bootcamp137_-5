@@ -1,5 +1,6 @@
 package com.miniproject.pos.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,35 @@ public class SupplierController {
 	@ResponseStatus(HttpStatus.OK)
 	public void nonactive(@RequestBody Supplier supplier) {
 		supplierService.nonactive(supplier);
+	}
+	
+	@RequestMapping(value="/get-all", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Supplier> getAllSupplier(){
+		List<Supplier> supps = supplierService.getAll();
+		return supps;
+	}
+	
+	@RequestMapping(value="/get-all-name", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getAllName(){
+		List<String> listname = new ArrayList<>();
+		List<Supplier> supps = supplierService.getAll();
+		for (Supplier supplier : supps) {
+			listname.add(supplier.getName());
+		}
+		return listname;
+	}
+	
+	@RequestMapping(value="/get-all-email", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getAllEmail(){
+		List<String> listemail = new ArrayList<>();
+		List<Supplier> supe = supplierService.getAll();
+		for (Supplier supplier : supe) {
+			listemail.add(supplier.getEmail());
+		}
+		return listemail;
 	}
 	
 }
