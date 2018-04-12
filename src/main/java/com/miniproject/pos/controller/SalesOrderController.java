@@ -85,13 +85,13 @@ public class SalesOrderController {
 	}
 	
 	@RequestMapping(value="/save", method = RequestMethod.POST)
-	@ResponseStatus(HttpStatus.CREATED)
-	public void save(@RequestBody SalesOrder salesOrder) {
+	@ResponseBody
+	public String save(@RequestBody SalesOrder salesOrder) {
 		User user = new User();
 		user.setId(httpSession.getAttribute("userId").toString());
 		Outlet outlet = new Outlet();
 		outlet.setId(httpSession.getAttribute("outletId").toString());
-		salesOrderService.save(salesOrder, user, outlet);
+		return salesOrderService.save(salesOrder, user, outlet);
 	}
 	
 	@RequestMapping(value="/get-id/{id}", method=RequestMethod.GET)

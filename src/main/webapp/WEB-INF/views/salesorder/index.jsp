@@ -49,7 +49,7 @@
 						</tfoot>
 					</table>
 						<a href="#" class="clear-sod btn btn-primary">Clear Sale</a>
-						<button id="pay-sods" class="bayar-sod btn btn-primary">Charge Rp</button>
+						<button id="pay-sods" class="bayar-sod btn btn-primary" disabled>Charge Rp</button>
 					</div>
 
 				</div>

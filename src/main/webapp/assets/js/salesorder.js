@@ -1,4 +1,5 @@
 var customer = {};
+var soid;
 $(function() {
 
 	$('#table-customer').DataTable({
@@ -24,28 +25,30 @@ $(function() {
 					else{
 						$('#table-item').empty();	
 						var value = $('#nama-item').getSelectedItemData();
-						var c = ('x'+value.id);
+						var c = ('x'+value.variantId.id);
 						if(allReadyId.indexOf(c.toString())==-1){
 							$('#table-item').append(
 									"<tr id="+value.id+">" +
 									"<td class= nama-item"+value.variantId.id+">"+value.variantId.itemId.name+" - "+value.variantId.name+"</td>" +
-									"<td class= harga-item"+value.variantId.id+">Rp."+value.price+"</td>" +
+									"<td class= hargaaa-item"+value.variantId.id+">Rp."+(parseInt(value.variantId.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td>" +
+									"<td style='display:none;' class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
 									"<td style='display:none;' class= qty-itemqty"+value.variantId.id+">"+value.endingQty+"</td>" +
 									"<td><input id="+value.variantId.id+" class='check-item' type='checkbox'></input></td>" +
 									"</tr>"
 							);
-							/*$('#pay-sods').prop('disabled',true);*/
+							$('#pay-sods').prop('disabled',true);
 							$('#nama-item').val('');}
 						else{
 							$('#table-item').append(
 									"<tr id="+value.id+">" +
 									"<td class= nama-item"+value.variantId.id+">"+value.variantId.itemId.name+" - "+value.variantId.name+"</td>" +
-									"<td class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
+									"<td class= hargaaa-item"+value.variantId.id+">Rp."+(parseInt(value.variantId.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td>" +
+									"<td style='display:none;' class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
 									"<td style='display:none;' class= qty-itemqty"+value.variantId.id+">"+value.endingQty+"</td>" +
 									"<td><input id="+value.variantId.id+" class='check-item' type='checkbox' checked disabled></input></td>" +
 									"</tr>"
 							);
-							/*$('#pay-sods').prop('disabled',true);*/
+							$('#pay-sods').prop('disabled',true);
 							$('#nama-item').val('');
 						}
 		
@@ -65,7 +68,8 @@ $(function() {
 		var id = $(this).attr('id');
 		var hargaUnit = $('.hargaaaa'+id).text().split("Rp.")[1];
 		var hargaTotal = jumlah * hargaUnit;
-		$('#total'+id).val("Rp."+hargaTotal);
+		$('#totaal'+id).val("Rp."+hargaTotal);
+		$('#total'+id).val("Rp."+(parseInt(hargaTotal).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,')));
 		$('#total-harga-fix').empty();
 		var total = 0;
 		$('#salesorder > tbody > tr').each(function(index,value) {
@@ -74,14 +78,25 @@ $(function() {
 		})
 		$('#total-harga-fix').append(
 				"<tr>" +
-				"<td>Rp."+total+"</td>" +
+				"<td style='display:none;'>Rp."+total+"</td>" +
+				"<td>Rp."+(parseInt(total).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td>" +
 				"</tr>" 
 		)
-		var harga = $('#total-harga-fix').text().split("Rp.")[1];
-		$('.bayar-sod').text("Charge Rp."+harga);
+		var harga = $('#total-harga-fix').eq(0).text().split("Rp.")[1];
+		/*$('.bayar-sod').text("Charge Rp."+harga);*/
+		if(parseInt(jumlah) > parseInt($('.qty-item'+id).text())){
+			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled',true);
+			alert('stock tidak mencukupi');
+		}
+		else if(parseInt(harga) == 0){
+			$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled',true);
+		}
+		else{
+			$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled',false);
+		}
 	})	
 	
-	var idx ;
+	var idx;
 	
 	$('body').on('click', ':checkbox', function(){
 		var id = $(this).attr('id');
@@ -94,6 +109,7 @@ $(function() {
 				"<tr id=ritemx"+id+">" +
 				"<td id="+id+">"+$('.nama-item'+id).text()+"</td>" +
 				"<td><input min='0' max="+$('.qty-itemqty'+id).text()+" id=qty"+id+" type='number' class='quantity'></input></td>" +
+				"<td style='display:none;' ><output type='text' id='totaalqty"+id+"'>Rp.0</output></td>" +
 				"<td><output type='text' id='totalqty"+id+"'>Rp.0</output></td>" +
 				"<td style='display:none;' class= hargaaaaqty"+id+">Rp."+$('.harga-item'+id).text().split("Rp.")[1]+"</td>" +
 				"<td><a href='#' id=x"+id+" class='delete btn btn-danger'>X</td>" +
@@ -111,13 +127,12 @@ $(function() {
 				"</tr>"
 		)
 		var harga = $('#total-harga-fix').text().split("Rp.")[1];
-		$('.bayar-sod').text("Charge Rp."+harga);
-		/*
+		/*$('.bayar-sod').text("Charge Rp."+harga);*/
 		if(harga == 0){
 			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled', true);
 		}else{
 			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled', false);
-		}*/
+		}
 				
 	});
 	
@@ -127,7 +142,6 @@ $(function() {
 		$('#table-item').empty();
 		var getIndex = allReadyId.indexOf(id.toString());
 		allReadyId.splice(getIndex,1);
-		document.getElementById(idx).disabled=false;
 		$('#ritem'+id).remove();
 		$('#'+idx).prop('checked', false);
 		console.log(allReadyId);
@@ -143,7 +157,14 @@ $(function() {
 				"</tr>"
 		)
 		var harga = $('#total-harga-fix').text().split("Rp.")[1];
-		$('.bayar-sod').text("Charge Rp."+harga);
+		/*$('.bayar-sod').text("Charge Rp."+harga);*/
+		if(parseInt(harga) == 0){
+			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled',true);
+		}
+		else{
+			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled',false);
+		}
+		
 	});
 	
 //-------------------------------------------------------------------------------------------------------------------------------
@@ -181,15 +202,15 @@ $(function() {
 	
 	$('#btn-payment').click(function() {
 		var pay = $('#cash-price').val();
-		var total = parseInt($('.bayar-sod').text().split("Charge Rp.")[1]);
+		var total = parseInt($('#total-harga-fix').eq(0).text().split("Rp.")[1]);
 		if(parseInt(pay) < parseInt(total)){
 			alert('Maaf pembelian gagal');
 		}
 		else{
 			$('#pembayaran').modal('toggle');
 			$('#finish').modal();
-			$('#id-pay').val("Out of Rp."+pay);
-			$('#id-finish').val("Rp."+(pay-total));
+			$('#id-pay').val("Out of Rp."+(parseInt(pay).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,')));
+			$('#id-finish').val("Rp."+(parseInt(pay-total).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,')));
 			var salesOrderDetail = [];
 			$('#list-item-pilih > tr').each(function(index,data) {
 				var detail= {
@@ -197,7 +218,7 @@ $(function() {
 							id : $(data).find('td').eq(0).attr('id'),
 						},
 						qty : $('#qty'+$(data).find('td').eq(0).attr('id')).val(),
-						unitCost : $(data).find('td').eq(3).text().split("Rp.")[1],
+						unitCost : $(data).find('td').eq(4).text().split("Rp.")[1],
 						subTotal : $(data).find('td').eq(2).text().split("Rp.")[1]
 						
 				}
@@ -210,7 +231,7 @@ $(function() {
 								id : $('.customer').attr('id'),
 							},
 							salesOrderDetails : salesOrderDetail,
-							grandTotal :  parseInt($('.bayar-sod').text().split("Charge Rp.")[1]),
+							grandTotal :  parseInt($('#total-harga-fix').eq(0).text().split("Rp.")[1]),
 							modifiedOn : null,
 					}
 					console.log(so);
@@ -220,7 +241,9 @@ $(function() {
 						data : JSON.stringify(so),
 						contentType : 'application/json',
 						success : function(data) {
-								$.ajax({
+							soid= data;
+							alert(soid);
+							$.ajax({
 									url : baseUrl+"/salesorder/update-stock",
 									type : 'PUT',
 									contentType : 'application/json',
@@ -234,7 +257,6 @@ $(function() {
 											
 								});
 							alert('transaction success');
-							//window.location = baseUrl+"/salesorder/index";
 						},//ajaxsave
 						error : function() {
 							alert('save error');
@@ -477,6 +499,15 @@ $(function() {
 				});
 			}
 		});
+		
+//---------------------------------------------------------------------------------------------------print----------------------
+		
+		$('#btn-print').click(function() {
+			var id = soid;
+			window.open(baseUrl+'generate/sales-order/'+id, '_blank');
+			window.location = baseUrl+"salesorder/index";
+			
+		})
 				
 		
 });

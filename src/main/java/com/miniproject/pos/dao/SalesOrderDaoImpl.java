@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.miniproject.pos.model.SalesOrder;
+import com.miniproject.pos.model.SalesOrderDetail;
 
 @Repository
 public class SalesOrderDaoImpl implements SalesOrderDao{
@@ -46,6 +47,18 @@ public class SalesOrderDaoImpl implements SalesOrderDao{
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
 		return session.createCriteria(SalesOrder.class).list();
+	}
+
+	@Override
+	public List<SalesOrderDetail> getSalesOrderDetailByIdSalesOrder(String soId) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "from SalesOrderDetail sod where sod.salesOrder.id = :id";
+		List<SalesOrderDetail> sods = session.createQuery(hql).setParameter("id", soId).list();
+		if (sods.isEmpty()) {
+			return null;
+		}
+		return sods;
 	}
 
 }

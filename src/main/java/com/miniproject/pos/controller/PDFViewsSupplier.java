@@ -1,5 +1,6 @@
 package com.miniproject.pos.controller;
 
+import java.io.StringReader;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.view.document.AbstractPdfView;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.Element;
+import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.miniproject.pos.model.Supplier;
@@ -36,6 +38,12 @@ public class PDFViewsSupplier extends AbstractPdfView{
 				table.addCell(supp.getPhone()); 
 				table.addCell(supp.getEmail()); 
 			}
+			HTMLWorker htmlWorker = new HTMLWorker(doc);
+		      String str = "<html><head></head><body>"+
+		        "<h1 style='text-align: center;'>Supplier</h1>" +
+		        "<br/>" +
+		        "</body></html>";
+		      htmlWorker.parse(new StringReader(str));
 			doc.add(table);
 	}
 }
