@@ -1,7 +1,5 @@
 $(document).ready(function(){
 	
-	
-	
 	//setting up data tables
 	var tabPR = $('#pr-table').DataTable({searching : false, paging : false});
 	var tabSaveItem = $('#table-item-save').DataTable({searching : false, paging : false});
@@ -421,7 +419,8 @@ $(document).ready(function(){
 					});
 				}
 			} else if($('#set-status').val()=='print'){
-				console.log('print');
+				var id = pr.id;
+				window.location = baseUrl+"generate/purchase-request-detail/"+id;
 			} else if($('#set-status').val()=='createPO'){
 				if(pr.status=='approved'){
 					delete pr.createdOnFormatted;
@@ -682,5 +681,13 @@ $(document).ready(function(){
 		
 		});
 	});
+	
+	
+	//Export
+	
+	$('#btn-export').on('click', function(){
+		window.location = baseUrl + "generate/purchase-request";
+	});
+	
 	
 });

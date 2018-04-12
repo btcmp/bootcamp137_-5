@@ -13,9 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.miniproject.pos.model.PurchaseOrder;
+import com.miniproject.pos.model.PurchaseRequest;
+import com.miniproject.pos.model.PurchaseRequestDetail;
 import com.miniproject.pos.model.SalesOrder;
 import com.miniproject.pos.model.SalesOrderDetail;
 import com.miniproject.pos.model.Supplier;
+import com.miniproject.pos.service.PurchaseRequestService;
 import com.miniproject.pos.service.SalesOrderDetailService;
 import com.miniproject.pos.service.SalesOrderService;
 import com.miniproject.pos.service.SupplierService;
@@ -23,6 +27,9 @@ import com.miniproject.pos.service.SupplierService;
 @Controller
 @RequestMapping("/generate")
 public class PDFControllerr {
+	
+	@Autowired
+	PurchaseRequestService prService;
 	
 	@Autowired
 	SupplierService supplierService;
@@ -56,4 +63,22 @@ public class PDFControllerr {
 
 	return new ModelAndView("ViewSalesOrderpdf","sos",sos);
 	}
+	
+	@RequestMapping(value = "/purchase-request", method = RequestMethod.GET)
+	ModelAndView generatePdfPR(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		response.setHeader("Content-Disposition", "attachment; filename=\"purchase-request.pdf\"");
+		response.setContentType("application/pdf");
+		List<PurchaseRequest> listPR = prService.getAll();
+		return new ModelAndView("ViewPurchaseRequestPdf", "listPR", listPR);
+	}
+	
+	@RequestMapping(value = "/purchase-request-detail/{id}", method = RequestMethod.GET)
+	ModelAndView generatePdfPRD(HttpServletRequest request, @PathVariable String id, HttpServletResponse response) throws Exception{
+		response.setHeader("Content-Disposition", "attachment; filename=\"purchase-request-detail.pdf\"");
+		response.setContentType("application/pdf");
+		PurchaseRequest pr = prService.get(id);
+		return new ModelAndView("ViewPurchaseRequestDetailPdf", "pr", pr);
+	}
+	
+	
 }
