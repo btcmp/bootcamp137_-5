@@ -121,5 +121,9 @@ public class PurchaseRequestService {
 		// TODO Auto-generated method stub
 		return purchaseRequestDAO.getListPRBySearch(search);
 	}
-	
+
+	public List<PurchaseRequest> getListPRByDate(Date start, Date end) {
+		// TODO Auto-generated method stub
+		return purchaseRequestDAO.getListPRByDate(start,end);
+	}
 }

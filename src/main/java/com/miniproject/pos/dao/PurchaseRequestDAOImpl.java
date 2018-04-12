@@ -1,5 +1,6 @@
 package com.miniproject.pos.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -109,6 +110,20 @@ public class PurchaseRequestDAOImpl implements PurchaseRequestDAO{
 		Session session = sessionFactory.getCurrentSession();
 		String hql = "from PurchaseRequest where lower(prNo) like :search or lower(notes) like :search or lower(status) like :search";
 		List<PurchaseRequest> listPR = session.createQuery(hql).setParameter("search","%"+search.toLowerCase()+"%").list();
+		
+		if (listPR.isEmpty()) {
+			return null;
+		}  else {
+			return listPR;
+		}
+	}
+
+	@Override
+	public List<PurchaseRequest> getListPRByDate(Date start, Date end) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "from PurchaseRequest pr where pr.createdOn between :startDate and :endDate";
+		List<PurchaseRequest> listPR = session.createQuery(hql).setParameter("startDate", start).setParameter("endDate", end).list();
 		
 		if (listPR.isEmpty()) {
 			return null;

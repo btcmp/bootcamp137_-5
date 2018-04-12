@@ -1,7 +1,5 @@
 $(document).ready(function(){
 	
-	$('#search-date-range').daterangepicker();
-	
 	//setting up data tables
 	var tabPO = $('#po-table').DataTable({searching : false, paging : false});
 	var tabEditItem = $('#table-item-edit').DataTable({searching : false,paging : false,dataTables_info:false});
@@ -282,14 +280,25 @@ $(document).ready(function(){
 			success : function(listPO){
 				if(listPO != ''){
 					$.each(listPO, function(index, po){
-						tabPO.row.add([
-							po.createdOnFormatted,
-							po.supplier.name,
-							po.poNo,
-							po.grandTotalFormatted,
-							po.status,
-							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
-						]).draw();
+						if(po.supplier==null){
+							tabPO.row.add([
+								po.createdOnFormatted,
+								'-',
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						} else {
+							tabPO.row.add([
+								po.createdOnFormatted,
+								po.supplier.name,
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						}
 					});
 				}
 			},
@@ -418,5 +427,79 @@ $(document).ready(function(){
 		}
 	});
 	
+	//search by text input
+	$('#search-text').on('change', function(){
+		if ($(this).val()==''){
+			refreshPOList();
+		} else {
+			getPOListBySearch($(this).val());
+		}
+	});
 	
+	function getPOListBySearch(search){
+		tabPO.clear();
+		$.ajax({
+			url : baseUrl+'purchase-order/get-list-by-search/'+search,
+			type : 'GET',
+			contentType : 'application/json',
+			success : function(listPO){
+				if(listPO != ''){
+					$.each(listPO, function(index, po){
+						tabPO.row.add([
+							po.createdOnFormatted,
+							po.supplier.name,
+							po.poNo,
+							po.grandTotalFormatted,
+							po.status,
+							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+						]).draw();
+					});
+				} else {
+					tabPO.draw();
+				}
+			},
+			error : function(){
+				alert('error getting data');
+			}
+		})
+	}
+	
+	
+	//search by date range
+	$('#search-date-range').daterangepicker({
+		locale : {
+			format: 'YYYY-MM-DD'
+		}	
+	});
+	
+	$('#search-date-range').on('change', function(){
+		var daterange = $(this).val().split(" - ");
+		var start = daterange[0];
+		var end = daterange[1];
+		$.ajax({
+			url : baseUrl+'purchase-order/search-by-date?start='+start+'&end='+end,
+			type : 'GET',
+			contentType : 'application/json',
+			success : function(listPO){
+				tabPO.clear();
+				if(listPO != ''){
+					$.each(listPO, function(index, po){
+						tabPO.row.add([
+							po.createdOnFormatted,
+							po.supplier.name,
+							po.poNo,
+							po.grandTotalFormatted,
+							po.status,
+							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+						]).draw();
+					});
+				} else {
+					tabPO.draw();
+				}
+			},
+			error : function(){
+				alert('error getting data');
+			}
+		});
+	});
 });

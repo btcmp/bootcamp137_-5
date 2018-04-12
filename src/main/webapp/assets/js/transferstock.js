@@ -239,7 +239,7 @@ $(document).ready(function() {
     
     var variantOk;
     $('#form-variant').parsley().on('field:validated', function() {
-        variantOk = $('.parsley-error').length === 0;
+        variantOk = $(this).find('.parsley-error').length === 0;
      });
     $(document).on('submit','#form-variant', function(e) {
     	e.preventDefault();
@@ -319,6 +319,18 @@ $(document).ready(function() {
 	        			alert('gagal menghubungi server');
 	        		}
 	        	});
+    });
+    
+    $('#list-item-body').delegate('.delete-item','click', function() {
+    	var id = $(this).attr("data-id");
+    	if(detailTransfer.length >1){
+    		if(confirm("delete item ?")){ 		
+    			detailTransfer.splice(id, 1);
+		    	createTableTransfer(detailTransfer);
+    		}
+    	}else{
+			alert("Warning!!! Could not delete item. Transfer must have at least one item");
+		}
     });
     
     function createTableTransfer(data){

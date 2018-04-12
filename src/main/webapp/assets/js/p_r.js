@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	
-	$('#search-date-range').daterangepicker();
+	
 	
 	//setting up data tables
 	var tabPR = $('#pr-table').DataTable({searching : false, paging : false});
@@ -458,7 +458,7 @@ $(document).ready(function(){
 	
 	//Search Item Variant
 	var options = {
-			url : baseUrl+'items/get-all-variant',
+			url : baseUrl+'items/get-all-inventory',
 			getValue : function(response){
 				return response.variantId.itemId.name + ' - ' + response.variantId.name;
 			},
@@ -645,5 +645,42 @@ $(document).ready(function(){
 	}
 	
 	
+	//search by date range
+	$('#search-date-range').daterangepicker({
+		locale : {
+			format: 'YYYY-MM-DD'
+		}	
+	});
+	
+	$('#search-date-range').on('change', function(){
+		var daterange = $(this).val().split(" - ");
+		var start = daterange[0];
+		var end = daterange[1];
+		$.ajax({
+			url : baseUrl+'purchase-request/search-by-date?start='+start+'&end='+end,
+			type : 'GET',
+			contentType : 'application/json',
+			success : function(listPR){
+				tabPR.clear();
+				if(listPR != ''){
+					$.each(listPR, function(index, pr){
+						tabPR.row.add([
+							pr.createdOnFormatted,
+							pr.prNo,
+							pr.notes,
+							pr.status,
+							'<button id="' + pr.id + '" class="edit btn btn-secondary">Edit</button><button id="' + pr.id + '" class="view btn btn-secondary">View</button>'		
+						]).draw();
+					});
+				} else {
+					tabPR.draw();
+				}
+			},
+			error : function(){
+				alert('error getting data');
+			}
+		
+		});
+	});
 	
 });
