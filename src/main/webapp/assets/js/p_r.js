@@ -175,30 +175,22 @@ $(document).ready(function(){
 		var offside = 0;
 		$('#list-item').find('input[type="number"]').each(function(){
 			if($(this).val() > 0){
-				if($(this).val() > parseInt($(this).closest('tr').find('td').eq(1).text())){
-					offside = 1;
-				} else {
-					item = {
-						name: $(this).closest('tr').find('td').eq(0).text(),
-						quantity: $(this).closest('tr').find('td').eq(1).text(),
-						id: $(this).attr('id'),
-						requestQty : $(this).val()
-					};
-					listItem.push(item);
-				}
+				item = {
+					name: $(this).closest('tr').find('td').eq(0).text(),
+					quantity: $(this).closest('tr').find('td').eq(1).text(),
+					id: $(this).attr('id'),
+					requestQty : $(this).val()
+				};
+				listItem.push(item);
 			}
 		});
-		if (offside == 1){
-			alert('requested quantity is more than stock, please review your request.');
-		} else {
-			parent = $('#modal-list-item').attr('parent')
-			if(parent=='save'){
-				$('#list-selected-item-save').attr('listItem',JSON.stringify(listItem));
-			} else if(parent=='edit'){
-				$('#list-selected-item-edit').attr('listItem',JSON.stringify(listItem));
-			}
-			$('#modal-list-item').modal('hide');
+		parent = $('#modal-list-item').attr('parent')
+		if(parent=='save'){
+			$('#list-selected-item-save').attr('listItem',JSON.stringify(listItem));
+		} else if(parent=='edit'){
+			$('#list-selected-item-edit').attr('listItem',JSON.stringify(listItem));
 		}
+		$('#modal-list-item').modal('hide');
 	});
 	
 	$('#table-item-save').delegate('.del-item', 'click', function(){
@@ -246,6 +238,8 @@ $(document).ready(function(){
 	});
 	
 	$('#btn-exec-save').on('click', function(){
+		var formSave = $('#form-save-pr');
+		var validSave = formSave.parsley().validate();
 		var listDetail = [];
 		$('#table-item-save').find('button[type="button"]').each(function(){
 			var itemVariantId = $(this).attr('id');
@@ -265,19 +259,27 @@ $(document).ready(function(){
 			listPurchaseRequestDetail : listDetail,
 			listPurchaseRequestHistory : listHistory
 		}
-		$.ajax({
-			url : baseUrl+'purchase-request/save',
-			type : 'POST',
-			contentType : 'application/json',
-			data : JSON.stringify(purchaseRequest),
-			success : function(){
-				alert('save pr success');
-				window.location = baseUrl+'purchase-request';
-			},
-			error : function(){
-				alert('save pr failed');
+		
+		if(listDetail[0] != null){
+			if (validSave==true){
+				$.ajax({
+					url : baseUrl+'purchase-request/save',
+					type : 'POST',
+					contentType : 'application/json',
+					data : JSON.stringify(purchaseRequest),
+					success : function(){
+						alert('save pr success');
+						window.location = baseUrl+'purchase-request';
+					},
+					error : function(){
+						alert('save pr failed');
+					}
+				});
 			}
-		});
+		} else {
+			alert('Please choose the item first!');
+		}
+		
 		
 	});
 	

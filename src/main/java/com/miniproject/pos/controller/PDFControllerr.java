@@ -19,6 +19,7 @@ import com.miniproject.pos.model.PurchaseRequestDetail;
 import com.miniproject.pos.model.SalesOrder;
 import com.miniproject.pos.model.SalesOrderDetail;
 import com.miniproject.pos.model.Supplier;
+import com.miniproject.pos.service.PurchaseOrderService;
 import com.miniproject.pos.service.PurchaseRequestService;
 import com.miniproject.pos.service.SalesOrderDetailService;
 import com.miniproject.pos.service.SalesOrderService;
@@ -30,6 +31,9 @@ public class PDFControllerr {
 	
 	@Autowired
 	PurchaseRequestService prService;
+	
+	@Autowired
+	PurchaseOrderService poService;
 	
 	@Autowired
 	SupplierService supplierService;
@@ -80,5 +84,19 @@ public class PDFControllerr {
 		return new ModelAndView("ViewPurchaseRequestDetailPdf", "pr", pr);
 	}
 	
+	@RequestMapping(value = "/purchase-order", method = RequestMethod.GET)
+	ModelAndView generatePdfPO(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		response.setHeader("Content-Disposition", "attachment; filename=\"purchase-order.pdf\"");
+		response.setContentType("application/pdf");
+		List<PurchaseOrder> listPO = poService.getAll();
+		return new ModelAndView("ViewPurchaseOrderPdf", "listPO", listPO);
+	}
 	
+	@RequestMapping(value = "/purchase-order-detail/{id}", method = RequestMethod.GET)
+	ModelAndView generatePdfPOD(HttpServletRequest request, @PathVariable String id, HttpServletResponse response) throws Exception{
+		response.setHeader("Content-Disposition", "attachment; filename=\"purchase-order-detail.pdf\"");
+		response.setContentType("application/pdf");
+		PurchaseOrder po = poService.get(id);
+		return new ModelAndView("ViewPurchaseOrderDetailPdf", "po", po);
+	}
 }

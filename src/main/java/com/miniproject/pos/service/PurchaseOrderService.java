@@ -89,7 +89,7 @@ public class PurchaseOrderService {
 		purchaseRequestDAO.update(pr);
 	}
 	
-	public void update(PurchaseOrder po) {
+	public void update(PurchaseOrder po, User editor) {
 		PurchaseOrder prevPO = get(po.getId());
 		
 		for (PurchaseOrderDetail ppod : prevPO.getListPurchaseOrderDetail()) {
@@ -103,7 +103,7 @@ public class PurchaseOrderService {
 		prevPO.setGrandTotal(po.getGrandTotal());
 		prevPO.setSupplier(supplierService.getOne(po.getSupplier().getId()));
 		prevPO.setNotes(po.getNotes());
-		System.out.println(prevPO.getNotes()+" ini note");
+		prevPO.setModifiedBy(editor);
 		purchaseOrderDAO.update(prevPO);
 	}
 	
