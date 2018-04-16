@@ -22,6 +22,12 @@ $(document).ready(function(){
 					$('#edit-poNo').val(po.poNo);
 					$('#edit-notes').val(po.notes);
 					$('#edit-grandTotal').val(po.grandTotal);
+					if(po.supplier != null){
+						$('#edit-supplier').val(po.supplier.id);
+						$('#btn-exec-submit').prop('disabled', false);
+					} else {
+						$('#btn-exec-submit').prop('disabled', true);
+					}
 					
 					var	listDetail = po.listPurchaseOrderDetail;
 					var listItem = [];
@@ -30,7 +36,6 @@ $(document).ready(function(){
 					$.each(listDetail, function(index, detail){
 						item = {
 								name: detail.variant.itemId.name + ' - ' + detail.variant.name,
-								quantity: 2,
 								id: detail.variant.id,
 								requestQty : detail.requestQty,
 								unitCost : detail.unitCost,
@@ -42,7 +47,6 @@ $(document).ready(function(){
 					$.each(listItem, function(index,item){
 						tabEditItem.row.add([
 							item.name,
-							item.quantity,
 							item.requestQty,
 							'<input type="text" style="border:none" class="edit-unitCost" id="'+ item.id +'" value="'+ item.unitCost +'">',
 							'<input type="text" style="border:none" class="edit-subTotal" value="'+ item.subTotal +'" readonly>'
@@ -103,7 +107,7 @@ $(document).ready(function(){
 						detail.subTotal
 					]).draw();
 				});
-				$('#view-grandTotal').text(po.grandTotal);
+				$('#view-grandTotal').val(po.grandTotal);
 				$('#btn-done-view').attr('currentstatus',po.status);
 			},
 			error : function(){
@@ -265,7 +269,7 @@ $(document).ready(function(){
 				});
 			}
 		} else if(setstatus=='print'){
-			alert('under construction');
+			window.location = baseUrl + "generate/purchase-order-detail/"+idPO;
 		}
 	});
 	
@@ -318,14 +322,25 @@ $(document).ready(function(){
 			success : function(listPO){
 				if(listPO != ''){
 					$.each(listPO, function(index, po){
-						tabPO.row.add([
-							po.createdOnFormatted,
-							po.supplier.name,
-							po.poNo,
-							po.grandTotalFormatted,
-							po.status,
-							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
-						]).draw();
+						if(po.supplier==null){
+							tabPO.row.add([
+								po.createdOnFormatted,
+								'-',
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						} else {
+							tabPO.row.add([
+								po.createdOnFormatted,
+								po.supplier.name,
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						}
 					});
 				}
 			},
@@ -344,14 +359,25 @@ $(document).ready(function(){
 			success : function(listPO){
 				if(listPO != ''){
 					$.each(listPO, function(index, po){
-						tabPO.row.add([
-							po.createdOnFormatted,
-							po.supplier.name,
-							po.poNo,
-							po.grandTotalFormatted,
-							po.status,
-							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
-						]).draw();
+						if(po.supplier==null){
+							tabPO.row.add([
+								po.createdOnFormatted,
+								'-',
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						} else {
+							tabPO.row.add([
+								po.createdOnFormatted,
+								po.supplier.name,
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						}
 					});
 				}
 			},
@@ -370,14 +396,25 @@ $(document).ready(function(){
 			success : function(listPO){
 				if(listPO != ''){
 					$.each(listPO, function(index, po){
-						tabPO.row.add([
-							po.createdOnFormatted,
-							po.supplier.name,
-							po.poNo,
-							po.grandTotalFormatted,
-							po.status,
-							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
-						]).draw();
+						if(po.supplier==null){
+							tabPO.row.add([
+								po.createdOnFormatted,
+								'-',
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						} else {
+							tabPO.row.add([
+								po.createdOnFormatted,
+								po.supplier.name,
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						}
 					});
 				}
 			},
@@ -396,14 +433,25 @@ $(document).ready(function(){
 			success : function(listPO){
 				if(listPO != ''){
 					$.each(listPO, function(index, po){
-						tabPO.row.add([
-							po.createdOnFormatted,
-							po.supplier.name,
-							po.poNo,
-							po.grandTotalFormatted,
-							po.status,
-							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
-						]).draw();
+						if(po.supplier==null){
+							tabPO.row.add([
+								po.createdOnFormatted,
+								'-',
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						} else {
+							tabPO.row.add([
+								po.createdOnFormatted,
+								po.supplier.name,
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						}
 					});
 				}
 			},
@@ -445,17 +493,26 @@ $(document).ready(function(){
 			success : function(listPO){
 				if(listPO != ''){
 					$.each(listPO, function(index, po){
-						tabPO.row.add([
-							po.createdOnFormatted,
-							po.supplier.name,
-							po.poNo,
-							po.grandTotalFormatted,
-							po.status,
-							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
-						]).draw();
+						if(po.supplier==null){
+							tabPO.row.add([
+								po.createdOnFormatted,
+								'-',
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						} else {
+							tabPO.row.add([
+								po.createdOnFormatted,
+								po.supplier.name,
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						}
 					});
-				} else {
-					tabPO.draw();
 				}
 			},
 			error : function(){
@@ -473,6 +530,7 @@ $(document).ready(function(){
 	});
 	
 	$('#search-date-range').on('change', function(){
+		tabPO.clear();
 		var daterange = $(this).val().split(" - ");
 		var start = daterange[0];
 		var end = daterange[1];
@@ -481,20 +539,28 @@ $(document).ready(function(){
 			type : 'GET',
 			contentType : 'application/json',
 			success : function(listPO){
-				tabPO.clear();
 				if(listPO != ''){
 					$.each(listPO, function(index, po){
-						tabPO.row.add([
-							po.createdOnFormatted,
-							po.supplier.name,
-							po.poNo,
-							po.grandTotalFormatted,
-							po.status,
-							'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
-						]).draw();
+						if(po.supplier==null){
+							tabPO.row.add([
+								po.createdOnFormatted,
+								'-',
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						} else {
+							tabPO.row.add([
+								po.createdOnFormatted,
+								po.supplier.name,
+								po.poNo,
+								po.grandTotalFormatted,
+								po.status,
+								'<button id="' + po.id + '" class="edit btn btn-secondary">Edit</button><button id="' + po.id + '" class="view btn btn-secondary">View</button>'		
+							]).draw();
+						}
 					});
-				} else {
-					tabPO.draw();
 				}
 			},
 			error : function(){
@@ -502,4 +568,10 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	
+	$('#btn-export').on('click', function(){
+		window.location = baseUrl + "generate/purchase-order";
+	});
+	
 });

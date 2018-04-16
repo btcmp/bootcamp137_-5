@@ -89,7 +89,9 @@ public class PurchaseOrderController {
 	@RequestMapping(value="/edit", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public void edit(@RequestBody PurchaseOrder po) {
-		poService.update(po);
+		User editor = new User();
+		editor.setId(httpSession.getAttribute("userId").toString());
+		poService.update(po, editor);
 	}
 	
 	

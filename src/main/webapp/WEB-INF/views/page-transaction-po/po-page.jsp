@@ -119,7 +119,7 @@
 								<br>
 								<div>
 									<label for="edit-notes">Notes</label>
-									<input type="text" id="edit-notes" class="form-control" style="height:100px">
+									<textarea id="edit-notes" class="form-control" style="height:100px"></textarea>
 								</div>
 								<br>
 								<br>
@@ -129,7 +129,6 @@
 										<thead>
 											<tr>
 												<th>Item</th>
-												<th>In Stock</th>
 												<th>Qty.</th>
 												<th>Unit Cost</th>
 												<th>Sub Total</th>
@@ -140,7 +139,6 @@
 										<tfoot>
 											<tr>
 												<td><label for="edit-grandTotal">Total</label></td>
-												<td></td>
 												<td></td>
 												<td></td>
 												<td><input style="border:none" id="edit-grandTotal" readonly></td>
@@ -168,7 +166,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<p>Purchase Request Detail</p>
+					<p><b>Purchase Request Detail</b></p>
 					<div align="right">
 						<select id="set-status">
 							<option value="approve">Approve</option>
@@ -196,7 +194,7 @@
 							</table>
 						</div>
 						<div>
-							<p>Notes:</p>
+							<p><b>Notes:</b></p>
 							<input type="text" id="view-notes" style="height:100px; width:100%;" disabled>
 						</div>
 						<div>
@@ -210,7 +208,7 @@
 						</div>
 						<hr>
 						<div>
-							<p>Status History</p>
+							<p><b>Status History</b></p>
 							<hr>
 							<table id="view-table-history">
 								<thead><tr><th></th></tr></thead>
@@ -219,7 +217,7 @@
 						</div>
 						<hr>
 						<div>
-							<p>Purchase Items</p>
+							<p><b>Purchase Items</b></p>
 							<hr>
 							<table id="view-table-detail" style = "width:100%">
 								<thead>
@@ -231,11 +229,15 @@
 									</tr>
 								</thead>
 								<tbody></tbody>
+								<tfoot>			
+									<tr>
+										<td><label for="view-grandTotal"><b>Total</b></label></td>
+										<td></td>
+										<td></td>
+										<td><input style="border:none" id="view-grandTotal" readonly></td>
+									</tr>
+								</tfoot>
 							</table>
-						</div>
-						<div>
-							<label for="view-grandTotal">Total</label>
-							<input style="border:none" id="view-grandTotal" readonly>
 						</div>
 					</div>
 				</div>

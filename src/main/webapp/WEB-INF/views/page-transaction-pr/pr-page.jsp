@@ -102,10 +102,10 @@
 							<hr>
 						</div>
 						<div> 
-							<form class="form-room">
+							<form class="form-room" id="form-save-pr">
 								<div>
 									<label for="save-item-ready">Target Waktu Item Ready</label>
-									<input type="date" class="form-control" id="save-item-ready">
+									<input required type="date" class="form-control" id="save-item-ready">
 								</div>
 								<br>
 								<br>
@@ -234,7 +234,7 @@
 						</div>
 						<div>
 							<p><b>Notes:</b></p>
-							<input type="text" id="view-notes" style="height:100px; width:100%;" disabled>
+							<textarea id="view-notes" style="height:100px; width:100%;" disabled></textarea>
 						</div>
 						<br>
 						<br>
