@@ -2,6 +2,8 @@ package com.miniproject.pos.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import com.miniproject.pos.model.Customer;
 import com.miniproject.pos.model.District;
 import com.miniproject.pos.model.Provinsi;
 import com.miniproject.pos.model.Region;
+import com.miniproject.pos.model.User;
 import com.miniproject.pos.service.CustomerService;
 import com.miniproject.pos.service.DistrictService;
 import com.miniproject.pos.service.ProvinsiService;
@@ -38,6 +41,9 @@ public class CustomerController {
 	@Autowired
 	DistrictService districtService;
 	
+	@Autowired
+	private HttpSession httpSession;
+	
 	@RequestMapping(value="/index")
 	public String index(Model model) {
 		List<Customer> customers = customerService.selectAll();
@@ -54,7 +60,9 @@ public class CustomerController {
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void save(@RequestBody Customer customer) {
-		customerService.save(customer);
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		customerService.save(customer, user);
 	}
 	
 	@RequestMapping(value="/update", method=RequestMethod.PUT)

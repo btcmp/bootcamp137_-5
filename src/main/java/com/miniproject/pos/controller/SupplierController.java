@@ -3,6 +3,8 @@ package com.miniproject.pos.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import com.miniproject.pos.model.District;
 import com.miniproject.pos.model.Provinsi;
 import com.miniproject.pos.model.Region;
 import com.miniproject.pos.model.Supplier;
+import com.miniproject.pos.model.User;
 import com.miniproject.pos.service.DistrictService;
 import com.miniproject.pos.service.ProvinsiService;
 import com.miniproject.pos.service.RegionService;
@@ -39,6 +42,9 @@ public class SupplierController {
 	
 	@Autowired
 	DistrictService districtService;
+	
+	@Autowired
+	private HttpSession httpSession;
 	
 	@RequestMapping(value="/index")
 	public String index(Model model) {
@@ -69,13 +75,25 @@ public class SupplierController {
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void save (@RequestBody Supplier supplier) {
-		supplierService.save(supplier);
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		supplierService.save(supplier, user);
 	}
 	
 	@RequestMapping(value="/update", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public void update(@RequestBody Supplier supplier) {
-		supplierService.update(supplier);
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		supplierService.update(supplier, user);
+	}
+	
+	@RequestMapping(value="/deactive", method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public void deactive(@RequestBody Supplier supplier) {
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		supplierService.deactive(supplier, user);
 	}
 	
 	@RequestMapping(value="/get-id/{id}", method = RequestMethod.GET)
@@ -131,6 +149,17 @@ public class SupplierController {
 			listemail.add(supplier.getEmail());
 		}
 		return listemail;
+	}
+	
+	@RequestMapping(value="/get-all-phone", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getAllPhone(){
+		List<String> listphone = new ArrayList<>();
+		List<Supplier> supphone = supplierService.getAll();
+		for (Supplier supplier : supphone) {
+			listphone.add(supplier.getPhone());
+		}
+		return listphone;
 	}
 	
 }

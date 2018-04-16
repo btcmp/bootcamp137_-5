@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.miniproject.pos.dao.CustomerDao;
 import com.miniproject.pos.model.Customer;
+import com.miniproject.pos.model.User;
 
 @Service
 @Transactional
@@ -16,7 +17,9 @@ public class CustomerService {
 	@Autowired
 	CustomerDao customerDao;
 	
-	public void save(Customer customer) {
+	public void save(Customer customer, User user) {
+		customer.setActive(true);
+		customer.setCreatedBy(user);
 		customerDao.save(customer);
 	}
 	

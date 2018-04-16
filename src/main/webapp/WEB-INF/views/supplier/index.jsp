@@ -34,7 +34,6 @@
 								<th style="width: 18%; text-align: center;">Address</th>
 								<th style="width: 18%; text-align: center;">Phone</th>
 								<th style="width: 18%; text-align: center;">Email</th>
-								<th style="width: 18%; text-align: center;">Active</th>
 								<th style="width: 10%; text-align: center;">#</th>
 							</tr>
 						</thead>
@@ -45,11 +44,9 @@
 							 		<td>${sups.address}</td>
 							 		<td>${sups.phone}</td>
 							 		<td>${sups.email}</td>
-							 		<td>${sups.active}</td>
 							 		<td>
 							 			<!-- class untuk selektor -->
 							 			 <a id="${sups.id}" class="editsupplier" href="#" >edit</a>
-							 			 <%-- <a id="${sups.id}" class="id-nonactive btn btn-danger" href="#" >X</a> --%>
 							 		</td>
 							 	</tr>
 							</c:forEach>
@@ -76,11 +73,11 @@
 			<div class="modal-body">
 				<form id="form-save" action="#">
 					<div class="form-group">
-						<input required data-parsley-length= "[4,50]" type="text" class="form-control" id="save-name-sup" aria-describedby="emailHelp" placeholder="Supplier Name" />
+						<input required data-parsley-length= "[4,50]" type="text" class="form-control" id="save-name-sup" placeholder="Supplier Name" />
 					</div>
 					
 					<div class="form-group">
-						<input data-parsley-minlength= "4" type="text" class="form-control" id="save-address-sup" aria-describedby="emailHelp" placeholder="Address" />
+						<input data-parsley-minlength= "4" type="text" class="form-control" id="save-address-sup" placeholder="Address" />
 					</div>
 					
 					<div class="row form-group">
@@ -106,8 +103,9 @@
 					
 					<div class="row form-group">
 						<div class="col-sm-4"><input type="number" class="form-control" id="save-code-sup" placeholder="Postal Code" /></div>
-						<div data-parsley-required="true" class="col-sm-4" datavalid><input type="text" class="form-control" id="save-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
-						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="save-email-sup" aria-describedby="emailHelp" placeholder="Email" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="save-phone-sup" placeholder="Phone" /></div>
+						<div class="col-sm-4"><input style="display: none;" type="text" class="form-control" id="save-phone-sup-database" placeholder="Phone" /></div>
+						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="save-email-sup" placeholder="Email" /></div>
 					</div>
 				</form>
 			</div>
@@ -130,13 +128,16 @@
 			<div class="modal-body">
 				<form id="form-edit" action="#">
 					<input type="hidden" name="edit-id" id="edit-id-sup"/>
+					<input type="hidden" name="edit-createdOn-sup" id="edit-createdOn-sup"/>
+					<input type="hidden" name="edit-createdBy-sup" id="edit-createdBy-sup"/>
+					<input type="hidden" name="edit-active-sup" id="edit-active-sup"/>
 					
 					<div class="form-group">
-						<input required data-parsley-length="[4,50]" type="text" class="form-control" id="edit-name-sup" aria-describedby="emailHelp" placeholder="Outlet Name" />
+						<input required data-parsley-length="[4,50]" type="text" class="form-control" id="edit-name-sup" placeholder="Outlet Name" />
 					</div>
 					
 					<div class="form-group">
-						<input data-parsley-minlength="4" type="text" class="form-control" id="edit-address-sup" aria-describedby="emailHelp" placeholder="Address" />
+						<input data-parsley-minlength="4" type="text" class="form-control" id="edit-address-sup" placeholder="Address" />
 					</div>
 					
 					<div class="row form-group">
@@ -162,8 +163,9 @@
 					
 					<div class="row form-group">
 						<div class="col-sm-4"><input type="text" class="form-control" id="edit-code-sup" placeholder="Postel Code" /></div>
-						<div data-parsley-length="[4,16]" class="col-sm-4"><input type="text" class="form-control" id="edit-phone-sup" aria-describedby="emailHelp" placeholder="Phone" /></div>
-						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="edit-email-sup" aria-describedby="emailHelp" placeholder="Email" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="edit-phone-sup" placeholder="Phone" /></div>
+						<div style="display: none;" class="col-sm-4"><input type="text" class="form-control" id="edit-phone-sup-database" placeholder="Phone" /></div>
+						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="edit-email-sup" placeholder="Email" /></div>
 					</div>
 					
 				</form>

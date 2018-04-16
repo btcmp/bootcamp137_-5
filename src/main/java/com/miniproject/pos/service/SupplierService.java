@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.miniproject.pos.dao.SupplierDao;
 import com.miniproject.pos.model.Supplier;
+import com.miniproject.pos.model.User;
 
 @Service
 @Transactional
@@ -16,7 +17,9 @@ public class SupplierService {
 	@Autowired
 	SupplierDao supplierDao;
 	
-	public void save(Supplier supplier) {
+	public void save(Supplier supplier, User user) {
+		supplier.setActive(true);
+		supplier.setCreatedBy(user);
 		supplierDao.save(supplier);
 	}
 	
@@ -24,8 +27,15 @@ public class SupplierService {
 		supplierDao.delete(supplier);
 	}
 	
-	public void update(Supplier supplier) {
+	public void update(Supplier supplier, User user) {
+		supplier.setModifiedBy(user);
 		supplierDao.update(supplier);
+	}
+	
+	public void deactive(Supplier supplier, User user) {
+		supplier.setActive(false);
+		supplier.setModifiedBy(user);
+		update(supplier,user);
 	}
 	
 	public Supplier getOne(String id) {

@@ -44,12 +44,12 @@
 						<tfoot id="total-harga">
 							<tr>
 								<th colspan="3">TOTAL : </th>
-								<td colspan="1" id="total-harga-fix"></td>
+								<td colspan="1" id="total-harga-fix">Rp.0</td>
 							</tr>
 						</tfoot>
 					</table>
 						<a href="#" class="clear-sod btn btn-primary">Clear Sale</a>
-						<button id="pay-sods" class="bayar-sod btn btn-primary" disabled>Charge Rp</button>
+						<button id="pay-sods" class="bayar-sod btn btn-primary" disabled>Charge Rp.0</button>
 					</div>
 
 				</div>
@@ -73,7 +73,7 @@
 				<form action="#">
 				<div class="row	">
 					<div class="col-lg-6 form-group">
-						<input type="text" class="form-control" id="name-cust" aria-describedby="emailHelp" placeholder="Search Customer" />
+						<input type="text" class="form-control" id="name-cust" placeholder="Search Customer" />
 						</div>
 					<div class="col-lg-3">
 						<a id="cari-customer" class="col-lg-12 btn btn-primary" href="#">Search</a>
@@ -115,19 +115,20 @@
 				<form id="form-save" action="#">
 					<div class="form-group">
 						<label>PROFILE</label>
-						<input required data-parsley-length="[4,50]" type="text" class="form-control" id="save-name-cust" aria-describedby="emailHelp" placeholder="Customer Name" />
+						<input required data-parsley-length="[4,50]" type="text" class="form-control" id="save-name-cust" placeholder="Customer Name" />
 						<input required type="email" class="form-control" id="save-email-cust" aria-describedby="emailHelp" placeholder="Email" />
-						<input data-parsley-length="[4,16]" type="text" class="form-control" id="save-phone-cust" aria-describedby="emailHelp" placeholder="Phone ex.+62xxxxxxxxxx" />
+						<input type="text" class="form-control" id="save-phone-cust" aria-describedby="emailHelp" placeholder="Phone number" />
+						<input style="display: none;" type="text" class="form-control" id="save-phone-cust-database" placeholder="Phone number" />
 					</div>
 					
 					<div class="form-group">
 						<label>Day Of Birth</label>
-						<input type="date" max="2018-04-04" class="form-control" id="save-dob-cust" aria-describedby="emailHelp" placeholder="Day Of Birth" />
+						<input type="date" max="2018-04-04" class="form-control" id="save-dob-cust" placeholder="Day Of Birth" />
 					</div>
 					
 					<div class="form-group">
 						<label>Address</label>
-						<input data-parsley-minlength="4" style="height: 80px;" type="text" class="form-control" id="save-address-cust" aria-describedby="emailHelp" placeholder="address" />
+						<input data-parsley-minlength="4" style="height: 80px;" type="text" class="form-control" id="save-address-cust" placeholder="address" />
 					</div>
 					<div class="row">
 						<div class="col-lg-4">
@@ -195,17 +196,17 @@
 			<div class="modal-body">
 				<form action="#">
 					<div class="form-group"  style="text-align: center; margin-left: 25%;  margin-right: 25%;">
-						<output style="height: 80px; font-size: 30px;" type="number" class="form-control" id="id-finish" aria-de	scribedby="emailHelp"/>
+						<output style="height: 80px; font-size: 30px;" type="number" class="form-control" id="id-finish"/>
 					</div>
 					<div class="form-group" style="text-align: center; margin-left: 25%; margin-right: 25%;">
-						<output type="number" class="form-control" id="id-pay" aria-describedby="emailHelp"></output>
+						<output type="number" class="form-control" id="id-pay"></output>
 					</div>
 					<div style="text-align: center;">
 						<label>How do you want to receive your receipts?</label>
 					</div>
 					<div class="row form-group" style="margin-bottom: 20px;">
 						<div  class="col-lg-8">
-							<output type="number" class="form-control email-cust" aria-describedby="emailHelp"></output>
+							<output type="number" class="form-control email-cust"></output>
 						</div>
 						<div class="col-lg-4">
 							<button type="button" id="btn-send" class="form-control btn btn-primary">Send</button>

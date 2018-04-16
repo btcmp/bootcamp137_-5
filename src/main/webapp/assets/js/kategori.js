@@ -79,6 +79,7 @@ $(function() {
 				type : 'GET',
 				success : function(kat) {
 					setEditKategori(kat);
+					console.log(kat);
 					$('#editkat').modal();
 				},
 				error : function() {
@@ -90,6 +91,8 @@ $(function() {
 		function setEditKategori(kat) {
 			$('#edit-id').val(kat.id);
 			$('#edit-name-kat').val(kat.name);
+			$('#edit-createdon').val(kat.createdOn);
+			$('#edit-createdby').val(kat.createdBy.id);
 		}
 	
 		
@@ -101,12 +104,17 @@ $(function() {
 			var kat = {
 					id : $('#edit-id').val(),
 					name : $('#edit-name-kat').val(),
+					createdOn : $('#edit-createdon').val(),
+					createdBy : {
+						id : $('#edit-createdby').val(),
+					},
 					active : 0
 			}
+			console.log(kat);
 			
 			if (validedit == true){
 				$.ajax({
-					url : baseUrl+"kategori/update",
+					url : baseUrl+"kategori/deactive",
 					type : 'PUT',
 					data : JSON.stringify(kat),
 					contentType : 'application/json',
@@ -130,6 +138,10 @@ $(function() {
 			var kat = {
 					id : $('#edit-id').val(),
 					name : $('#edit-name-kat').val(),
+					createdOn : $('#edit-createdon').val(),
+					createdBy : {
+						id : $('#edit-createdby').val(),
+					},
 					active : 1
 			}
 			var dupnameedit;
