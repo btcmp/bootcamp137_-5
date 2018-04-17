@@ -1,6 +1,9 @@
 package com.miniproject.pos.dao;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -61,4 +64,20 @@ public class SalesOrderDaoImpl implements SalesOrderDao{
 		return sods;
 	}
 
+	@Override
+	public Map<String, Double> getTotalSalesLast7Day(Date date) {
+		// TODO Auto-generated method stub
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "select sum(so.grandTotal), to_char(so.createdOn, 'DD-MM-YYYY') from SalesOrder so group by , to_char(so.createdOn, 'DD-MM-YYYY')";
+		List<Object[]> data = session.createQuery(hql).list();
+		Map<String, Double> mapping = new HashMap<String, Double>();
+		for(Object[] tamp:data) {
+			Double total = (Double) tamp[0];
+			String tgl = (String) tamp[1];
+			System.out.println(tgl+" "+total);
+		}
+		return null;
+	}
+
+	
 }

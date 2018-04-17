@@ -1,11 +1,16 @@
 package com.miniproject.pos.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ibm.icu.util.Calendar;
 import com.miniproject.pos.dao.ItemInventoryDao;
 import com.miniproject.pos.dao.ItemVariantDao;
 import com.miniproject.pos.dao.SalesOrderDao;
@@ -88,4 +93,19 @@ public class SalesOrderService {
 		// TODO Auto-generated method stub
 		return salesOrderDao.getSalesOrderDetailByIdSalesOrder(soId);
 	}	
+	
+	public Map<String, List> getTotalSalesLast7Day(){
+		Map<String, Double> data = new HashMap<>();
+		Date date = new Date();
+		salesOrderDao.getTotalSalesLast7Day(date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		for(int i=0;i<6;i++) {
+			cal.add(Calendar.DATE, -1);
+			Date dateEnd = cal.getTime();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			System.out.println(sdf.format(dateEnd));
+		}
+		return null;
+	}
 }
