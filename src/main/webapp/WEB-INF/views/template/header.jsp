@@ -29,6 +29,7 @@ String namaOutlet = session.getAttribute("outletName").toString();
 <link rel="stylesheet" href="${baseUrl }assets/node_modules/easy-autocomplete/dist/easy-autocomplete.themes.min.css">
 <link rel="stylesheet" href="${baseUrl }assets/node_modules/daterangepicker/daterangepicker.css">
 <link rel="stylesheet" href="${baseUrl }assets/node_modules/bootstrap-fileinput/css/fileinput.min.css">
+<link rel="stylesheet" href="${baseUrl }assets/node_modules/highcharts/css/highcharts.css">
 <style type="text/css">
 input.parsley-success,
 select.parsley-success,

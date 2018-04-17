@@ -28,6 +28,9 @@
 <script src="${baseUrl }assets/node_modules/daterangepicker/moment.min.js"></script>
 <script src="${baseUrl }assets/node_modules/daterangepicker/daterangepicker.js"></script>
 <script src="${baseUrl }assets/node_modules/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="${baseUrl }assets/node_modules/highcharts/js/highcharts.js"></script>
+<script src="${baseUrl }assets/node_modules/highcharts/modules/exporting.js"></script>
+<script src="${baseUrl }assets/node_modules/highcharts/modules/export-data.js"></script>
 
 <!-- AdminLTE App -->
 <script src="${baseUrl }assets/dist/js/adminlte.min.js"></script>
@@ -48,6 +51,56 @@ function displayNotif(keterangan, status){
 	    notice.close();
 	});
 }
+Highcharts.chart('coba-chart', {
+    chart: {
+        type: 'areaspline'
+    },
+    title: {
+        text: 'Average fruit consumption during one week'
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 150,
+        y: 100,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+    },
+    xAxis: {
+        categories: [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday'
+        ]
+    },
+    yAxis: {
+        title: {
+            text: 'Fruit units'
+        }
+    },
+    tooltip: {
+        shared: true,
+        valueSuffix: ' units'
+    },
+    credits: {
+        enabled: false
+    },
+    plotOptions: {
+        areaspline: {
+            fillOpacity: 0.5
+        }
+    },
+    series: [{
+        name: 'Jane',
+        data: [1, 3, 4, 3, 3, 5, 4]
+    }]
+});
 </script>
 <c:forEach items="${asset}" var="aset">
 	<script src="${baseUrl }assets/js/${aset}.js"></script>
