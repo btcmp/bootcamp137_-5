@@ -35,15 +35,6 @@ public class PDFViewSalesOrder extends AbstractPdfView{
 			total="Rp."+String.valueOf(sodox.getSalesOrder().getGrandTotal()) ;
 		}
 		
-	      String str = "<html><head></head><body>"+
-	        "<h1 style='text-align: center;'>Sales Order</h1>" +
-	        "<br/>" +
-	        "<p style='text-align: left ;'>Customer : "+customer+"</p>"+
-	        "<p style=''text-align: right ;'>Date : "+date+"</p>"+
-	        "</body></html>";
-	      htmlWorker.parse(new StringReader(str));
-		
-		
 			PdfPTable table = new PdfPTable(4);
 			table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -61,6 +52,16 @@ public class PDFViewSalesOrder extends AbstractPdfView{
 			    table.addCell("");
 			    table.addCell("");
 			    table.addCell(total);
+				
+				
+				String str = "<html><head></head><body>"+
+				        "<h1 style='text-align: center;'>Sales Order</h1>" +
+				        "<br/>" +
+				        "<p style='text-align: left ;'>Customer : "+customer+"</p>"+
+				        "<p style=''text-align: right ;'>Date : "+date+"</p>"+
+				        "<br/>" +
+				        "</body></html>";
+				htmlWorker.parse(new StringReader(str));
 				doc.add(table);
 
 	}

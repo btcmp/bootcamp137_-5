@@ -90,7 +90,9 @@ public class PurchaseRequestController {
 	@RequestMapping(value="/edit", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public void edit(@RequestBody PurchaseRequest pr) {
-		prService.update(pr);
+		User editor = new User();
+		editor.setId(httpSession.getAttribute("userId").toString());
+		prService.update(pr, editor);
 	}
 	
 	

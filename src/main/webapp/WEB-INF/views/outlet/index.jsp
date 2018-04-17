@@ -32,7 +32,6 @@
 								<th style="width: 18%; text-align: center;">Address</th>
 								<th style="width: 18%; text-align: center;">Phone</th>
 								<th style="width: 18%; text-align: center;">Email</th>
-								<th style="width: 18%; text-align: center;">Active</th>
 								<th style="width: 10%; text-align: center;">#</th>
 							</tr>
 						</thead>
@@ -43,11 +42,9 @@
 							 		<td>${otls.address}</td>
 							 		<td>${otls.phone}</td>
 							 		<td>${otls.email}</td>
-							 		<td>${otls.active}</td>
 							 		<td>
 							 			<!-- class untuk selektor -->
 							 			 <a id="${otls.id}" class="editoutlet" href="#" >edit</a>
-							 			 <%-- <a id="${otls.id}" class="id-nonactive btn btn-danger" href="#" >X</a> --%>
 							 		</td>
 							 	</tr>
 							</c:forEach>
@@ -74,11 +71,11 @@
 			<div class="modal-body">
 				<form id="form-save" action="#">
 					<div class="form-group">
-						<input required data-parsley-length="[4, 50]" type="text" class="form-control datavalid" id="save-name" aria-describedby="emailHelp" placeholder="Outlet Name" />
+						<input required data-parsley-length="[4, 50]" type="text" class="form-control" id="save-name" placeholder="Outlet Name" />
 					</div>
 					
 					<div class="form-group">
-						<input data-parsley-length="[4, 50]" type="text" class="form-control" id="save-address" aria-describedby="emailHelp" placeholder="Address" />
+						<input data-parsley-length="[4, 50]" type="text" class="form-control" id="save-address" placeholder="Address" />
 					</div>
 					
 					<div class="row form-group">
@@ -104,8 +101,9 @@
 					
 					<div class="row form-group">
 						<div class="col-sm-4"><input type="text" class="form-control" id="save-code" placeholder="Postal Code" /></div>
-						<div data-parsley-length="[4,16]" class="col-sm-4"><input type="text" class="form-control" id="save-phone" aria-describedby="emailHelp" placeholder="Phone" /></div>
-						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="save-email" aria-describedby="emailHelp" placeholder="Email" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="save-phone" aria-describedby="emailHelp" placeholder="Phone" /></div>
+						<div style="display: none;" class="col-sm-4"><input type="text" class="form-control" id="save-phone-database" placeholder="Phone" /></div>
+						<div data-parsley-required="true" class="col-sm-4"><input type="email" class="form-control" id="save-email" placeholder="Email" /></div>
 					</div>
 				</form>
 			</div>
@@ -128,13 +126,16 @@
 			<div class="modal-body">
 				<form action="#" id="form-edit">
 					<input type="hidden" name="edit-id" id="edit-id"/>
+					<input type="hidden" name="edit-createdOn-out" id="edit-createdOn-out"/>
+					<input type="hidden" name="edit-createdBy-out" id="edit-createdBy-out"/>
+					<input type="hidden" name="edit-active-out" id="edit-active-out"/>
 					
 					<div class="form-group">
-						<input required data-parsley-length="[4, 50]" type="text" class="form-control" id="edit-name-out" aria-describedby="emailHelp" placeholder="Outlet Name" />
+						<input required data-parsley-length="[4, 50]" type="text" class="form-control" id="edit-name-out" placeholder="Outlet Name" />
 					</div>
 					
 					<div class="form-group">
-						<input data-parsley-length="[4, 50]" type="text" class="form-control" id="edit-address-out" aria-describedby="emailHelp" placeholder="Address" />
+						<input data-parsley-length="[4, 50]" type="text" class="form-control" id="edit-address-out" placeholder="Address" />
 					</div>
 					
 					<div class="row form-group">
@@ -160,8 +161,9 @@
 					
 					<div class="row form-group">
 						<div class="col-sm-4"><input type="text" class="form-control" id="edit-code-out" placeholder="Postel Code" /></div>
-						<div data-parsley-length="[4,16]" class="col-sm-4"><input type="text" class="form-control" id="edit-phone-out" aria-describedby="emailHelp" placeholder="Phone" /></div>
-						<div data-parsley-required="true" class="col-sm-4"><input type="text" class="form-control" id="edit-email-out" aria-describedby="emailHelp" placeholder="Email" /></div>
+						<div class="col-sm-4"><input type="text" class="form-control" id="edit-phone-out" aria-describedby="emailHelp" placeholder="Phone" /></div>
+						<div style="display: none;" class="col-sm-4"><input type="text" class="form-control" id="edit-phone-out-database" placeholder="Phone" /></div>
+						<div data-parsley-required="true" class="col-sm-4"><input type="text" class="form-control" id="edit-email-out" placeholder="Email" /></div>
 					</div>
 					
 				</form>

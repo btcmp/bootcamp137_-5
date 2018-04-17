@@ -31,6 +31,16 @@ $(function() {
 		$('#add').on('click', function() {
 			$('#saveout').modal();
 		})
+		$('#save-phone').inputmask({
+			"mask": "+##-###-####-####",
+		})
+		$('#save-phone').on('change', function () {
+			var value = $('#save-phone').val();
+	        var numDecimal = value.replace(/[^0-9]+/g,'');
+	        $('#save-phone-database').val(numDecimal);
+	        $('#save-phone-database').trigger('change');
+		});
+		
 		$('#btn-save').on('click', function(evt) {
 			evt.preventDefault();
 			var formsave = $('#form-save');
@@ -48,12 +58,13 @@ $(function() {
 						id : $('#save-dis').val()
 					},
 					postalCode : $('#save-code').val(),
-					phone : $('#save-phone').val(),
+					phone : $('#save-phone-database').val(),
 					email : $('#save-email').val(),
 					active : 1
 			}
 		var dupname;
 		var dupemail;
+		var dupphone;
 			$.ajax({
 				url : baseUrl+"outlet/get-all-name",
 				type : 'GET',
@@ -84,23 +95,43 @@ $(function() {
 									alert("email has been used");
 								}
 								else{
-									if(validsave == true){
-										$.ajax({
-											url : baseUrl+"outlet/save",
-											type : 'POST',
-											contentType : 'application/json',
-											data : JSON.stringify(out),
-											success : function(data) {
-												//console.log(data);
-												alert('save success');
-												window.location = baseUrl+"outlet/index";
-											},//succesajaxsave
-											error : function() {
-												alert('saving failed!');
-											}//errorajaxname             
-										});//ajaxname
-									}
-									
+									$.ajax({
+										url : baseUrl+"outlet/get-all-phone",
+										tye : 'GET',
+										contentType : 'application/json',
+										success : function(listphone) {
+											dupphone = 0;
+											$.each(listphone, function(index, phone) {
+												if (phone == $('#save-phone-database').val()) {
+													dupphone = 1;
+												}
+											})
+											if (dupphone==1) {
+												alert('phone number has been used')
+											}
+											else{
+												if(validsave == true){
+													$.ajax({
+														url : baseUrl+"outlet/save",
+														type : 'POST',
+														contentType : 'application/json',
+														data : JSON.stringify(out),
+														success : function(data) {
+															//console.log(data);
+															alert('save success');
+															window.location = baseUrl+"outlet/index";
+														},//succesajaxsave
+														error : function() {
+															alert('saving failed!');
+														}//errorajaxname             
+													});//ajaxname
+												}
+											}
+										},
+										error : function() {
+											alert('error getting listphone');
+										}
+									})
 								}
 							},
 							error : function() {
@@ -202,8 +233,12 @@ $(function() {
 			$('#edit-address-out').val(out.address);
 			$('#edit-prov-out').val(out.provinsi.id);
 			$('#edit-code-out').val(out.postalCode);
+			$('#edit-createdOn-out').val(out.createdOn);
+			$('#edit-createdBy-out').val(out.createdBy.id);
 			$('#edit-phone-out').val(out.phone);
+			$('#edit-phone-out-database').val(out.phone);
 			$('#edit-email-out').val(out.email);
+			$('#edit-active-out').val(out.active);
 		};
 		
 		function getRegionByProvinsi(idProv,regid) {
@@ -254,6 +289,18 @@ $(function() {
 		
 //------------------------------------------------------------------------------------------------------nonactive-------------------------------------------
 		
+		$('#edit-phone-out').inputmask({
+			"mask": "+##-###-####-####",
+		})
+		$('#edit-phone-out').trigger('change');
+
+	    $('#edit-phone-out').on('change', function () {
+	        var value = $(this).val();
+	        var numDecimal = value.replace(/[^0-9]+/g,'');
+	        $('#edit-phone-out-database').val(numDecimal);
+	        $('#edit-phone-out-database').trigger('change');
+	    });
+		
 		$('#btn-nonactive').on('click', function() {
 			var formedit = $('#form-edit');
 			var validedit = formedit.parsley().validate();
@@ -270,14 +317,19 @@ $(function() {
 					district : {
 						id : $('#edit-dis-out').val()
 					},
+					createdOn : $('#edit-createdOn-out').val(),
+					createdBy : {
+						id : $('#edit-createdBy-out').val()
+					},
 					postalCode : $('#edit-code-out').val(),
-					phone : $('#edit-phone-out').val(),
+					phone : $('#edit-phone-out-database').val(),
 					email : $('#edit-email-out').val(),
-					active : 0
+					active : $('#edit-active-out').val(),
 			}
+			console.log(outlet);
 			if(validedit == true){
 				$.ajax({
-					url : baseUrl+"outlet/update",
+					url : baseUrl+"outlet/deactive",
 					type : 'PUT',
 					data : JSON.stringify(outlet),
 					contentType : 'application/json',
@@ -310,13 +362,19 @@ $(function() {
 					district : {
 						id : $('#edit-dis-out').val()
 					},
+					createdOn : $('#edit-createdOn-out').val(),
+					createdBy : {
+						id : $('#edit-createdBy-out').val()
+					},
 					postalCode : $('#edit-code-out').val(),
-					phone : $('#edit-phone-out').val(),
+					phone : $('#edit-phone-out-database').val(),
 					email : $('#edit-email-out').val(),
-					active : 1
+					active : $('#edit-active-out').val(),
 			}
+			console.log(outlet);
 			var dupnameedeit;
 			var dupemailedit;
+			var dupphoneedit;
 			$.ajax({
 				url : baseUrl+"outlet/get-all",
 				type : 'GET',
@@ -331,6 +389,9 @@ $(function() {
 							else if ($('#edit-email-out').val() == outlet.email){
 								dupemailedit = 1;
 							}
+							else if ($('#edit-phone-out-database').val() == outlet.phone){
+								dupphoneedit = 1;
+							}
 						}
 					});
 					if (dupnameedeit==1){
@@ -338,6 +399,9 @@ $(function() {
 					}
 					else if(dupemailedit==1){
 						alert('email has been used');
+					}
+					else if(dupphoneedit==1){
+						alert('phone number has been used');
 					}
 					else{
 						if(validedit == true){

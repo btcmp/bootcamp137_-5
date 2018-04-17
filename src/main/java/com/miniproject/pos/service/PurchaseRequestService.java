@@ -14,6 +14,7 @@ import com.miniproject.pos.model.PurchaseOrderDetail;
 import com.miniproject.pos.model.PurchaseRequest;
 import com.miniproject.pos.model.PurchaseRequestDetail;
 import com.miniproject.pos.model.PurchaseRequestHistory;
+import com.miniproject.pos.model.User;
 
 @Service
 @Transactional
@@ -52,7 +53,7 @@ public class PurchaseRequestService {
 		purchaseRequestDAO.save(pr);
 	}
 	
-	public void update(PurchaseRequest pr) {
+	public void update(PurchaseRequest pr, User editor) {
 		for (PurchaseRequestDetail prd : pr.getListPurchaseRequestDetail()) {
 			prd.setPurchaseRequest(pr);
 		}
@@ -70,6 +71,7 @@ public class PurchaseRequestService {
 		pr.setCreatedOn(get(pr.getId()).getCreatedOn());
 		pr.setCreatedBy(get(pr.getId()).getCreatedBy());
 		pr.setOutlet(get(pr.getId()).getOutlet());
+		pr.setModifiedBy(editor);
 		purchaseRequestDAO.update(pr);
 	}
 	

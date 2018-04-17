@@ -15,7 +15,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Email;
 
 @Entity
@@ -52,6 +54,7 @@ public class Customer {
 	@JoinColumn(nullable=true, name="created_by")
 	private User createdBy;
 	
+	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_on", nullable=true)
 	private Date createdOn;
@@ -60,6 +63,7 @@ public class Customer {
 	@JoinColumn(name="modified_by", nullable=true)
 	private User modifiedBy;
 	
+	@UpdateTimestamp
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="modified_on", nullable=true)
 	private Date modifiedOn;

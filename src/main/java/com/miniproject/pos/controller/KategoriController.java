@@ -3,6 +3,8 @@ package com.miniproject.pos.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.miniproject.pos.model.Items;
 import com.miniproject.pos.model.Kategori;
+import com.miniproject.pos.model.User;
 import com.miniproject.pos.service.KategoriService;
 
 @Controller
@@ -25,6 +28,9 @@ public class KategoriController {
 
 	@Autowired
 	KategoriService kategoriService;
+	
+	@Autowired
+	private HttpSession httpSession;
 	
 	@RequestMapping("/index")
 	public String index(Model model) {
@@ -43,13 +49,25 @@ public class KategoriController {
 	@RequestMapping(value="/save", method= RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void save(@RequestBody Kategori kategori) {
-		kategoriService.save(kategori);
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		kategoriService.save(kategori, user);
 	}
 	
 	@RequestMapping(value="/update", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public void update(@RequestBody Kategori kategori) {
-		kategoriService.update(kategori);
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		kategoriService.update(kategori, user);
+	}
+	
+	@RequestMapping(value="/deactive", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public void deactive(@RequestBody Kategori kategori) {
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		kategoriService.deactive(kategori, user);
 	}
 	
 	@RequestMapping(value="/get-id/{id}", method= RequestMethod.GET)

@@ -32,6 +32,7 @@ public class OutletDaoImpl implements OutletDao{
 	public void update(Outlet outlet) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
+		session.clear();
 		session.update(outlet);
 		session.flush();
 	}
