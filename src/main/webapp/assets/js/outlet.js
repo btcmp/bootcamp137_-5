@@ -21,8 +21,14 @@ $(function() {
 			$('#save-phone').val('');
 			$('#save-email').val('');
 			$('#save-pro').val('');
-			$('#save-reg').val('');
-			$('#save-dis').val('');
+			var region = [];
+			var reg = '<option value=/"/">Region</option>';
+			region.push(reg);
+			$('#save-reg').html(region);
+			var district = [];
+			var dist = '<option value=/"/">District</option>';
+			district.push(dist);
+			$('#save-dis').html(district);
 			
 		})
 		
@@ -286,8 +292,9 @@ $(function() {
 				}
 			})
 		}
+				
 		
-//------------------------------------------------------------------------------------------------------nonactive-------------------------------------------
+//------------------------------------------------------------------------------------------------update----------------------------------------------
 		
 		$('#edit-phone-out').inputmask({
 			"mask": "+##-###-####-####",
@@ -300,51 +307,6 @@ $(function() {
 	        $('#edit-phone-out-database').val(numDecimal);
 	        $('#edit-phone-out-database').trigger('change');
 	    });
-		
-		$('#btn-nonactive').on('click', function() {
-			var formedit = $('#form-edit');
-			var validedit = formedit.parsley().validate();
-			var outlet = {
-					id : $('#edit-id').val(),
-					name : $('#edit-name-out').val(),
-					address : $('#edit-address-out').val(),
-					provinsi : {
-						id : $('#edit-prov-out').val()
-					},
-					region : {
-						id : $('#edit-reg-out').val()
-					},
-					district : {
-						id : $('#edit-dis-out').val()
-					},
-					createdOn : $('#edit-createdOn-out').val(),
-					createdBy : {
-						id : $('#edit-createdBy-out').val()
-					},
-					postalCode : $('#edit-code-out').val(),
-					phone : $('#edit-phone-out-database').val(),
-					email : $('#edit-email-out').val(),
-					active : $('#edit-active-out').val(),
-			}
-			console.log(outlet);
-			if(validedit == true){
-				$.ajax({
-					url : baseUrl+"outlet/deactive",
-					type : 'PUT',
-					data : JSON.stringify(outlet),
-					contentType : 'application/json',
-					success : function(data) {
-						alert('Outlet non-active');
-						window.location = baseUrl+"outlet/index";
-					},
-					error : function() {
-						alert('update failed!!');
-					}
-				});
-			}
-		});
-		
-//------------------------------------------------------------------------------------------------update----------------------------------------------
 		
 		$('#btn-update').on('click', function() {
 			var formedit = $('#form-edit');

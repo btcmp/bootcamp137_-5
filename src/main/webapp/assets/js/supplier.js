@@ -483,5 +483,24 @@ $(function() {
 		$('#print-supp').on('click', function() {
 			window.location =baseUrl+"generate/suplier";
 		})
+		
+//---------------------------------------------------------------------------reset form----------------------------------------------
+		
+		$('#cancle').click(function() {
+			$('#save-name-sup').val('');
+			$('#save-address-sup').val('');
+			$('#save-code-sup').val('');
+			$('#save-phone-sup').val('');
+			$('#save-email-sup').val('');
+			$('#save-pro-sup').val('');
+			var region = [];
+			var reg = '<option value=/"/">Region</option>';
+			region.push(reg);
+			$('#save-reg-sup').html(region);
+			var district = [];
+			var dist = '<option value=/"/">District</option>';
+			district.push(dist);
+			$('#save-dis-sup').html(district);
+		})
 				
 });

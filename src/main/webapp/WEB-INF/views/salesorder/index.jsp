@@ -123,12 +123,12 @@
 					
 					<div class="form-group">
 						<label>Day Of Birth</label>
-						<input type="date" max="2018-04-04" class="form-control" id="save-dob-cust" placeholder="Day Of Birth" />
+						<input type="text" class="form-control" id="save-dob-cust" placeholder="Day Of Birth" />
 					</div>
 					
 					<div class="form-group">
 						<label>Address</label>
-						<input data-parsley-minlength="4" style="height: 80px;" type="text" class="form-control" id="save-address-cust" placeholder="address" />
+						<textarea data-parsley-minlength="4" style="height: 80px;" type="text" class="form-control" id="save-address-cust" placeholder="Address"></textarea>
 					</div>
 					<div class="row">
 						<div class="col-lg-4">
