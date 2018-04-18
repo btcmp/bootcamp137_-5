@@ -1,9 +1,13 @@
 package com.miniproject.pos.utils;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
+import java.util.Locale;
+
 
 public class Formatter {
 
@@ -17,8 +21,14 @@ public class Formatter {
 	}
 	
 	public static String currency(double value) {
-		NumberFormat nf = DecimalFormat.getInstance();
-		String uangS = nf.format(value);
-        return "Rp "+uangS;
+		DecimalFormat df = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+		DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setCurrencySymbol("Rp");
+        dfs.setMonetaryDecimalSeparator('.');
+        dfs.setGroupingSeparator(',');
+        df.setDecimalSeparatorAlwaysShown(false);
+        df.setMaximumFractionDigits(0);
+        df.setDecimalFormatSymbols(dfs);
+        return df.format(value);
 	}
 }

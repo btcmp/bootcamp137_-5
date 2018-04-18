@@ -22,6 +22,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.miniproject.pos.model.Outlet;
 import com.miniproject.pos.service.EmployeeService;
 import com.miniproject.pos.service.OutletService;
+import com.miniproject.pos.service.SalesOrderService;
 
 @Controller
 @RequestMapping
@@ -32,6 +33,9 @@ public class LoginController {
 	
 	@Autowired 
 	 private EmployeeService empService;
+	
+	@Autowired 
+	 private SalesOrderService soService;
 	
 	@Autowired
 	private OutletService os;
@@ -70,6 +74,9 @@ public class LoginController {
 	@RequestMapping("/home")
 	public String home(Model model) {
 		model.addAttribute("title", "Dashboard");
+		Map<String, String> tamp = soService.getTotalSalesLast7Day();
+		model.addAttribute("kategori", tamp.get("kategori"));
+		model.addAttribute("total", tamp.get("total"));
 		return "security/home";
 	}
 }

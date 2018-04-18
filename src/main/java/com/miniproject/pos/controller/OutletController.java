@@ -3,6 +3,8 @@ package com.miniproject.pos.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import com.miniproject.pos.model.District;
 import com.miniproject.pos.model.Outlet;
 import com.miniproject.pos.model.Provinsi;
 import com.miniproject.pos.model.Region;
+import com.miniproject.pos.model.User;
 import com.miniproject.pos.service.DistrictService;
 import com.miniproject.pos.service.OutletService;
 import com.miniproject.pos.service.ProvinsiService;
@@ -39,6 +42,9 @@ public class OutletController {
 	
 	@Autowired
 	DistrictService districtService;
+	
+	@Autowired
+	private HttpSession httpSession;
 	
 	@RequestMapping("/index")
 	public String index(Model model) {
@@ -70,19 +76,17 @@ public class OutletController {
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
 	public void save(@RequestBody Outlet outlet) {
-		outletService.save(outlet);
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		outletService.save(outlet, user);
 	}
 	
 	@RequestMapping(value="/update", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public void update(@RequestBody Outlet outlet) {
-		outletService.update(outlet);
-	}
-	
-	@RequestMapping(value="/nonactive", method = RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.OK)
-	public void nonActiveOutlet(@RequestBody Outlet outlet) {
-		outletService.nonActiveOutlet(outlet);
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		outletService.update(outlet, user);
 	}
 	
 	@RequestMapping(value="/get-id/{id}", method=RequestMethod.GET)
@@ -126,5 +130,24 @@ public class OutletController {
 	public List<Outlet> getAllAttOutlet(){
 		List<Outlet> out = outletService.getAll();
 		return out;
+	}
+	
+	@RequestMapping(value="/get-all-phone", method = RequestMethod.GET)
+	@ResponseBody
+	public List<String> getAllPhone(){
+		List<String> listphone = new ArrayList<String>();
+		List<Outlet> out = outletService.getAll();
+		for (Outlet outlet : out) {
+			listphone.add(outlet.getPhone());
+		}
+		return listphone;
+	}
+	
+	@RequestMapping(value="/deactive", method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public void deactive (@RequestBody Outlet outlet) {
+		User user = new User();
+		user.setId(httpSession.getAttribute("userId").toString());
+		outletService.deactive(outlet, user);
 	}
 }

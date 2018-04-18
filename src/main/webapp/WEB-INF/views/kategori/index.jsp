@@ -30,7 +30,6 @@
 							<tr>
 								<th style="width: 25%; text-align: center;">Category Name</th>
 								<th style="width: 25%; text-align: center;">Item Stock</th>
-								<th style="width: 25%; text-align: center;">Active</th>
 								<th style="width: 5%; text-align: center;">#</th>
 							</tr>
 						</thead>
@@ -39,7 +38,6 @@
 							 	<tr>
 							 		<td>${kats.name}</td>
 							 		<td>${kats.itemStock} item</td>
-							 		<td>${kats.active}</td>
 							 		<td>
 							 			<!-- class untuk selektor -->
 							 			 <a id="${kats.id}" class="editkategori" href="#" >view</a>
@@ -69,7 +67,7 @@
 			<div class="modal-body">
 				<form id="form-save" action="#">
 					<div class="form-group">
-						<input required data-parsley-length="[4, 50]" type="text" class="form-control datavalid" id="save-name" aria-describedby="emailHelp" placeholder="Category Name" />
+						<input required data-parsley-length="[4, 50]" type="text" class="form-control" id="save-name" placeholder="Category Name" />
 					</div>
 
 				</form>
@@ -93,9 +91,11 @@
 			<div class="modal-body">
 				<form id="form-edit" action="#">
 					<input type="hidden" name="edit-id" id="edit-id"/>
+					<input type="hidden" name="edit-createdon" id="edit-createdon"/>
+					<input type="hidden" name="edit-createdby" id="edit-createdby"/>
 					
 					<div class="form-group">
-						<input required data-parsley-length="[4, 50]" type="text" class="form-control" id="edit-name-kat" aria-describedby="emailHelp" placeholder="Category Name" />
+						<input required data-parsley-length="[4, 50]" type="text" class="form-control" id="edit-name-kat" placeholder="Category Name" />
 					</div>
 					
 				</form>

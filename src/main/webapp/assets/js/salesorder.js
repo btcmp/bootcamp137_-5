@@ -36,7 +36,12 @@ $(function() {
 									"<td><input id="+value.variantId.id+" class='check-item' type='checkbox'></input></td>" +
 									"</tr>"
 							);
-							$('#pay-sods').prop('disabled',true);
+							var harga = $('#total-harga-fix').eq(0).text().split("Rp.")[1];
+							if(harga == 0){
+								$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', true);
+							}else{
+								$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', false);
+							}
 							$('#nama-item').val('');}
 						else{
 							$('#table-item').append(
@@ -48,7 +53,12 @@ $(function() {
 									"<td><input id="+value.variantId.id+" class='check-item' type='checkbox' checked disabled></input></td>" +
 									"</tr>"
 							);
-							$('#pay-sods').prop('disabled',true);
+							var harga = $('#total-harga-fix').eq(0).text().split("Rp.")[1];
+							if(harga == 0){
+								$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', true);
+							}else{
+								$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', false);
+							}
 							$('#nama-item').val('');
 						}
 		
@@ -63,11 +73,22 @@ $(function() {
 	$('#nama-item').easyAutocomplete(options);
 	
 	$('body').on('input', '.quantity', function() {
-		var jumlah = $(this).val();
-		console.log(jumlah);
 		var id = $(this).attr('id');
+		var jumlah = $(this).val();
+		var min = parseInt($(this).attr('min'));
+		var max = parseInt($(this).attr('max'));
+		var jumlahfix=0;
+		if(jumlah>max){
+			jumlahfix=max;
+		}
+		else if (jumlah == ""){
+			jumlahfix=1;
+		}
+		else{
+			jumlahfix=jumlah;
+		}
 		var hargaUnit = $('.hargaaaa'+id).text().split("Rp.")[1];
-		var hargaTotal = jumlah * hargaUnit;
+		var hargaTotal = jumlahfix * hargaUnit;
 		$('#totaal'+id).val("Rp."+hargaTotal);
 		$('#total'+id).val("Rp."+(parseInt(hargaTotal).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,')));
 		$('#total-harga-fix').empty();
@@ -83,10 +104,13 @@ $(function() {
 				"</tr>" 
 		)
 		var harga = $('#total-harga-fix').eq(0).text().split("Rp.")[1];
-		/*$('.bayar-sod').text("Charge Rp."+harga);*/
-		if(parseInt(jumlah) > parseInt($('.qty-item'+id).text())){
-			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled',true);
-			alert('stock tidak mencukupi');
+		if(jumlah > max){
+			$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled',false);
+			$(this).val(max);
+		}
+		else if (jumlah<min){
+			$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled',false);
+			$(this).val(min);
 		}
 		else if(parseInt(harga) == 0){
 			$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled',true);
@@ -108,7 +132,7 @@ $(function() {
 		$('#list-item-pilih').append(
 				"<tr id=ritemx"+id+">" +
 				"<td id="+id+">"+$('.nama-item'+id).text()+"</td>" +
-				"<td><input min='0' max="+$('.qty-itemqty'+id).text()+" id=qty"+id+" type='number' class='quantity'></input></td>" +
+				"<td><input min='1' max="+$('.qty-itemqty'+id).text()+" id=qty"+id+" type='number' class='quantity' value='0'></input></td>" +
 				"<td style='display:none;' ><output type='text' id='totaalqty"+id+"'>Rp.0</output></td>" +
 				"<td><output type='text' id='totalqty"+id+"'>Rp.0</output></td>" +
 				"<td style='display:none;' class= hargaaaaqty"+id+">Rp."+$('.harga-item'+id).text().split("Rp.")[1]+"</td>" +
@@ -127,12 +151,12 @@ $(function() {
 				"</tr>"
 		)
 		var harga = $('#total-harga-fix').text().split("Rp.")[1];
-		/*$('.bayar-sod').text("Charge Rp."+harga);*/
 		if(harga == 0){
-			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled', true);
+			$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', true);
 		}else{
-			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled', false);
+			$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', false);
 		}
+		$('#nama-item').val('');
 				
 	});
 	
@@ -157,12 +181,11 @@ $(function() {
 				"</tr>"
 		)
 		var harga = $('#total-harga-fix').text().split("Rp.")[1];
-		/*$('.bayar-sod').text("Charge Rp."+harga);*/
 		if(parseInt(harga) == 0){
-			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled',true);
+			$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled',true);
 		}
 		else{
-			$('.bayar-sod').text("Charge Rp."+harga).prop('disabled',false);
+			$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled',false);
 		}
 		
 	});
@@ -208,7 +231,7 @@ $(function() {
 		}
 		else{
 			$('#pembayaran').modal('toggle');
-			$('#finish').modal();
+			$('#finish').modal({backdrop : 'static', keyboard : false});
 			$('#id-pay').val("Out of Rp."+(parseInt(pay).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,')));
 			$('#id-finish').val("Rp."+(parseInt(pay-total).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,')));
 			var salesOrderDetail = [];
@@ -223,7 +246,6 @@ $(function() {
 						
 				}
 				salesOrderDetail.push(detail);
-				//console.log(salesOrderDetail);
 				
 			})
 				var so ={
@@ -234,7 +256,6 @@ $(function() {
 							grandTotal :  parseInt($('#total-harga-fix').eq(0).text().split("Rp.")[1]),
 							modifiedOn : null,
 					}
-					console.log(so);
 					$.ajax({
 						url : baseUrl+"/salesorder/save",
 						type : 'POST',
@@ -242,14 +263,12 @@ $(function() {
 						contentType : 'application/json',
 						success : function(data) {
 							soid= data;
-							alert(soid);
 							$.ajax({
 									url : baseUrl+"/salesorder/update-stock",
 									type : 'PUT',
 									contentType : 'application/json',
 									data : JSON.stringify(so),
 									success : function(data) {
-										//alert('update stoke done');
 									},
 									error : function() {
 										alert('error update stock');
@@ -347,6 +366,17 @@ $(function() {
 		$('#btn-cancel-save').on('click', function(evt) {
 			$('#new-cust').modal('toggle');
 		})
+		$('#save-phone-cust').inputmask({
+			"mask": "+##-###-####-####",
+		})
+		$('#save-phone-cust').on('change', function () {
+			var value = $('#save-phone-cust').val();
+	        var numDecimal = value.replace(/[^0-9]+/g,'');
+	        $('#save-phone-cust-database').val(numDecimal);
+	        $('#save-phone-cust-database').trigger('change');
+		});
+		
+		
 		$('#btn-simpan').on('click', function(evt) {
 			evt.preventDefault();
 			var formsave = $('#form-save');
@@ -354,7 +384,7 @@ $(function() {
 			var customer = {
 					name : $('#save-name-cust').val(),
 					email : $('#save-email-cust').val(),
-					phone : $('#save-phone-cust').val(),
+					phone : $('#save-phone-cust-database').val(),
 					dob : $('#save-dob-cust').val(),
 					address : $('#save-address-cust').val(),
 					provinsi : {
@@ -378,7 +408,6 @@ $(function() {
 					dupemail = 0;
 					$.each(listcustomer , function(index, email) {
 						if($('#save-email-cust').val() == email){
-							console.log($('#save-email-cust').val()+ "+" +email);
 							dupemail = 1;
 						}
 					})
@@ -393,7 +422,7 @@ $(function() {
 							success : function(listphone) {
 								dupphone=0;
 								$.each(listphone , function(index, phone) {
-									if($('#save-phone-cust').val() == phone){
+									if($('#save-phone-cust-database').val() == phone){
 										dupphone = 1;
 									}
 								})
@@ -457,19 +486,8 @@ $(function() {
 					}
 				});
 			}else{
-				$.ajax({
-					url : baseUrl+"region/get-region?id="+id,
-					type : 'GET',
-					success : function(regionss) {
-						var region = [];
-							var reg = '<option value=/"/">Region</option>';
-							region.push(reg);
-							
-							$('#save-reg-cust').html(region);
-					}, error : function(){
-						alert('get failed');
-					}
-				});
+				var reg = '<option value=/"/">Region</option>';
+				region.push(reg);
 			}
 		});		
 		

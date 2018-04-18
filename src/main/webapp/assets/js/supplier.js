@@ -9,6 +9,17 @@ $(function() {
 		$('#new').on('click', function() {
 			$('#savesup').modal();
 		})
+		$('#save-phone-sup').inputmask({
+			"mask": "+##-###-####-####",
+		})
+		
+		$('#save-phone-sup').on('change', function () {
+			var value = $('#save-phone-sup').val();
+	        var numDecimal = value.replace(/[^0-9]+/g,'');
+	        $('#save-phone-sup-database').val(numDecimal);
+	        $('#save-phone-sup-database').trigger('change');
+		});
+		
 		$('#btn-save-sup').on('click', function(evt) {
 			evt.preventDefault();
 			var formsave = $('#form-save');
@@ -26,12 +37,12 @@ $(function() {
 						id : $('#save-dis-sup').val()
 					},
 					postalCode : $('#save-code-sup').val(),
-					phone : $('#save-phone-sup').val(),
+					phone : $('#save-phone-sup-database').val(),
 					email : $('#save-email-sup').val(),
-					active : 1
 			}
 			var dupname;
 			var dupemail;
+			var dupphone;
 			$.ajax({
 				url : baseUrl+"supplier/get-all-name",
 				type : 'GET',
@@ -62,32 +73,52 @@ $(function() {
 									alert('email has been used')
 								}
 								else{
-									if(validsave==true){
-										$.ajax({
-											url : baseUrl+"supplier/save",
-											type : 'POST',
-											contentType : 'application/json',
-											data : JSON.stringify(out),
-											success : function(data) {
-												//console.log(data);
-												alert('save success');
-												window.location = baseUrl+"supplier/index";
-											},
-											error : function() {
-												alert('saving failed!');
-											}                              
-										});
-									}
+									$.ajax({
+										url : baseUrl+"supplier/get-all-phone",
+										type : 'GET',
+										contentType : 'application/json',
+										success : function(listphone) {
+											dupphone=0;
+											$.each(listphone, function(index,phone) {
+												if (phone == $('#save-phone-sup-database').val()) {
+													dupphone=1;
+												}
+											});
+											if (dupphone==1) {
+												alert('phone has been used');
+											}
+											else{
+												if(validsave==true){
+													$.ajax({
+														url : baseUrl+"supplier/save",
+														type : 'POST',
+														contentType : 'application/json',
+														data : JSON.stringify(out),
+														success : function(data) {
+															alert('save success');
+															window.location = baseUrl+"supplier/index";
+														},
+														error : function() {
+															alert('saving failed!');
+														}                              
+													});
+												}
+											}
+										},
+										error : function() {
+											alert('error getting listphone')
+										}
+									})
 								}
 							},
 							error : function() {
-								alert('error getting data')
+								alert('error getting listemail')
 							}
 						})
 					}
 				},
 				error : function() {
-					alert('error getting data');
+					alert('error getting listname');
 				}
 			})
 		});
@@ -98,7 +129,7 @@ $(function() {
 		$('#save-pro-sup').on('change', function() {
 			var id = $(this).val();
 			//console.log(id);
-			if (id!==""){
+			if (id != ""){
 				$.ajax({
 					url : baseUrl+"region/get-region?id="+id,
 					type : 'GET',
@@ -117,6 +148,12 @@ $(function() {
 					}
 				});
 			}
+			else{
+				var region = [];
+				var reg = '<option value=/"/">Region</option>';
+				region.push(reg);
+				$('#save-reg-sup').html(region);
+			}
 		});		
 		
 		
@@ -126,7 +163,7 @@ $(function() {
 		$('#save-reg-sup').on('change', function() {
 			var id = $(this).val();
 			//console.log(id);
-			if (id!=""){
+			if (id != ""){
 				$.ajax({
 					url : baseUrl+"kecamatan/get-kecamatan?id="+id,
 					type : 'GET',
@@ -144,6 +181,12 @@ $(function() {
 						alert('get failed');
 					}
 				});
+			}
+			else{
+				var district = [];
+				var dis = '<option value=/"/">District</option>';
+				district.push(dis);
+				$('#save-dis-sup').html(district);
 			}
 		});
 				
@@ -177,8 +220,12 @@ $(function() {
 			$('#edit-address-sup').val(sup.address);
 			$('#edit-prov-sup').val(sup.provinsi.id);
 			$('#edit-code-sup').val(sup.postalCode);
+			$('#edit-createdOn-sup').val(sup.createdOn);
+			$('#edit-createdBy-sup').val(sup.createdBy.id);
 			$('#edit-phone-sup').val(sup.phone);
+			$('#edit-phone-sup-database').val(sup.phone);
 			$('#edit-email-sup').val(sup.email);
+			$('#edit-active-sup').val(sup.active);
 		};
 		
 		function getRegionByProvinsi(idProv,regionid) {
@@ -227,6 +274,19 @@ $(function() {
 		}
 		
 //----------------------------------------------------------------------------------------------------nonactive-------------------
+		
+		$('#edit-phone-sup').inputmask({
+			"mask": "+##-###-####-####",
+		})
+		$('#edit-phone-sup').trigger('change');
+
+	    $('#edit-phone-sup').on('change', function () {
+	        var value = $(this).val();
+	        var numDecimal = value.replace(/[^0-9]+/g,'');
+	        $('#edit-phone-sup-database').val(numDecimal);
+	        $('#edit-phone-sup-database').trigger('change');
+	    });
+		
 		$('#btn-nonactive').on('click', function() {
 			var formedit = $('#form-edit');
 			var validedit = formedit.parsley().validate();
@@ -243,16 +303,20 @@ $(function() {
 					district : {
 						id : $('#edit-dis-sup').val()
 					},
+					createdBy : {
+						id : $('#edit-createdBy-sup').val()
+					},
+					createdOn : $('#edit-createdOn-sup').val(),
 					postalCode : $('#edit-code-sup').val(),
-					phone : $('#edit-phone-sup').val(),
+					phone : $('#edit-phone-sup-database').val(),
 					email : $('#edit-email-sup').val(),
-					active : 0
+					active : $('#edit-active-sup').val(),
 					
 			}
 			
 			if(validedit==true){
 				$.ajax({
-					url : baseUrl+"supplier/update",
+					url : baseUrl+"supplier/deactive",
 					type : 'PUT',
 					data : JSON.stringify(supplier),
 					contentType : 'application/json',
@@ -286,13 +350,19 @@ $(function() {
 					district : {
 						id : $('#edit-dis-sup').val()
 					},
+					createdBy : {
+						id : $('#edit-createdBy-sup').val()
+					},
+					createdOn : $('#edit-createdOn-sup').val(),
 					postalCode : $('#edit-code-sup').val(),
-					phone : $('#edit-phone-sup').val(),
+					phone : $('#edit-phone-sup-database').val(),
 					email : $('#edit-email-sup').val(),
-					active : 1
+					active : $('#edit-active-sup').val(),
+					
 			}
 			var dupnameedit;
 			var dupemailedit;
+			var dupphoneedit;
 			$.ajax({
 				url : baseUrl+"supplier/get-all",
 				type : 'GET',
@@ -307,6 +377,9 @@ $(function() {
 							else if ($('#edit-email-sup').val() == supplier.email){
 								dupemailedit=1;
 							}
+							else if ($('#edit-phone-sup-database').val() == supplier.phone){
+								dupphoneedit=1;
+							}
 						}
 					})
 					if (dupnameedit==1) {
@@ -314,6 +387,9 @@ $(function() {
 					}
 					else if (dupemailedit==1){
 						alert('email has been used')
+					}
+					else if (dupphoneedit==1){
+						alert('phone has been used')
 					}
 					else{
 						if(validedit==true){
@@ -343,7 +419,7 @@ $(function() {
 		
 		$('#edit-prov-sup').on('change', function() {
 			var id = $(this).val();
-			if (id!==""){
+			if (id != ""){
 				$.ajax({
 					url : baseUrl+"region/get-region?id="+id,
 					type : 'GET',
@@ -361,6 +437,12 @@ $(function() {
 						alert('get failed');
 					}
 				});
+			}
+			else{
+				var region = [];
+				var reg = '<option value=/"/">Region</option>';
+				region.push(reg);
+				$('#edit-reg-sup').html(region);
 			}
 		});
 		

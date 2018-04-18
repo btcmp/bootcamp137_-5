@@ -10,6 +10,7 @@ import com.miniproject.pos.dao.ItemsDao;
 import com.miniproject.pos.dao.KategoriDao;
 import com.miniproject.pos.model.Items;
 import com.miniproject.pos.model.Kategori;
+import com.miniproject.pos.model.User;
 
 @Service
 @Transactional
@@ -21,16 +22,33 @@ public class KategoriService {
 	@Autowired
 	ItemsDao itemsDao;
 	
-	public void save(Kategori kategori) {
-		kategoriDao.save(kategori);
+	public void save(Kategori kategori, User user) {
+		Kategori kat = new Kategori();
+		kat.setId(kategori.getId());
+		kat.setCreatedBy(user);
+		kat.setCreatedOn(kategori.getCreatedOn());
+		kat.setItemStock(kategori.getItemStock());
+		kat.setModifiedOn(kategori.getModifiedOn());
+		kat.setName(kategori.getName());
+		kat.setItems(kategori.getItems());
+		kat.setActive(true);
+		kategoriDao.save(kat);
 	}
 	
 	public void delete(Kategori kategori) {
 		kategoriDao.delete(kategori);
 	}
 	
-	public void update(Kategori kategori) {
-		kategoriDao.update(kategori);
+	public void update(Kategori kategori, User user) {
+		Kategori kats = new Kategori();
+		kats.setId(kategori.getId());
+		kats.setName(kategori.getName());
+		kats.setCreatedBy(kategori.getCreatedBy());
+		kats.setCreatedOn(kategori.getCreatedOn());
+		kats.setModifiedOn(kategori.getModifiedOn());
+		kats.setModifiedBy(user);
+		kats.setActive(true);
+		kategoriDao.update(kats);
 	}
 	
 	public Kategori getOne(String id) {
@@ -45,7 +63,6 @@ public class KategoriService {
 				kategori.setItemStock(0);
 			}else
 			kategori.setItemStock(items.size());
-			System.out.println(kategori.getName()+" item= "+ kategori.getItemStock());
 		}
 		
 		return kategoris;
@@ -70,5 +87,19 @@ public class KategoriService {
 	public List<Kategori> getAllKategori() {
 		// TODO Auto-generated method stub
 		return kategoriDao.getAllKategori();
+	}
+
+	public void deactive(Kategori kategori, User user) {
+		// TODO Auto-generated method stub
+		Kategori kats = new Kategori();
+		kats.setId(kategori.getId());
+		kats.setName(kategori.getName());
+		kats.setCreatedBy(kategori.getCreatedBy());
+		kats.setCreatedOn(kategori.getCreatedOn());
+		kats.setModifiedOn(kategori.getModifiedOn());
+		kats.setModifiedBy(user);
+		kats.setActive(false);
+		kategoriDao.update(kats);
+		
 	}
 }
