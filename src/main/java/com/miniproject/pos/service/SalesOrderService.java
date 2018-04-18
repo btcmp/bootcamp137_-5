@@ -41,6 +41,7 @@ public class SalesOrderService {
 	public String save(SalesOrder salesOrder, User user, Outlet outlet) {
 		
 		List<SalesOrderDetail> sodss = salesOrder.getSalesOrderDetails();
+		salesOrder.setOutletId(outlet);
 		salesOrder.setSalesOrderDetails(null);
 		salesOrder.setModifiedOn(null);
 		salesOrder.setCreatedBy(user);
