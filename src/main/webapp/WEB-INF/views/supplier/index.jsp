@@ -77,7 +77,7 @@
 					</div>
 					
 					<div class="form-group">
-						<input data-parsley-minlength= "4" type="text" class="form-control" id="save-address-sup" placeholder="Address" />
+						<textarea  data-parsley-minlength= "4" type="text" class="form-control" id="save-address-sup" placeholder="Address"></textarea>
 					</div>
 					
 					<div class="row form-group">
@@ -102,7 +102,7 @@
 					</div>
 					
 					<div class="row form-group">
-						<div class="col-sm-4"><input type="number" class="form-control" id="save-code-sup" placeholder="Postal Code" /></div>
+						<div class="col-sm-4"><input data-parsley-maxlength= "50" type="number" class="form-control" id="save-code-sup" placeholder="Postal Code" /></div>
 						<div class="col-sm-4"><input type="text" class="form-control" id="save-phone-sup" placeholder="Phone" /></div>
 						<div class="col-sm-4"><input style="display: none;" type="text" class="form-control" id="save-phone-sup-database" placeholder="Phone" /></div>
 						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="save-email-sup" placeholder="Email" /></div>
@@ -110,7 +110,7 @@
 				</form>
 			</div>
 			<div class="modal-footer">
-				<a class="btn btn-primary" href="${pageContext.request.contextPath}/supplier/index">CANCEL</a>
+				<a class="btn btn-primary" id="cancle">CANCEL</a>
 				<button style="float: right;" type="button" id="btn-save-sup" class="btn btn-primary">SAVE</button>
 			</div>
 		</div>
@@ -137,7 +137,7 @@
 					</div>
 					
 					<div class="form-group">
-						<input data-parsley-minlength="4" type="text" class="form-control" id="edit-address-sup" placeholder="Address" />
+						<textarea data-parsley-minlength="4" type="text" class="form-control" id="edit-address-sup" placeholder="Address"></textarea>
 					</div>
 					
 					<div class="row form-group">
@@ -162,7 +162,7 @@
 					</div>
 					
 					<div class="row form-group">
-						<div class="col-sm-4"><input type="text" class="form-control" id="edit-code-sup" placeholder="Postel Code" /></div>
+						<div class="col-sm-4"><input data-parsley-maxlength= "50" type="text" class="form-control" id="edit-code-sup" placeholder="Postel Code" /></div>
 						<div class="col-sm-4"><input type="text" class="form-control" id="edit-phone-sup" placeholder="Phone" /></div>
 						<div style="display: none;" class="col-sm-4"><input type="text" class="form-control" id="edit-phone-sup-database" placeholder="Phone" /></div>
 						<div data-parsley-required="true" class="col-sm-4 datavalid"><input type="email" class="form-control" id="edit-email-sup" placeholder="Email" /></div>

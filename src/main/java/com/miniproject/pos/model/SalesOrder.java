@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -118,5 +119,19 @@ public class SalesOrder {
 
 	public void setSalesOrderDetails(List<SalesOrderDetail> salesOrderDetails) {
 		this.salesOrderDetails = salesOrderDetails;
-	}	
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="outlet_id")
+	private Outlet outletId;
+
+	public Outlet getOutletId() {
+		return outletId;
+	}
+
+	public void setOutletId(Outlet outletId) {
+		this.outletId = outletId;
+	}
+	
+	
 }

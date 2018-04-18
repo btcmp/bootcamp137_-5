@@ -75,7 +75,7 @@
 					</div>
 					
 					<div class="form-group">
-						<input data-parsley-length="[4, 50]" type="text" class="form-control" id="save-address" placeholder="Address" />
+						<textarea data-parsley-length="[4, 50]" type="text" class="form-control" id="save-address" placeholder="Address"></textarea>
 					</div>
 					
 					<div class="row form-group">
@@ -100,7 +100,7 @@
 					</div>
 					
 					<div class="row form-group">
-						<div class="col-sm-4"><input type="text" class="form-control" id="save-code" placeholder="Postal Code" /></div>
+						<div class="col-sm-4"><input data-parsley-maxlength= "6" type="text" class="form-control" id="save-code" placeholder="Postal Code" /></div>
 						<div class="col-sm-4"><input type="text" class="form-control" id="save-phone" aria-describedby="emailHelp" placeholder="Phone" /></div>
 						<div style="display: none;" class="col-sm-4"><input type="text" class="form-control" id="save-phone-database" placeholder="Phone" /></div>
 						<div data-parsley-required="true" class="col-sm-4"><input type="email" class="form-control" id="save-email" placeholder="Email" /></div>
@@ -135,7 +135,7 @@
 					</div>
 					
 					<div class="form-group">
-						<input data-parsley-length="[4, 50]" type="text" class="form-control" id="edit-address-out" placeholder="Address" />
+						<textarea data-parsley-length="[4, 50]" type="text" class="form-control" id="edit-address-out" placeholder="Address"></textarea>
 					</div>
 					
 					<div class="row form-group">
@@ -160,7 +160,7 @@
 					</div>
 					
 					<div class="row form-group">
-						<div class="col-sm-4"><input type="text" class="form-control" id="edit-code-out" placeholder="Postel Code" /></div>
+						<div class="col-sm-4"><input data-parsley-maxlength= "6" type="text" class="form-control" id="edit-code-out" placeholder="Postel Code" /></div>
 						<div class="col-sm-4"><input type="text" class="form-control" id="edit-phone-out" aria-describedby="emailHelp" placeholder="Phone" /></div>
 						<div style="display: none;" class="col-sm-4"><input type="text" class="form-control" id="edit-phone-out-database" placeholder="Phone" /></div>
 						<div data-parsley-required="true" class="col-sm-4"><input type="text" class="form-control" id="edit-email-out" placeholder="Email" /></div>
@@ -170,7 +170,6 @@
 			</div>
 			<div class="modal-footer">
 				<a class="btn btn-primary" href="${pageContext.request.contextPath}/outlet/index">CANCEL</a>
-				<button style="float: left;" type="button" id="btn-nonactive" class="btn btn-danger">X</button>
 				<button style="width: 15%;" type="button" id="btn-update" class="btn btn-primary">UPDATE</button>
 			</div>
 		</div>

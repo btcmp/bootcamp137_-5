@@ -375,7 +375,15 @@ $(function() {
 	        $('#save-phone-cust-database').val(numDecimal);
 	        $('#save-phone-cust-database').trigger('change');
 		});
-		
+	$('#save-dob-cust').daterangepicker({
+		singleDatePicker: true,
+        showDropdowns: true,
+        minDate : new Date('1940-01-01'),
+        maxDate : new Date(),
+        locale : {
+			format: 'YYYY-MM-DD'
+		}
+	})
 		
 		$('#btn-simpan').on('click', function(evt) {
 			evt.preventDefault();
