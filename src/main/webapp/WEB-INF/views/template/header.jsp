@@ -6,6 +6,7 @@
 <c:set var="baseUrl" value="${pageContext.request.contextPath}/"></c:set>
 <% 
 String namaOutlet = session.getAttribute("outletName").toString();
+request.setAttribute("namaOutlet", namaOutlet);
 %>
 <!DOCTYPE html>
 <html>

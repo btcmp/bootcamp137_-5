@@ -93,7 +93,7 @@
 					<li class="pull-left header"><i class="fa fa-inbox"></i> Sales</li>
 				</ul>
 				<div class="tab-content no-padding">
-					<div id="coba-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+					<div id="coba-chart" style="min-width: 310px; height: 500px; margin: 0 auto"></div>
 
 				</div>
 			</div>
@@ -107,5 +107,52 @@
 	<!-- /.row (main row) -->
 
 </section>
-
+<c:set var="js"
+	value="
+   
+Highcharts.chart('coba-chart', {
+    chart: {
+        type: 'areaspline'
+    },
+    title: {
+        text: 'Sales in last 7 days'
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'left',
+        verticalAlign: 'top',
+        x: 150,
+        y: 100,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+    },
+    xAxis: {
+        categories: [
+            ${kategori }
+        ]
+    },
+    yAxis: {
+        title: {
+            text: 'Sales(Rupiah)'
+        }
+    },
+    tooltip: {
+        shared: true,
+        valuePrefix: 'Rp '
+    },
+    credits: {
+        enabled: false
+    },
+    plotOptions: {
+        areaspline: {
+            fillOpacity: 0.5
+        }
+    },
+    series: [{
+        name: '${namaOutlet }',
+        data: [${total }]
+    }]
+});
+"></c:set>
 <%@ include file="/WEB-INF/views/template/footer.jsp"%>

@@ -74,7 +74,9 @@ public class LoginController {
 	@RequestMapping("/home")
 	public String home(Model model) {
 		model.addAttribute("title", "Dashboard");
-		soService.getTotalSalesLast7Day();
+		Map<String, String> tamp = soService.getTotalSalesLast7Day();
+		model.addAttribute("kategori", tamp.get("kategori"));
+		model.addAttribute("total", tamp.get("total"));
 		return "security/home";
 	}
 }

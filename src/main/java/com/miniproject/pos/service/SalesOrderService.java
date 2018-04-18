@@ -94,18 +94,35 @@ public class SalesOrderService {
 		return salesOrderDao.getSalesOrderDetailByIdSalesOrder(soId);
 	}	
 	
-	public Map<String, List> getTotalSalesLast7Day(){
+	public Map<String, String> getTotalSalesLast7Day(){
 		Map<String, Double> data = new HashMap<>();
 		Date date = new Date();
-		salesOrderDao.getTotalSalesLast7Day(date);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
-		for(int i=0;i<6;i++) {
-			cal.add(Calendar.DATE, -1);
+		cal.add(Calendar.DATE, -7);
+		Map<String, Double> tampung = salesOrderDao.getTotalSalesLast7Day(cal.getTime());
+		StringBuilder keyString = new StringBuilder();
+		StringBuilder valueString = new StringBuilder();
+		for(int i=0;i<7;i++) {
+			cal.add(Calendar.DATE, 1);
 			Date dateEnd = cal.getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			if(tampung.containsKey(sdf.format(dateEnd))) {
+				valueString.append(tampung.get(sdf.format(dateEnd))).append(",");
+				keyString.append("'").append(sdf.format(dateEnd)).append("',");
+			}else {
+				valueString.append("0").append(",");
+				keyString.append("'").append(sdf.format(dateEnd)).append("',");
+			}
 			System.out.println(sdf.format(dateEnd));
 		}
-		return null;
+		valueString.deleteCharAt(valueString.length()-1);
+		keyString.deleteCharAt(keyString.length()-1);
+		Map<String, String> hasil = new HashMap();
+		hasil.put("kategori", keyString.toString());
+		hasil.put("total", valueString.toString());
+		return hasil;
 	}
+	
+	
 }
