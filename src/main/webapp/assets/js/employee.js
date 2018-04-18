@@ -77,63 +77,68 @@ $(document).ready(function() {
     	
     	var duplicateUsername;
     	var duplicateEmail;
-    	$.ajax({
-    		url : baseUrl+'employee/get-all-username',
-   			type : 'GET',
-   			contentType : 'application/json',
-   			success : function(listUsername){
-   				duplicateUsername = 0;
-   				$.each(listUsername, function(index, username){
-   					if($('#save-username').val() == username){
-   						duplicateUsername = 1;
-   					}
-   				});
-   				
-   				if(duplicateUsername == 1){
-   					alert('username has been used');
-   				} else {
-   			    	$.ajax({
-   			    		url : baseUrl+'employee/get-all-email',
-   			   			type : 'GET',
-   			   			contentType : 'application/json',
-   			   			success : function(listEmail){
-   			   				duplicateEmail = 0;
-   			   				$.each(listEmail, function(index, email){
-   			   					if($('#save-email').val() == email){
-   			   						duplicateEmail = 1;
-   			   					}
-   			   				});
-   			   				
-	   			   			if(duplicateEmail == 1){
-	   	   						alert('email has been used');
-	   	   					} else {
-	   	   						if(validSave==true){
-	   	   			  		   		$.ajax({
-	   	   			  		       		url : baseUrl+'employee/save-emp',
-	   	   			  	      			type : 'POST',
-	   	   			  	      			contentType : 'application/json',
-	   	   			  	     			data : JSON.stringify(employee),
-	   	   			  		       		success : function(data){
-	   	   			  	    				alert('save emp success');
-	   	   			  	       				window.location = baseUrl+'employee';
-	   	   			  	       			},
-	   	   			  		        	error : function(){
-	   	   			  		       			alert('save emp failed');
-	   	   			  		       		}
-	   	   			  		       	});
-	   	   			  		    }
-	   	   					}
-   			   			},
-   			   			error : function(){
-   			   				alert('checking email failed');
-   			   			}
-   			    	});
-   				}
-   			},
-   			error : function(){
-   				alert('checking username failed');
-   			}
-    	});
+    	
+    	if(listOutlet == null || listOutlet[0] == null){
+    		alert('Please Assign Employee to Outlet(s)');
+    	} else {
+    		$.ajax({
+        		url : baseUrl+'employee/get-all-username',
+       			type : 'GET',
+       			contentType : 'application/json',
+       			success : function(listUsername){
+       				duplicateUsername = 0;
+       				$.each(listUsername, function(index, username){
+       					if($('#save-username').val() == username){
+       						duplicateUsername = 1;
+       					}
+       				});
+       				
+       				if(duplicateUsername == 1){
+       					alert('username has been used');
+       				} else {
+       			    	$.ajax({
+       			    		url : baseUrl+'employee/get-all-email',
+       			   			type : 'GET',
+       			   			contentType : 'application/json',
+       			   			success : function(listEmail){
+       			   				duplicateEmail = 0;
+       			   				$.each(listEmail, function(index, email){
+       			   					if($('#save-email').val() == email){
+       			   						duplicateEmail = 1;
+       			   					}
+       			   				});
+       			   				
+    	   			   			if(duplicateEmail == 1){
+    	   	   						alert('email has been used');
+    	   	   					} else {
+    	   	   						if(validSave==true){
+    	   	   			  		   		$.ajax({
+    	   	   			  		       		url : baseUrl+'employee/save-emp',
+    	   	   			  	      			type : 'POST',
+    	   	   			  	      			contentType : 'application/json',
+    	   	   			  	     			data : JSON.stringify(employee),
+    	   	   			  		       		success : function(data){
+    	   	   			  	    				alert('save emp success');
+    	   	   			  	       				window.location = baseUrl+'employee';
+    	   	   			  	       			},
+    	   	   			  		        	error : function(){
+    	   	   			  		       			alert('save emp failed');
+    	   	   			  		       		}
+    	   	   			  		       	});
+    	   	   			  		    }
+    	   	   					}
+       			   			},
+       			   			error : function(){
+       			   				alert('checking email failed');
+       			   			}
+       			    	});
+       				}
+       			},
+       			error : function(){
+       				alert('checking username failed');
+       			}
+        	});
+    	}
     	
     });
     
@@ -295,65 +300,71 @@ $(document).ready(function() {
     	
     	var duplicateUsername;
     	var duplicateEmail;
-    	$.ajax({
-    		url : baseUrl+'employee/get-all-username',
-   			type : 'GET',
-   			contentType : 'application/json',
-   			success : function(listUsername){
-   				duplicateUsername = 0;
-   				$.each(listUsername, function(index, username){
-   					if($('#edit-username').val() == username){
-   						if($('#edit-username').val() != prevUsername){
-   							duplicateUsername = 1;
-   						}
-   					}
-   				});
-   				if(duplicateUsername == 1){
-   					alert('username has been used');
-   				} else {
-   			    	$.ajax({
-   			    		url : baseUrl+'employee/get-all-email',
-   			   			type : 'GET',
-   			   			contentType : 'application/json',
-   			   			success : function(listEmail){
-   			   				duplicateEmail = 0;
-   			   				$.each(listEmail, function(index, email){
-   			   					if($('#edit-email').val() == email){
-   			   						if($('#edit-email').val() != prevEmail){
-   			   							duplicateEmail = 1;
-   			   						}
-   			   					}
-   			   				});
-	   			   			if(duplicateEmail == 1){
-	   	   						alert('email has been used');
-	   	   					} else {
-	   	   						if(validSave==true){
-	   	   							$.ajax({
-	   	   								url : baseUrl+'employee/edit-emp',
-	   	   								type : 'PUT',
-	   	   								contentType : 'application/json',
-	   	   								data : JSON.stringify(employee),
-	   	   								success : function(data){
-	   	   									alert('edit emp success');
-	   	   									window.location = baseUrl+'employee';
-	   	   								},
-	   	   								error : function(){
-	   	   									alert('edit emp failed');
-	   	   								}
-	   	   							});
-	   	   			  		    }
-	   	   					}
-   			   			},
-   			   			error : function(){
-   			   				alert('checking email failed');
-   			   			}
-   			    	});
-   				}
-   			},
-   			error : function(){
-   				alert('checking username failed');
-   			}
-    	});
+    	
+    	if(listOutlet == null || listOutlet[0] == null){
+    		alert('Please Assign Employee to Outlet(s)');
+    	} else {
+    		$.ajax({
+        		url : baseUrl+'employee/get-all-username',
+       			type : 'GET',
+       			contentType : 'application/json',
+       			success : function(listUsername){
+       				duplicateUsername = 0;
+       				$.each(listUsername, function(index, username){
+       					if($('#edit-username').val() == username){
+       						if($('#edit-username').val() != prevUsername){
+       							duplicateUsername = 1;
+       						}
+       					}
+       				});
+       				if(duplicateUsername == 1){
+       					alert('username has been used');
+       				} else {
+       			    	$.ajax({
+       			    		url : baseUrl+'employee/get-all-email',
+       			   			type : 'GET',
+       			   			contentType : 'application/json',
+       			   			success : function(listEmail){
+       			   				duplicateEmail = 0;
+       			   				$.each(listEmail, function(index, email){
+       			   					if($('#edit-email').val() == email){
+       			   						if($('#edit-email').val() != prevEmail){
+       			   							duplicateEmail = 1;
+       			   						}
+       			   					}
+       			   				});
+    	   			   			if(duplicateEmail == 1){
+    	   	   						alert('email has been used');
+    	   	   					} else {
+    	   	   						if(validSave==true){
+    	   	   							$.ajax({
+    	   	   								url : baseUrl+'employee/edit-emp',
+    	   	   								type : 'PUT',
+    	   	   								contentType : 'application/json',
+    	   	   								data : JSON.stringify(employee),
+    	   	   								success : function(data){
+    	   	   									alert('edit emp success');
+    	   	   									window.location = baseUrl+'employee';
+    	   	   								},
+    	   	   								error : function(){
+    	   	   									alert('edit emp failed');
+    	   	   								}
+    	   	   							});
+    	   	   			  		    }
+    	   	   					}
+       			   			},
+       			   			error : function(){
+       			   				alert('checking email failed');
+       			   			}
+       			    	});
+       				}
+       			},
+       			error : function(){
+       				alert('checking username failed');
+       			}
+        	});
+    	}
+    	
     });
     
 } );
