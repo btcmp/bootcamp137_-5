@@ -1,6 +1,8 @@
 package com.miniproject.pos.dao;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.miniproject.pos.model.SalesOrder;
 import com.miniproject.pos.model.SalesOrderDetail;
@@ -18,4 +20,6 @@ public interface SalesOrderDao {
 	public List<SalesOrder> selectAll();
 
 	public List<SalesOrderDetail> getSalesOrderDetailByIdSalesOrder(String soId);
+	
+	public Map<String, Double> getTotalSalesLast7Day(Date date);
 }

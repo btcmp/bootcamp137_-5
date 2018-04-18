@@ -28,6 +28,9 @@
 <script src="${baseUrl }assets/node_modules/daterangepicker/moment.min.js"></script>
 <script src="${baseUrl }assets/node_modules/daterangepicker/daterangepicker.js"></script>
 <script src="${baseUrl }assets/node_modules/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="${baseUrl }assets/node_modules/highcharts/js/highcharts.js"></script>
+<script src="${baseUrl }assets/node_modules/highcharts/modules/exporting.js"></script>
+<script src="${baseUrl }assets/node_modules/highcharts/modules/export-data.js"></script>
 
 <!-- AdminLTE App -->
 <script src="${baseUrl }assets/dist/js/adminlte.min.js"></script>
@@ -48,6 +51,9 @@ function displayNotif(keterangan, status){
 	    notice.close();
 	});
 }
+$(function () {
+	  ${js}
+})
 </script>
 <c:forEach items="${asset}" var="aset">
 	<script src="${baseUrl }assets/js/${aset}.js"></script>
