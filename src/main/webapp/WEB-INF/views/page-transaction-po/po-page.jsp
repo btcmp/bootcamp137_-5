@@ -195,7 +195,7 @@
 						</div>
 						<div>
 							<p><b>Notes:</b></p>
-							<input type="text" id="view-notes" style="height:100px; width:100%;" disabled>
+							<textarea id="view-notes" style="height:100px; width:100%;" disabled></textarea>
 						</div>
 						<div>
 							<input type="hidden" class="form-control" id="view-id" >

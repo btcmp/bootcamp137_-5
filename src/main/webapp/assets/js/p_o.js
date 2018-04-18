@@ -119,7 +119,7 @@ $(document).ready(function(){
 	
 	//edit execution
 	$('#table-item-edit').delegate('.edit-unitCost','change', function(){
-		var qty = $(this).closest('tr').find('td').eq(2).text();
+		var qty = $(this).closest('tr').find('td').eq(1).text();
 		var unitCost = $(this).val();
 		var subTotal = parseInt(qty * unitCost);
 		$(this).closest('tr').find('.edit-subTotal').val(subTotal);
