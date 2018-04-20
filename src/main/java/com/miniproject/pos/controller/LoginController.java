@@ -67,14 +67,14 @@ public class LoginController {
 		httpSession.setAttribute("userId", id);
 		httpSession.setAttribute("outletId", outlet);
 		httpSession.setAttribute("outletName", outletModel.getName());
-		System.out.println(outletModel.getName());
 		return new RedirectView("home");
 	}
 	
 	@RequestMapping("/home")
 	public String home(Model model) {
 		model.addAttribute("title", "Dashboard");
-		Map<String, String> tamp = soService.getTotalSalesLast7Day();
+		String outletId = httpSession.getAttribute("outletId").toString();
+		Map<String, String> tamp = soService.getTotalSalesLast7Day(outletId);
 		model.addAttribute("kategori", tamp.get("kategori"));
 		model.addAttribute("total", tamp.get("total"));
 		return "security/home";

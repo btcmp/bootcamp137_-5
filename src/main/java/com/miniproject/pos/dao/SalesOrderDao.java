@@ -21,5 +21,5 @@ public interface SalesOrderDao {
 
 	public List<SalesOrderDetail> getSalesOrderDetailByIdSalesOrder(String soId);
 	
-	public Map<String, Double> getTotalSalesLast7Day(Date date);
+	public Map<String, Double> getTotalSalesLast7Day(Date date, String outletId);
 }
