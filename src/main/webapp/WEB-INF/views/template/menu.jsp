@@ -30,7 +30,7 @@
         		{"items/index","fa fa-dashboard", "Items", "ADMIN"},
         		{"adjustment/index","fa fa-dashboard", "Adjustment", "BACK_OFFICE"},
         		{"transfer-stock/index","fa fa-dashboard", "Transfer Stock", "BACK_OFFICE"},
-        		{"salesorder/index","fa fa-dashboard", "Sales Order", "CASHIER,BACK_OFFICE,ADMIN"},
+        		{"salesorder/index","fa fa-dashboard", "Sales Order", "CASHIER,BACK_OFFICE"},
         		{"items/summary","fa fa-dashboard", "Summary", "CASHIER,BACK_OFFICE,ADMIN"},
         		};	
         Menu mn = new Menu((String) pageContext.getAttribute("baseUrl"),currentUrl, menu);
