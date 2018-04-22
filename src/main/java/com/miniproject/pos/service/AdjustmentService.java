@@ -106,4 +106,8 @@ public class AdjustmentService {
 	public Adjustment getAdjustment(String id){
 		return ad.getAdjustment(id);
 	}
+	
+	public int countAdjustment(String outletId) {
+		return ad.countAdjustment(outletId);
+	}
 }

@@ -146,4 +146,15 @@ public class PurchaseOrderDAOImpl implements PurchaseOrderDAO{
 			return listPO;
 		}
 	}
+	
+	public int countPurchaseOrder(String outletId) {
+		Session session = sessionFactory.getCurrentSession();
+		String hql = "select count(id) from PurchaseOrder where outletId.id=:outletId and status='processed'";
+		List<Integer> data = session.createQuery(hql).setParameter("outletId", outletId).list();
+		if(! data.isEmpty()) {
+			return data.get(0);
+		}else{
+			return 0;
+		}
+	}
 }
