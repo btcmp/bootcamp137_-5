@@ -15,4 +15,6 @@ public interface TransferStockDao {
 	public List<TransferStock> getAllTransferStock(String outletId);
 	
 	public List<TransferStock> getAllTransferStockFilterToOutlet(String outletId, String toOutlet);
+	
+	public Long getCountTransferStock(String outletId);
 }

@@ -22,9 +22,11 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.miniproject.pos.model.Outlet;
 import com.miniproject.pos.service.AdjustmentService;
 import com.miniproject.pos.service.EmployeeService;
+import com.miniproject.pos.service.ItemInventoryService;
 import com.miniproject.pos.service.OutletService;
 import com.miniproject.pos.service.PurchaseOrderService;
 import com.miniproject.pos.service.SalesOrderService;
+import com.miniproject.pos.service.TransferStockSevice;
 
 @Controller
 @RequestMapping
@@ -45,7 +47,14 @@ public class LoginController {
 	@Autowired
 	private PurchaseOrderService pos;
 	
+	@Autowired
 	private AdjustmentService as;
+	
+	@Autowired
+	private TransferStockSevice tss;
+	
+	@Autowired
+	private ItemInventoryService iis;
 	
 	@RequestMapping("/login")
 	public String doLogin(Model model, @RequestParam(value="error", required=false) String error, @RequestParam(value="logout", required=false) String logout){
@@ -82,7 +91,9 @@ public class LoginController {
 		model.addAttribute("title", "Dashboard");
 		String outletId = httpSession.getAttribute("outletId").toString();
 		Map<String, String> tamp = soService.getTotalSalesLast7Day(outletId);
-		model.addAttribute("purchase", 10);
+		model.addAttribute("purchase", pos.countPurchaseOrder(outletId));
+		model.addAttribute("item", iis.getCountRedStock(outletId));
+		model.addAttribute("transfer", tss.getCountTransferStock(outletId));
 		model.addAttribute("adjustment", as.countAdjustment(outletId));
 		model.addAttribute("kategori", tamp.get("kategori"));
 		model.addAttribute("total", tamp.get("total"));

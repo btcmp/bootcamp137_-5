@@ -29,4 +29,6 @@ public interface ItemInventoryDao {
 	public Long getTotalStockByIdVariant(String idVariant);
 	
 	public Long getTotalStockByIdItems(String idItems);
+	
+	public Long getCountRedStock(String outletId);
 }

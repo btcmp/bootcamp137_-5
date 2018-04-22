@@ -19,5 +19,5 @@ public interface PurchaseOrderDAO {
 	List<PurchaseOrder> getAllProcessedPurchaseOrder();
 	List<PurchaseOrder> getListPOBySearch(String search);
 	List<PurchaseOrder> getListPOByDate(Date start, Date end);
-	int countPurchaseOrder(String outletId);
+	Long countPurchaseOrder(String outletId);
 }

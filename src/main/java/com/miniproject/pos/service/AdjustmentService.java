@@ -107,7 +107,7 @@ public class AdjustmentService {
 		return ad.getAdjustment(id);
 	}
 	
-	public int countAdjustment(String outletId) {
+	public Long countAdjustment(String outletId) {
 		return ad.countAdjustment(outletId);
 	}
 }

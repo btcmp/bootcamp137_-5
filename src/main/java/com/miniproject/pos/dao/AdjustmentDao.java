@@ -21,5 +21,5 @@ public interface AdjustmentDao {
 	
 	public Adjustment getAdjustment(String id);
 	
-	public int countAdjustment(String outletId);
+	public Long countAdjustment(String outletId);
 }

@@ -106,4 +106,14 @@ public class ItemInventoryDaoImpl implements ItemInventoryDao {
 		return list.get(0);
 	}
 
+	public Long getCountRedStock(String outletId) {
+		Session session = sf.getCurrentSession();
+		String hql = "select count(id) from ItemInventory where outletId.id=:outletId and endingQty <= alertAtQty and variantId.active=:status and variantId.itemId.active=:status";
+		List<Long> data = session.createQuery(hql).setParameter("outletId", outletId).setParameter("status", Constants.ACTIVE).list();
+		if(! data.isEmpty()) {
+			return data.get(0);
+		}else{
+			return (long) 0;
+		}
+	}
 }
