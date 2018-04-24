@@ -65,11 +65,11 @@ public class SalesOrderDaoImpl implements SalesOrderDao{
 	}
 
 	@Override
-	public Map<String, Double> getTotalSalesLast7Day(Date date) {
+	public Map<String, Double> getTotalSalesLast7Day(Date date, String outletId) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		String hql = "select sum(so.grandTotal), to_char(so.createdOn, 'DD-MM-YYYY') from SalesOrder so where so.createdOn > :date group by to_char(so.createdOn, 'DD-MM-YYYY')";
-		List<Object[]> data = session.createQuery(hql).setParameter("date", date).list();
+		String hql = "select sum(so.grandTotal), to_char(so.createdOn, 'DD-MM-YYYY') from SalesOrder so where so.outletId.id=:outletId and so.createdOn > :date group by to_char(so.createdOn, 'DD-MM-YYYY')";
+		List<Object[]> data = session.createQuery(hql).setParameter("date", date).setParameter("outletId", outletId).list();
 		Map<String, Double> mapping = new HashMap<String, Double>();
 		for(Object[] tamp:data) {
 			Double total = (Double) tamp[0];

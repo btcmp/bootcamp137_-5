@@ -123,4 +123,8 @@ public class TransferStockSevice {
 	public TransferStock getTransferStock(String id) {
 		return tsd.getTransferStockById(id);
 	}
+	
+	public Long getCountTransferStock(String outletId) {
+		return tsd.getCountTransferStock(outletId);
+	}
 }

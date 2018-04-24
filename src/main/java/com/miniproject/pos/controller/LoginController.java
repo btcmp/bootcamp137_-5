@@ -20,9 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.miniproject.pos.model.Outlet;
+import com.miniproject.pos.service.AdjustmentService;
 import com.miniproject.pos.service.EmployeeService;
+import com.miniproject.pos.service.ItemInventoryService;
 import com.miniproject.pos.service.OutletService;
+import com.miniproject.pos.service.PurchaseOrderService;
 import com.miniproject.pos.service.SalesOrderService;
+import com.miniproject.pos.service.TransferStockSevice;
 
 @Controller
 @RequestMapping
@@ -39,6 +43,18 @@ public class LoginController {
 	
 	@Autowired
 	private OutletService os;
+	
+	@Autowired
+	private PurchaseOrderService pos;
+	
+	@Autowired
+	private AdjustmentService as;
+	
+	@Autowired
+	private TransferStockSevice tss;
+	
+	@Autowired
+	private ItemInventoryService iis;
 	
 	@RequestMapping("/login")
 	public String doLogin(Model model, @RequestParam(value="error", required=false) String error, @RequestParam(value="logout", required=false) String logout){
@@ -67,14 +83,18 @@ public class LoginController {
 		httpSession.setAttribute("userId", id);
 		httpSession.setAttribute("outletId", outlet);
 		httpSession.setAttribute("outletName", outletModel.getName());
-		System.out.println(outletModel.getName());
 		return new RedirectView("home");
 	}
 	
 	@RequestMapping("/home")
 	public String home(Model model) {
 		model.addAttribute("title", "Dashboard");
-		Map<String, String> tamp = soService.getTotalSalesLast7Day();
+		String outletId = httpSession.getAttribute("outletId").toString();
+		Map<String, String> tamp = soService.getTotalSalesLast7Day(outletId);
+		model.addAttribute("purchase", pos.countPurchaseOrder(outletId));
+		model.addAttribute("item", iis.getCountRedStock(outletId));
+		model.addAttribute("transfer", tss.getCountTransferStock(outletId));
+		model.addAttribute("adjustment", as.countAdjustment(outletId));
 		model.addAttribute("kategori", tamp.get("kategori"));
 		model.addAttribute("total", tamp.get("total"));
 		return "security/home";

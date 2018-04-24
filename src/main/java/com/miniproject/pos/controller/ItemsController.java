@@ -68,6 +68,12 @@ public class ItemsController {
 		return "items/index";
 	}
 	
+	@RequestMapping("/summary")
+	public String summary(Model model) {
+		model.addAttribute("title", "Summary");
+		return "items/summary";
+	}
+	
 	@RequestMapping("/get-all-data")
 	@ResponseBody
 	public ResponseMessage getAllData() {
@@ -110,6 +116,15 @@ public class ItemsController {
 	public List<ItemInventory> getInventory() {
 		String outletId = httpSession.getAttribute("outletId").toString();
 		return itemInventoryService.getInventoryAll(outletId);
+	}
+	
+	@RequestMapping("/get-all-inventory2")
+	@ResponseBody
+	public ResponseMessage getInventory2() {
+		String outletId = httpSession.getAttribute("outletId").toString();
+		ResponseMessage rm = new ResponseMessage();
+		rm.setData(itemInventoryService.getInventoryAll(outletId));
+		return rm;
 	}
 	
 	@RequestMapping(value="/delete-variant/{id}", method=RequestMethod.DELETE)

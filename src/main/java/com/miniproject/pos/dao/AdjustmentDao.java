@@ -20,4 +20,6 @@ public interface AdjustmentDao {
 	public List<Adjustment> getAllAdjustmentByDate(Date startDate, Date endDate, String outletId);
 	
 	public Adjustment getAdjustment(String id);
+	
+	public Long countAdjustment(String outletId);
 }

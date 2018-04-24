@@ -46,4 +46,15 @@ public class TransferStockDaoImpl implements TransferStockDao {
 		String hql = "from TransferStock as ts where ts.fromOutlet.id=:id and ts.toOutlet.id=:toId";
 		return session.createQuery(hql).setParameter("id", outletId).setParameter("toId", toOutlet).list();
 	}
+	
+	public Long getCountTransferStock(String outletId) {
+		Session session = sf.getCurrentSession();
+		String hql = "select count(id) from TransferStock where fromOutlet.id=:outletId and status='Approved'";
+		List<Long> data = session.createQuery(hql).setParameter("outletId", outletId).list();
+		if(! data.isEmpty()) {
+			return data.get(0);
+		}else{
+			return (long) 0;
+		}
+	}
 }

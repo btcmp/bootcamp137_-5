@@ -65,4 +65,14 @@ public class AdjustmentDaoImpl implements AdjustmentDao {
 		return session.createQuery(hql).setParameter("endDate", endDate).setParameter("startDate", startDate).setParameter("outlet", outletId).list();
 	}
 
+	public Long countAdjustment(String outletId) {
+		Session session = sf.getCurrentSession();
+		String hql = "select count(id) from Adjustment where outletId.id=:outletId and status='Approved'";
+		List<Long> data = session.createQuery(hql).setParameter("outletId", outletId).list();
+		if(! data.isEmpty()) {
+			return data.get(0);
+		}else{
+			return (long) 0;
+		}
+	}
 }

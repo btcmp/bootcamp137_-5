@@ -95,13 +95,13 @@ public class SalesOrderService {
 		return salesOrderDao.getSalesOrderDetailByIdSalesOrder(soId);
 	}	
 	
-	public Map<String, String> getTotalSalesLast7Day(){
+	public Map<String, String> getTotalSalesLast7Day(String outletId){
 		Map<String, Double> data = new HashMap<>();
 		Date date = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.DATE, -7);
-		Map<String, Double> tampung = salesOrderDao.getTotalSalesLast7Day(cal.getTime());
+		Map<String, Double> tampung = salesOrderDao.getTotalSalesLast7Day(cal.getTime(), outletId);
 		StringBuilder keyString = new StringBuilder();
 		StringBuilder valueString = new StringBuilder();
 		for(int i=0;i<7;i++) {
@@ -115,7 +115,6 @@ public class SalesOrderService {
 				valueString.append("0").append(",");
 				keyString.append("'").append(sdf.format(dateEnd)).append("',");
 			}
-			System.out.println(sdf.format(dateEnd));
 		}
 		valueString.deleteCharAt(valueString.length()-1);
 		keyString.deleteCharAt(keyString.length()-1);

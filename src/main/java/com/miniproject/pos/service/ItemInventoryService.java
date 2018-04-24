@@ -31,4 +31,8 @@ public class ItemInventoryService {
 	public List<ItemInventory> getInventory(String id){
 		return iiDao.getInventory(id);
 	}
+	
+	public Long getCountRedStock(String outletId) {
+		return iiDao.getCountRedStock(outletId);
+	}
 }

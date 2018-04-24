@@ -193,4 +193,7 @@ public class PurchaseOrderService {
 		return purchaseOrderDAO.getListPOByDate(start, end);
 	}
 	
+	public Long countPurchaseOrder(String outletId) {
+		return purchaseOrderDAO.countPurchaseOrder(outletId);
+	}
 }

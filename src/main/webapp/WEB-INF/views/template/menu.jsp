@@ -12,7 +12,7 @@
           <img src="${baseUrl }assets/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p><security:authentication property="principal.username" /> - <%= namaOutlet %></p>
+          <p><security:authentication property="principal.username" /> - ${namaOutlet } </p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -31,6 +31,7 @@
         		{"adjustment/index","fa fa-dashboard", "Adjustment", "BACK_OFFICE"},
         		{"transfer-stock/index","fa fa-dashboard", "Transfer Stock", "BACK_OFFICE"},
         		{"salesorder/index","fa fa-dashboard", "Sales Order", "CASHIER,BACK_OFFICE"},
+        		{"items/summary","fa fa-dashboard", "Summary", "CASHIER,BACK_OFFICE,ADMIN"},
         		};	
         Menu mn = new Menu((String) pageContext.getAttribute("baseUrl"),currentUrl, menu);
         out.print(mn.renderMenu());
