@@ -27,39 +27,52 @@ $(function() {
 						var value = $('#nama-item').getSelectedItemData();
 						var c = ('x'+value.variantId.id);
 						if(allReadyId.indexOf(c.toString())==-1){
-							$('#table-item').append(
-									"<tr id="+value.id+">" +
-									"<td class= nama-item"+value.variantId.id+">"+value.variantId.itemId.name+" - "+value.variantId.name+"</td>" +
-									"<td class= hargaaa-item"+value.variantId.id+">Rp."+(parseInt(value.variantId.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td>" +
-									"<td style='display:none;' class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
-									"<td style='display:none;' class= qty-itemqty"+value.variantId.id+">"+value.endingQty+"</td>" +
-									"<td><input id="+value.variantId.id+" class='check-item' type='checkbox'></input></td>" +
-									"</tr>"
-							);
-							var harga = $('#total-harga-fix').eq(0).text().split("Rp.")[1];
-							if(harga == 0){
-								$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', true);
-							}else{
-								$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', false);
+							if (value.endingQty==0) {
+								alert('maaf untuk saat ini barang tidak tersedia, silahkan pilih barang lain');
+								$('#nama-item').val('');
 							}
-							$('#nama-item').val('');}
+							else{
+								$('#table-item').append(
+										"<tr id="+value.id+">" +
+										"<td class= nama-item"+value.variantId.id+">"+value.variantId.itemId.name+" - "+value.variantId.name+"</td>" +
+										"<td class= hargaaa-item"+value.variantId.id+">Rp."+(parseInt(value.variantId.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td>" +
+										"<td style='display:none;' class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
+										"<td style='display:none;' class= qty-itemqty"+value.variantId.id+">"+value.endingQty+"</td>" +
+										"<td><input id="+value.variantId.id+" class='check-item' type='checkbox'></input></td>" +
+										"</tr>"
+								);
+								var harga = $('#total-harga-fix').eq(0).text().split("Rp.")[1];
+								if(harga == 0){
+									$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', true);
+								}else{
+									$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', false);
+								}
+								$('#nama-item').val('');
+								}
+							}
 						else{
-							$('#table-item').append(
-									"<tr id="+value.id+">" +
-									"<td class= nama-item"+value.variantId.id+">"+value.variantId.itemId.name+" - "+value.variantId.name+"</td>" +
-									"<td class= hargaaa-item"+value.variantId.id+">Rp."+(parseInt(value.variantId.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td>" +
-									"<td style='display:none;' class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
-									"<td style='display:none;' class= qty-itemqty"+value.variantId.id+">"+value.endingQty+"</td>" +
-									"<td><input id="+value.variantId.id+" class='check-item' type='checkbox' checked disabled></input></td>" +
-									"</tr>"
-							);
-							var harga = $('#total-harga-fix').eq(0).text().split("Rp.")[1];
-							if(harga == 0){
-								$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', true);
-							}else{
-								$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', false);
+							if (value.endingQty==0) {
+								alert('maaf untuk saat ini barang tidak tersedia, silahkan pilih barang lain');
+								$('#nama-item').val('');
 							}
-							$('#nama-item').val('');
+							else{
+								$('#table-item').append(
+										"<tr id="+value.id+">" +
+										"<td class= nama-item"+value.variantId.id+">"+value.variantId.itemId.name+" - "+value.variantId.name+"</td>" +
+										"<td class= hargaaa-item"+value.variantId.id+">Rp."+(parseInt(value.variantId.price).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))+"</td>" +
+										"<td style='display:none;' class= harga-item"+value.variantId.id+">Rp."+value.variantId.price+"</td>" +
+										"<td style='display:none;' class= qty-itemqty"+value.variantId.id+">"+value.endingQty+"</td>" +
+										"<td><input id="+value.variantId.id+" class='check-item' type='checkbox' checked disabled></input></td>" +
+										"</tr>"
+								);
+								var harga = $('#total-harga-fix').eq(0).text().split("Rp.")[1];
+								if(harga == 0){
+									$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', true);
+								}else{
+									$('.bayar-sod').text("Charge Rp."+(parseInt(harga).toFixed().replace(/(\d)(?=(\d{3})+(,|$))/g, '$1,'))).prop('disabled', false);
+								}
+								$('#nama-item').val('');
+							}
 						}
 		
 						

@@ -174,7 +174,7 @@
 					</div>
 					<div class="col-lg-8 form-group">
 						<input type="text" value="0" class="form-control" id="id-cash" aria-describedby="emailHelp"/>
-						<input name="cash-price" type="hidden" data-parsley-required="true" id="cash-price">
+						<input value="0" name="cash-price" type="hidden" data-parsley-required="true" id="cash-price">
 					</div>
 					
 				</form>

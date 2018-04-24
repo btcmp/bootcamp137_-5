@@ -27,11 +27,13 @@ public class PDFViewSalesOrder extends AbstractPdfView{
 		HTMLWorker htmlWorker = new HTMLWorker(doc);
 		String customer=null;
 		Date date=null;
+		String pegawaiid=null;
 		String total = null;
 		
 		for(SalesOrderDetail sodox : sods) {
 			customer=sodox.getSalesOrder().getCustomer().getName();
 			date=sodox.getCreatedOn();
+			pegawaiid=sodox.getCreatedBy().getId();
 			total="Rp."+String.valueOf(sodox.getSalesOrder().getGrandTotal()) ;
 		}
 		
@@ -57,6 +59,7 @@ public class PDFViewSalesOrder extends AbstractPdfView{
 				String str = "<html><head></head><body>"+
 				        "<h1 style='text-align: center;'>Sales Order</h1>" +
 				        "<br/>" +
+				        "<p style='text-align: left ;'>ID Pegawai : "+pegawaiid+"</p>"+
 				        "<p style='text-align: left ;'>Customer : "+customer+"</p>"+
 				        "<p style=''text-align: right ;'>Date : "+date+"</p>"+
 				        "<br/>" +
